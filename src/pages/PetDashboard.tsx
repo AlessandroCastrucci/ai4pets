@@ -1,10 +1,19 @@
-import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock, Pencil, ChevronRight, Activity, CalendarClock } from 'lucide-react';
+import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock, Pencil, ClipboardList } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import ReminderCard from '../components/ReminderCard';
 import StatusBadge from '../components/StatusBadge';
 import { useApp } from '../context/AppContext';
 
-const FEATURES = [
+const GRID_FEATURES = [
+  {
+    id: 'health-history' as const,
+    label: 'Health History',
+    sublabel: 'Medical records & docs',
+    Icon: ClipboardList,
+    bg: 'bg-teal-50',
+    iconColor: 'text-teal-500',
+    border: 'border-teal-100',
+  },
   {
     id: 'ai-diagnostics' as const,
     label: 'AI Diagnostics',
@@ -50,38 +59,15 @@ const FEATURES = [
     iconColor: 'text-rose-500',
     border: 'border-rose-100',
   },
-] as const;
+];
 
-function getVaccineStatus(nextDue: string): { label: string; color: 'amber' | 'emerald' | 'red' } {
+function getVaccineStatus(nextDue: string): 'Overdue' | 'Due Soon' | 'Up to Date' {
   const today = new Date('2026-06-17');
   const due = new Date(nextDue);
   const diff = Math.ceil((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  if (diff < 0) return { label: 'Overdue', color: 'red' };
-  if (diff <= 30) return { label: 'Due Soon', color: 'amber' };
-  return { label: 'Up to Date', color: 'emerald' };
-}
-
-function fmtDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-}
-
-function daysUntil(iso: string): number {
-  return Math.ceil((new Date(iso).getTime() - new Date('2026-06-17').getTime()) / (1000 * 60 * 60 * 24));
-}
-
-function SummaryRow({ icon, label, value, sub }: { icon: React.ReactNode; label: string; value: string; sub?: string }) {
-  return (
-    <div className="flex items-start gap-3 py-2.5">
-      <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-        {icon}
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">{label}</p>
-        <p className="text-sm font-semibold text-slate-800 mt-0.5 leading-tight">{value}</p>
-        {sub && <p className="text-[11px] text-slate-400 mt-0.5">{sub}</p>}
-      </div>
-    </div>
-  );
+  if (diff < 0) return 'Overdue';
+  if (diff <= 30) return 'Due Soon';
+  return 'Up to Date';
 }
 
 export default function PetDashboard() {
@@ -93,8 +79,6 @@ export default function PetDashboard() {
     getPetReminders,
     getPetVaccines,
     getPetDiagnostics,
-    getPetCheckups,
-    getPetTherapies,
   } = useApp();
   const pet = getSelectedPet();
 
@@ -103,45 +87,24 @@ export default function PetDashboard() {
   const reminders = getPetReminders(pet.id).filter((r) => !r.done).slice(0, 2);
   const vaccines = getPetVaccines(pet.id);
   const diagnostics = getPetDiagnostics(pet.id);
-  const checkups = getPetCheckups(pet.id);
-  const therapies = getPetTherapies(pet.id);
   const SpeciesIcon = pet.species === 'dog' ? Dog : Cat;
 
   const vaccineStatuses = vaccines.map((v) => getVaccineStatus(v.nextDue));
-  const hasOverdue = vaccineStatuses.some((s) => s.label === 'Overdue');
-  const hasDueSoon = vaccineStatuses.some((s) => s.label === 'Due Soon');
-  const vaccineAlertLabel = hasOverdue ? 'Overdue' : hasDueSoon ? 'Due Soon' : vaccines.length > 0 ? 'Up to Date' : '—';
+  const vaccineAlertLabel = vaccineStatuses.includes('Overdue')
+    ? 'Overdue'
+    : vaccineStatuses.includes('Due Soon')
+    ? 'Due Soon'
+    : vaccines.length > 0
+    ? 'Up to Date'
+    : '—';
 
-  // Health Summary data
-  const latestDiagnosis = [...diagnostics].sort((a, b) => b.date.localeCompare(a.date))[0];
-  const latestCheckup = [...checkups].sort((a, b) => b.date.localeCompare(a.date))[0];
-  const activeTherapyCount = therapies.filter((t) => t.status === 'active').length;
-
-  const nextReminderUpcoming = getPetReminders(pet.id)
-    .filter((r) => !r.done && r.datetime > '2026-06-17')
-    .sort((a, b) => a.datetime.localeCompare(b.datetime))[0];
-  const nextVaccineUpcoming = [...vaccines]
-    .filter((v) => v.nextDue >= '2026-06-17')
-    .sort((a, b) => a.nextDue.localeCompare(b.nextDue))[0];
-
-  let nextEventText = 'No upcoming events';
-  if (nextReminderUpcoming && nextVaccineUpcoming) {
-    const rd = daysUntil(nextReminderUpcoming.datetime.substring(0, 10));
-    const vd = daysUntil(nextVaccineUpcoming.nextDue);
-    if (rd <= vd) {
-      nextEventText = `${nextReminderUpcoming.title} in ${rd} day${rd !== 1 ? 's' : ''}`;
+  function handleFeatureClick(id: string) {
+    if (id === 'health-history') {
+      navigateToHealthHistory();
     } else {
-      nextEventText = `${nextVaccineUpcoming.name} in ${vd} day${vd !== 1 ? 's' : ''}`;
+      navigateToFeature(id as Parameters<typeof navigateToFeature>[0]);
     }
-  } else if (nextReminderUpcoming) {
-    const d = daysUntil(nextReminderUpcoming.datetime.substring(0, 10));
-    nextEventText = `${nextReminderUpcoming.title} in ${d} day${d !== 1 ? 's' : ''}`;
-  } else if (nextVaccineUpcoming) {
-    const d = daysUntil(nextVaccineUpcoming.nextDue);
-    nextEventText = `${nextVaccineUpcoming.name} in ${d} day${d !== 1 ? 's' : ''}`;
   }
-
-  const lastWeight = latestCheckup ? `${latestCheckup.weight} kg` : `${pet.weight} kg`;
 
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
@@ -212,7 +175,6 @@ export default function PetDashboard() {
               </div>
             </div>
 
-            {/* Extended medical info */}
             {(pet.knownDiseases || (pet.allergies && pet.allergies.length > 0) || pet.activeMedications || pet.currentFood) && (
               <div className="mt-3 pt-3 border-t border-slate-100 space-y-2">
                 {pet.knownDiseases && (
@@ -255,58 +217,14 @@ export default function PetDashboard() {
           </div>
         </div>
 
-        {/* Health Summary */}
-        <section>
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1 mb-3">Health Summary</p>
-          <button
-            onClick={navigateToHealthHistory}
-            className="w-full bg-white rounded-2xl shadow-card text-left hover:shadow-card-md active:scale-[0.99] transition-all overflow-hidden"
-          >
-            <div className="px-4 divide-y divide-slate-50">
-              <SummaryRow
-                icon={<Scan size={16} className="text-sky-500" strokeWidth={2} />}
-                label="Last AI Diagnosis"
-                value={latestDiagnosis ? latestDiagnosis.possibleIssue : 'No diagnosis yet'}
-                sub={latestDiagnosis ? fmtDate(latestDiagnosis.date) : undefined}
-              />
-              <SummaryRow
-                icon={<Stethoscope size={16} className="text-emerald-500" strokeWidth={2} />}
-                label="Last AI Checkup"
-                value={latestCheckup ? 'Monthly checkup completed' : 'No checkup yet'}
-                sub={latestCheckup ? fmtDate(latestCheckup.date) : undefined}
-              />
-              <SummaryRow
-                icon={<HeartPulse size={16} className="text-rose-500" strokeWidth={2} />}
-                label="Active Therapies"
-                value={activeTherapyCount > 0 ? `${activeTherapyCount} active ${activeTherapyCount === 1 ? 'therapy' : 'therapies'}` : 'No active therapies'}
-              />
-              <SummaryRow
-                icon={<CalendarClock size={16} className="text-violet-500" strokeWidth={2} />}
-                label="Next Scheduled Event"
-                value={nextEventText}
-              />
-              <SummaryRow
-                icon={<Activity size={16} className="text-amber-500" strokeWidth={2} />}
-                label="Last Recorded Weight"
-                value={lastWeight}
-                sub={latestCheckup ? `Recorded ${fmtDate(latestCheckup.date)}` : 'From profile'}
-              />
-            </div>
-            <div className="flex items-center justify-between px-4 py-3 border-t border-slate-50 bg-slate-50/50">
-              <span className="text-xs font-semibold text-sky-500">View full health history</span>
-              <ChevronRight size={14} className="text-sky-400" strokeWidth={2.5} />
-            </div>
-          </button>
-        </section>
-
         {/* Health features grid */}
         <section>
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1 mb-3">Health Features</p>
           <div className="grid grid-cols-2 gap-3">
-            {FEATURES.map((feature) => (
+            {GRID_FEATURES.map((feature) => (
               <button
                 key={feature.id}
-                onClick={() => navigateToFeature(feature.id)}
+                onClick={() => handleFeatureClick(feature.id)}
                 className={`bg-white rounded-2xl shadow-card p-4 flex flex-col gap-2 border ${feature.border} hover:shadow-card-md active:scale-[0.98] transition-all text-left`}
               >
                 <div className={`w-10 h-10 rounded-xl ${feature.bg} flex items-center justify-center`}>
@@ -361,7 +279,6 @@ export default function PetDashboard() {
             </div>
           </section>
         )}
-
       </main>
     </div>
   );
