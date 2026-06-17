@@ -21,14 +21,17 @@ function getPetBadge(petId: string, reminders: ReturnType<typeof useApp>['remind
 }
 
 export default function MyPetsPage() {
-  const { pets, reminders, vaccines } = useApp();
+  const { pets, reminders, vaccines, navigateToAddPet } = useApp();
 
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
       <TopBar
         title="My Pets"
         rightSlot={
-          <button className="flex items-center gap-1.5 text-sky-500 text-sm font-medium py-1 px-2 rounded-lg hover:bg-sky-50 active:bg-sky-100 transition-colors">
+          <button
+            onClick={navigateToAddPet}
+            className="flex items-center gap-1.5 text-sky-500 text-sm font-medium py-1 px-2 rounded-lg hover:bg-sky-50 active:bg-sky-100 transition-colors"
+          >
             <PlusCircle size={17} strokeWidth={2} />
             <span>Add</span>
           </button>
@@ -50,7 +53,10 @@ export default function MyPetsPage() {
           );
         })}
         <div className="pt-2">
-          <button className="w-full border-2 border-dashed border-slate-200 rounded-2xl py-5 flex flex-col items-center gap-2 text-slate-400 hover:border-sky-300 hover:text-sky-400 hover:bg-sky-50/50 active:bg-sky-50 transition-all">
+          <button
+            onClick={navigateToAddPet}
+            className="w-full border-2 border-dashed border-slate-200 rounded-2xl py-5 flex flex-col items-center gap-2 text-slate-400 hover:border-sky-300 hover:text-sky-400 hover:bg-sky-50/50 active:bg-sky-50 transition-all"
+          >
             <PlusCircle size={24} strokeWidth={1.5} />
             <span className="text-sm font-medium">Add a new pet</span>
           </button>

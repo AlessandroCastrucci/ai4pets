@@ -3,11 +3,19 @@ export interface Pet {
   name: string;
   species: 'dog' | 'cat';
   breed: string;
+  dateOfBirth?: string;
   age: number;
   weight: number;
   gender: 'male' | 'female';
+  sterilized?: boolean;
   photo: string;
   accentColor: 'sky' | 'amber' | 'emerald' | 'violet' | 'rose';
+  knownDiseases?: string;
+  allergies?: string[];
+  activeMedications?: string;
+  currentFood?: string;
+  vetNotes?: string;
+  documents?: Array<{ label: string; placeholder: true }>;
 }
 
 export interface Reminder {
@@ -113,6 +121,8 @@ export type TabName = 'pets' | 'reminders' | 'assistant' | 'calendar' | 'more';
 export type ScreenName =
   | null
   | 'pet-dashboard'
+  | 'add-pet'
+  | 'edit-pet'
   | 'ai-diagnostics'
   | 'ai-checkup'
   | 'nutrition'

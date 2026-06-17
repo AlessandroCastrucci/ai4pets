@@ -8,6 +8,7 @@ import RemindersPage from './pages/RemindersPage';
 import AIAssistantPage from './pages/AIAssistantPage';
 import CalendarPage from './pages/CalendarPage';
 import MorePage from './pages/MorePage';
+import AddEditPetPage from './pages/AddEditPetPage';
 import AIDiagnosticsPage from './pages/features/AIDiagnosticsPage';
 import AICheckupPage from './pages/features/AICheckupPage';
 import NutritionPage from './pages/features/NutritionPage';
@@ -21,6 +22,8 @@ import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 function AppScreen() {
   const { activeTab, currentScreen } = useApp();
 
+  if (currentScreen === 'add-pet') return <AddEditPetPage />;
+  if (currentScreen === 'edit-pet') return <AddEditPetPage />;
   if (currentScreen === 'ai-diagnostics') return <AIDiagnosticsPage />;
   if (currentScreen === 'ai-checkup') return <AICheckupPage />;
   if (currentScreen === 'nutrition') return <NutritionPage />;

@@ -28,7 +28,9 @@ interface AppContextType {
   currentScreen: ScreenName;
   selectedPetId: string | null;
   navigateToPet: (petId: string) => void;
-  navigateToFeature: (screen: Exclude<ScreenName, null | 'pet-dashboard'>) => void;
+  navigateToFeature: (screen: Exclude<ScreenName, null | 'pet-dashboard' | 'add-pet' | 'edit-pet'>) => void;
+  navigateToAddPet: () => void;
+  navigateToEditPet: () => void;
   navigateBack: () => void;
   setActiveTab: (tab: TabName) => void;
 
@@ -43,6 +45,9 @@ interface AppContextType {
   calendarEvents: CalendarEvent[];
 
   // Data — write
+  addPet: (pet: Pet) => void;
+  updatePet: (pet: Pet) => void;
+  deletePet: (petId: string) => void;
   addDiagnosticResult: (result: DiagnosticResult) => void;
   addMonthlyCheckup: (checkup: MonthlyCheckup) => void;
   updateNutritionPlan: (plan: NutritionPlan) => void;
@@ -66,7 +71,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [currentScreen, setCurrentScreen] = useState<ScreenName>(null);
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null);
 
-  const [pets] = useState<Pet[]>(PETS);
+  const [pets, setPets] = useState<Pet[]>(PETS);
   const [reminders, setReminders] = useState<Reminder[]>(REMINDERS);
   const [vaccines] = useState<Vaccine[]>(VACCINES);
   const [therapies] = useState<Therapy[]>(THERAPIES);
@@ -81,14 +86,29 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const navigateToFeature = useCallback(
-    (screen: Exclude<ScreenName, null | 'pet-dashboard'>) => {
+    (screen: Exclude<ScreenName, null | 'pet-dashboard' | 'add-pet' | 'edit-pet'>) => {
       setCurrentScreen(screen);
     },
     [],
   );
 
+  const navigateToAddPet = useCallback(() => {
+    setSelectedPetId(null);
+    setCurrentScreen('add-pet');
+  }, []);
+
+  const navigateToEditPet = useCallback(() => {
+    setCurrentScreen('edit-pet');
+  }, []);
+
   const navigateBack = useCallback(() => {
-    if (currentScreen !== null && currentScreen !== 'pet-dashboard') {
+    if (currentScreen === 'add-pet') {
+      setCurrentScreen(null);
+      setSelectedPetId(null);
+      setActiveTabState('pets');
+    } else if (currentScreen === 'edit-pet') {
+      setCurrentScreen('pet-dashboard');
+    } else if (currentScreen !== null && currentScreen !== 'pet-dashboard') {
       setCurrentScreen('pet-dashboard');
     } else {
       setCurrentScreen(null);
@@ -102,6 +122,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setSelectedPetId(null);
   }, []);
 
+  const addPet = useCallback((pet: Pet) => {
+    setPets((prev) => [...prev, pet]);
+  }, []);
+
+  const updatePet = useCallback((pet: Pet) => {
+    setPets((prev) => prev.map((p) => (p.id === pet.id ? pet : p)));
+  }, []);
+
+  const deletePet = useCallback((petId: string) => {
+    setPets((prev) => prev.filter((p) => p.id !== petId));
+  }, []);
+
   const addDiagnosticResult = useCallback((result: DiagnosticResult) => {
     setDiagnosticResults((prev) => [result, ...prev]);
   }, []);
@@ -111,7 +143,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const updateNutritionPlan = useCallback((plan: NutritionPlan) => {
-    setNutritionPlans((prev) => prev.map((p) => (p.petId === plan.petId ? plan : p)));
+    setNutritionPlans((prev) => {
+      const exists = prev.some((p) => p.petId === plan.petId);
+      if (exists) return prev.map((p) => (p.petId === plan.petId ? plan : p));
+      return [...prev, plan];
+    });
   }, []);
 
   const toggleReminderDone = useCallback((id: string) => {
@@ -137,6 +173,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         selectedPetId,
         navigateToPet,
         navigateToFeature,
+        navigateToAddPet,
+        navigateToEditPet,
         navigateBack,
         setActiveTab,
         pets,
@@ -147,6 +185,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         diagnosticResults,
         monthlyCheckups,
         calendarEvents,
+        addPet,
+        updatePet,
+        deletePet,
         addDiagnosticResult,
         addMonthlyCheckup,
         updateNutritionPlan,

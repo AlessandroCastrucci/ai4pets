@@ -1,4 +1,4 @@
-import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock } from 'lucide-react';
+import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock, Pencil } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import ReminderCard from '../components/ReminderCard';
 import StatusBadge from '../components/StatusBadge';
@@ -62,7 +62,7 @@ function getVaccineStatus(nextDue: string): { label: string; color: 'amber' | 'e
 }
 
 export default function PetDashboard() {
-  const { getSelectedPet, navigateToFeature, getPetReminders, getPetVaccines, getPetDiagnostics } = useApp();
+  const { getSelectedPet, navigateToFeature, navigateToEditPet, getPetReminders, getPetVaccines, getPetDiagnostics } = useApp();
   const pet = getSelectedPet();
 
   if (!pet) return null;
@@ -75,11 +75,24 @@ export default function PetDashboard() {
   const vaccineStatuses = vaccines.map((v) => getVaccineStatus(v.nextDue));
   const hasOverdue = vaccineStatuses.some((s) => s.label === 'Overdue');
   const hasDueSoon = vaccineStatuses.some((s) => s.label === 'Due Soon');
-  const vaccineAlertLabel = hasOverdue ? 'Overdue' : hasDueSoon ? 'Due Soon' : 'Up to Date';
+  const vaccineAlertLabel = hasOverdue ? 'Overdue' : hasDueSoon ? 'Due Soon' : vaccines.length > 0 ? 'Up to Date' : '—';
 
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
-      <TopBar title={pet.name} showBack subtitle={pet.breed} />
+      <TopBar
+        title={pet.name}
+        showBack
+        subtitle={pet.breed}
+        rightSlot={
+          <button
+            onClick={navigateToEditPet}
+            className="flex items-center gap-1.5 text-sky-500 text-sm font-medium py-1 px-2 rounded-lg hover:bg-sky-50"
+          >
+            <Pencil size={15} strokeWidth={2} />
+            Edit
+          </button>
+        }
+      />
 
       <main className="flex-1 px-4 py-4 pb-24 space-y-5">
         {/* Pet profile card */}
@@ -102,30 +115,77 @@ export default function PetDashboard() {
                 <span className="text-xs text-slate-500 capitalize">{pet.species}</span>
               </div>
             </div>
-            <div className="flex items-center gap-4 mt-3 pt-3 border-t border-slate-100">
-              <div className="text-center">
+            <div className="flex items-center gap-3 mt-3 pt-3 border-t border-slate-100 overflow-x-auto no-scrollbar">
+              <div className="text-center flex-shrink-0">
                 <p className="text-lg font-bold text-slate-800">{pet.age}</p>
                 <p className="text-[11px] text-slate-500">years</p>
               </div>
-              <div className="w-px h-8 bg-slate-100" />
-              <div className="text-center">
+              <div className="w-px h-8 bg-slate-100 flex-shrink-0" />
+              <div className="text-center flex-shrink-0">
                 <p className="text-lg font-bold text-slate-800">{pet.weight}</p>
                 <p className="text-[11px] text-slate-500">kg</p>
               </div>
-              <div className="w-px h-8 bg-slate-100" />
-              <div className="text-center">
+              <div className="w-px h-8 bg-slate-100 flex-shrink-0" />
+              <div className="text-center flex-shrink-0">
                 <p className="text-sm font-semibold text-slate-800 capitalize">{pet.gender}</p>
-                <p className="text-[11px] text-slate-500">gender</p>
+                <p className="text-[11px] text-slate-500">sex</p>
               </div>
-              <div className="w-px h-8 bg-slate-100" />
-              <div className="text-center">
-                <StatusBadge
-                  label={vaccineAlertLabel}
-                  variant="vaccine"
-                />
+              {pet.sterilized !== undefined && (
+                <>
+                  <div className="w-px h-8 bg-slate-100 flex-shrink-0" />
+                  <div className="text-center flex-shrink-0">
+                    <p className="text-sm font-semibold text-slate-800">{pet.sterilized ? 'Yes' : 'No'}</p>
+                    <p className="text-[11px] text-slate-500">sterilized</p>
+                  </div>
+                </>
+              )}
+              <div className="w-px h-8 bg-slate-100 flex-shrink-0" />
+              <div className="text-center flex-shrink-0">
+                <StatusBadge label={vaccineAlertLabel} variant="vaccine" />
                 <p className="text-[11px] text-slate-500 mt-0.5">vaccines</p>
               </div>
             </div>
+
+            {/* Extended medical info */}
+            {(pet.knownDiseases || (pet.allergies && pet.allergies.length > 0) || pet.activeMedications || pet.currentFood) && (
+              <div className="mt-3 pt-3 border-t border-slate-100 space-y-2">
+                {pet.knownDiseases && (
+                  <div className="flex gap-2">
+                    <span className="text-[11px] font-semibold text-slate-400 w-24 flex-shrink-0">Diseases</span>
+                    <span className="text-[11px] text-slate-600">{pet.knownDiseases}</span>
+                  </div>
+                )}
+                {pet.allergies && pet.allergies.length > 0 && (
+                  <div className="flex gap-2 items-start">
+                    <span className="text-[11px] font-semibold text-slate-400 w-24 flex-shrink-0">Allergies</span>
+                    <div className="flex flex-wrap gap-1">
+                      {pet.allergies.map((a) => (
+                        <span key={a} className="text-[10px] font-semibold bg-rose-50 text-rose-600 border border-rose-200 px-2 py-0.5 rounded-full">{a}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {pet.activeMedications && (
+                  <div className="flex gap-2">
+                    <span className="text-[11px] font-semibold text-slate-400 w-24 flex-shrink-0">Medications</span>
+                    <span className="text-[11px] text-slate-600">{pet.activeMedications}</span>
+                  </div>
+                )}
+                {pet.currentFood && (
+                  <div className="flex gap-2">
+                    <span className="text-[11px] font-semibold text-slate-400 w-24 flex-shrink-0">Food</span>
+                    <span className="text-[11px] text-slate-600">{pet.currentFood}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {pet.vetNotes && (
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-[11px] font-semibold text-slate-400 mb-1">Vet Notes</p>
+                <p className="text-[11px] text-slate-600 leading-relaxed">{pet.vetNotes}</p>
+              </div>
+            )}
           </div>
         </div>
 
