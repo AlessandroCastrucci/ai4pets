@@ -1,0 +1,120 @@
+export interface Pet {
+  id: string;
+  name: string;
+  species: 'dog' | 'cat';
+  breed: string;
+  age: number;
+  weight: number;
+  gender: 'male' | 'female';
+  photo: string;
+  accentColor: 'sky' | 'amber' | 'emerald' | 'violet' | 'rose';
+}
+
+export interface Reminder {
+  id: string;
+  petId: string;
+  type: 'therapy' | 'vaccine' | 'medication' | 'checkup' | 'appointment';
+  title: string;
+  datetime: string;
+  notes?: string;
+  done: boolean;
+}
+
+export interface Vaccine {
+  id: string;
+  petId: string;
+  name: string;
+  dateAdministered: string;
+  nextDue: string;
+  vet?: string;
+  notes?: string;
+}
+
+export interface Therapy {
+  id: string;
+  petId: string;
+  name: string;
+  medication?: string;
+  dosage: string;
+  frequency: string;
+  startDate: string;
+  endDate?: string;
+  status: 'active' | 'completed';
+  notes?: string;
+}
+
+export interface NutritionPlan {
+  id: string;
+  petId: string;
+  brand: string;
+  productLine: string;
+  foodType: 'normal' | 'veterinary';
+  dailyQuantity: number;
+  mealsPerDay: number;
+  mealTimes: string[];
+  remindersEnabled: boolean;
+  notes?: string;
+}
+
+export type BodyArea =
+  | 'eyes'
+  | 'mouth-teeth'
+  | 'skin-coat'
+  | 'paws'
+  | 'abdomen'
+  | 'ears'
+  | 'back'
+  | 'tail';
+
+export type UrgencyLevel = 'low' | 'medium' | 'high';
+
+export interface DiagnosticResult {
+  id: string;
+  petId: string;
+  date: string;
+  bodyArea: BodyArea;
+  symptoms: string;
+  photoUrl?: string;
+  possibleIssue: string;
+  urgency: UrgencyLevel;
+  possibleCauses: string[];
+  whatToDoNow: string[];
+  whatToMonitor: string[];
+  whatNotToDo: string[];
+  followUpRecommendation: string;
+}
+
+export type StoolQuality = 'normal' | 'soft' | 'hard' | 'liquid';
+
+export interface MonthlyCheckup {
+  id: string;
+  petId: string;
+  date: string;
+  weight: number;
+  appetite: 1 | 2 | 3 | 4 | 5;
+  energyLevel: 1 | 2 | 3 | 4 | 5;
+  stoolQuality: StoolQuality;
+  behaviorChanges: string;
+  photoEyes?: string;
+  photoTeeth?: string;
+  photoSkin?: string;
+}
+
+export interface CalendarEvent {
+  id: string;
+  petId: string;
+  title: string;
+  date: string;
+  time?: string;
+  type: 'vaccine' | 'therapy' | 'checkup' | 'medication' | 'appointment';
+}
+
+export type TabName = 'pets' | 'reminders' | 'assistant' | 'calendar' | 'more';
+export type ScreenName =
+  | null
+  | 'pet-dashboard'
+  | 'ai-diagnostics'
+  | 'ai-checkup'
+  | 'nutrition'
+  | 'vaccines'
+  | 'therapies';
