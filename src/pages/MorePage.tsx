@@ -1,6 +1,7 @@
-import { Bell, Shield, Info, ChevronRight, User, Moon } from 'lucide-react';
+import { Bell, Shield, Info, ChevronRight, User, Moon, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import TopBar from '../components/TopBar';
+import { useAuth } from '../context/AuthContext';
 
 interface ToggleProps {
   checked: boolean;
@@ -60,6 +61,7 @@ function Row({
 }
 
 export default function MorePage() {
+  const { logout, user } = useAuth();
   const [notifReminders, setNotifReminders] = useState(true);
   const [notifVaccines, setNotifVaccines] = useState(true);
   const [notifCheckups, setNotifCheckups] = useState(false);
@@ -76,8 +78,8 @@ export default function MorePage() {
               <User size={22} className="text-white" strokeWidth={2} />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-slate-800">My Account</p>
-              <p className="text-xs text-slate-500 mt-0.5">Manage your profile and preferences</p>
+              <p className="text-sm font-semibold text-slate-800">{user?.name ?? 'My Account'}</p>
+              <p className="text-xs text-slate-500 mt-0.5">{user?.email ?? 'Manage your profile and preferences'}</p>
             </div>
             <ChevronRight size={16} className="text-slate-300" />
           </div>
@@ -137,6 +139,17 @@ export default function MorePage() {
             <Row Icon={Shield} label="Privacy Policy" iconBg="bg-slate-100" iconColor="text-slate-500" />
           </SectionCard>
         </div>
+
+        {/* Sign Out */}
+        <button
+          onClick={logout}
+          className="w-full bg-white rounded-2xl shadow-card px-4 py-3.5 flex items-center gap-3 hover:bg-red-50 active:bg-red-100 transition-colors"
+        >
+          <div className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
+            <LogOut size={16} className="text-red-500" strokeWidth={2} />
+          </div>
+          <span className="text-sm font-semibold text-red-500">Sign Out</span>
+        </button>
       </main>
     </div>
   );
