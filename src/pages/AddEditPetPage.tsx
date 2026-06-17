@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Camera, X, Plus, Trash2, Dog, Cat, FileText, FlaskConical, Pill } from 'lucide-react';
+import { Camera, X, Plus, Trash2, Dog, Cat, FileText, FlaskConical, Pill, Syringe } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import { useApp } from '../context/AppContext';
 import type { Pet } from '../types';
@@ -374,18 +374,19 @@ export default function AddEditPetPage() {
 
         {/* Documents */}
         <SectionCard title="Documents">
-          <p className="text-xs text-slate-400 -mt-2 mb-2">Upload placeholders — document management coming soon.</p>
-          <div className="grid grid-cols-3 gap-3">
+          <p className="text-xs text-slate-400 -mt-2 mb-1">Uploaded documents appear in this pet's Health History.</p>
+          <div className="grid grid-cols-2 gap-3">
             {[
-              { label: 'Health document', Icon: FileText },
-              { label: 'Lab result', Icon: FlaskConical },
-              { label: 'Prescription', Icon: Pill },
-            ].map(({ label, Icon }) => (
+              { label: 'Vaccination card', Icon: Syringe, color: 'text-violet-400', bg: 'bg-violet-50' },
+              { label: 'Blood test', Icon: FlaskConical, color: 'text-sky-400', bg: 'bg-sky-50' },
+              { label: 'Prescription', Icon: Pill, color: 'text-rose-400', bg: 'bg-rose-50' },
+              { label: 'Health document', Icon: FileText, color: 'text-amber-400', bg: 'bg-amber-50' },
+            ].map(({ label, Icon, color, bg }) => (
               <div key={label} className="flex flex-col items-center gap-2 p-3 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50">
-                <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
-                  <Icon size={18} className="text-slate-400" strokeWidth={1.5} />
+                <div className={`w-9 h-9 rounded-xl ${bg} flex items-center justify-center`}>
+                  <Icon size={18} className={color} strokeWidth={1.5} />
                 </div>
-                <span className="text-[10px] font-medium text-slate-400 text-center leading-tight">{label}</span>
+                <span className="text-[10px] font-medium text-slate-500 text-center leading-tight">{label}</span>
                 <span className="text-[9px] text-slate-300 font-semibold uppercase tracking-wide">Coming soon</span>
               </div>
             ))}

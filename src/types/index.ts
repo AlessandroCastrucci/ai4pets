@@ -1,3 +1,12 @@
+export interface PetDocument {
+  id: string;
+  petId: string;
+  label: string;
+  type: 'vaccination-card' | 'blood-test' | 'prescription' | 'health-document';
+  uploadedAt: string;
+  fileUrl?: string;
+}
+
 export interface Pet {
   id: string;
   name: string;
@@ -15,7 +24,6 @@ export interface Pet {
   activeMedications?: string;
   currentFood?: string;
   vetNotes?: string;
-  documents?: Array<{ label: string; placeholder: true }>;
 }
 
 export interface Reminder {
@@ -123,6 +131,7 @@ export type ScreenName =
   | 'pet-dashboard'
   | 'add-pet'
   | 'edit-pet'
+  | 'pet-health-history'
   | 'ai-diagnostics'
   | 'ai-checkup'
   | 'nutrition'

@@ -9,6 +9,7 @@ import AIAssistantPage from './pages/AIAssistantPage';
 import CalendarPage from './pages/CalendarPage';
 import MorePage from './pages/MorePage';
 import AddEditPetPage from './pages/AddEditPetPage';
+import PetHealthHistoryPage from './pages/features/PetHealthHistoryPage';
 import AIDiagnosticsPage from './pages/features/AIDiagnosticsPage';
 import AICheckupPage from './pages/features/AICheckupPage';
 import NutritionPage from './pages/features/NutritionPage';
@@ -24,6 +25,7 @@ function AppScreen() {
 
   if (currentScreen === 'add-pet') return <AddEditPetPage />;
   if (currentScreen === 'edit-pet') return <AddEditPetPage />;
+  if (currentScreen === 'pet-health-history') return <PetHealthHistoryPage />;
   if (currentScreen === 'ai-diagnostics') return <AIDiagnosticsPage />;
   if (currentScreen === 'ai-checkup') return <AICheckupPage />;
   if (currentScreen === 'nutrition') return <NutritionPage />;

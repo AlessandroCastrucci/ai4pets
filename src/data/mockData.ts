@@ -1,5 +1,6 @@
 import type {
   Pet,
+  PetDocument,
   Reminder,
   Vaccine,
   Therapy,
@@ -400,5 +401,29 @@ export const CALENDAR_EVENTS: CalendarEvent[] = [
     date: '2026-06-27',
     time: '10:30',
     type: 'vaccine',
+  },
+];
+
+export const PET_DOCUMENTS: PetDocument[] = [
+  {
+    id: 'doc1',
+    petId: 'luna',
+    label: 'Vaccination Card.pdf',
+    type: 'vaccination-card',
+    uploadedAt: '2026-01-10',
+  },
+  {
+    id: 'doc2',
+    petId: 'luna',
+    label: 'Blood Test Results.pdf',
+    type: 'blood-test',
+    uploadedAt: '2026-04-12',
+  },
+  {
+    id: 'doc3',
+    petId: 'luna',
+    label: 'Prescription - Eye Drops.pdf',
+    type: 'prescription',
+    uploadedAt: '2026-05-15',
   },
 ];

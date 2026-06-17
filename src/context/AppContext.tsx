@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 import type {
   Pet,
+  PetDocument,
   Reminder,
   Vaccine,
   Therapy,
@@ -20,6 +21,7 @@ import {
   DIAGNOSTIC_RESULTS,
   MONTHLY_CHECKUPS,
   CALENDAR_EVENTS,
+  PET_DOCUMENTS,
 } from '../data/mockData';
 
 interface AppContextType {
@@ -28,9 +30,10 @@ interface AppContextType {
   currentScreen: ScreenName;
   selectedPetId: string | null;
   navigateToPet: (petId: string) => void;
-  navigateToFeature: (screen: Exclude<ScreenName, null | 'pet-dashboard' | 'add-pet' | 'edit-pet'>) => void;
+  navigateToFeature: (screen: Exclude<ScreenName, null | 'pet-dashboard' | 'add-pet' | 'edit-pet' | 'pet-health-history'>) => void;
   navigateToAddPet: () => void;
   navigateToEditPet: () => void;
+  navigateToHealthHistory: () => void;
   navigateBack: () => void;
   setActiveTab: (tab: TabName) => void;
 
@@ -43,6 +46,7 @@ interface AppContextType {
   diagnosticResults: DiagnosticResult[];
   monthlyCheckups: MonthlyCheckup[];
   calendarEvents: CalendarEvent[];
+  petDocuments: PetDocument[];
 
   // Data — write
   addPet: (pet: Pet) => void;
@@ -52,6 +56,7 @@ interface AppContextType {
   addMonthlyCheckup: (checkup: MonthlyCheckup) => void;
   updateNutritionPlan: (plan: NutritionPlan) => void;
   toggleReminderDone: (id: string) => void;
+  addPetDocument: (doc: PetDocument) => void;
 
   // Helpers
   getPet: (id: string) => Pet | undefined;
@@ -62,6 +67,7 @@ interface AppContextType {
   getPetNutrition: (petId: string) => NutritionPlan | undefined;
   getPetDiagnostics: (petId: string) => DiagnosticResult[];
   getPetCheckups: (petId: string) => MonthlyCheckup[];
+  getPetDocuments: (petId: string) => PetDocument[];
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -79,6 +85,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [diagnosticResults, setDiagnosticResults] = useState<DiagnosticResult[]>(DIAGNOSTIC_RESULTS);
   const [monthlyCheckups, setMonthlyCheckups] = useState<MonthlyCheckup[]>(MONTHLY_CHECKUPS);
   const [calendarEvents] = useState<CalendarEvent[]>(CALENDAR_EVENTS);
+  const [petDocuments, setPetDocuments] = useState<PetDocument[]>(PET_DOCUMENTS);
 
   const navigateToPet = useCallback((petId: string) => {
     setSelectedPetId(petId);
@@ -86,7 +93,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const navigateToFeature = useCallback(
-    (screen: Exclude<ScreenName, null | 'pet-dashboard' | 'add-pet' | 'edit-pet'>) => {
+    (screen: Exclude<ScreenName, null | 'pet-dashboard' | 'add-pet' | 'edit-pet' | 'pet-health-history'>) => {
       setCurrentScreen(screen);
     },
     [],
@@ -101,12 +108,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setCurrentScreen('edit-pet');
   }, []);
 
+  const navigateToHealthHistory = useCallback(() => {
+    setCurrentScreen('pet-health-history');
+  }, []);
+
   const navigateBack = useCallback(() => {
     if (currentScreen === 'add-pet') {
       setCurrentScreen(null);
       setSelectedPetId(null);
       setActiveTabState('pets');
     } else if (currentScreen === 'edit-pet') {
+      setCurrentScreen('pet-dashboard');
+    } else if (currentScreen === 'pet-health-history') {
       setCurrentScreen('pet-dashboard');
     } else if (currentScreen !== null && currentScreen !== 'pet-dashboard') {
       setCurrentScreen('pet-dashboard');
@@ -156,6 +169,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
   }, []);
 
+  const addPetDocument = useCallback((doc: PetDocument) => {
+    setPetDocuments((prev) => [doc, ...prev]);
+  }, []);
+
   const getPet = useCallback((id: string) => pets.find((p) => p.id === id), [pets]);
   const getSelectedPet = useCallback(() => (selectedPetId ? pets.find((p) => p.id === selectedPetId) : undefined), [pets, selectedPetId]);
   const getPetReminders = useCallback((petId: string) => reminders.filter((r) => r.petId === petId), [reminders]);
@@ -164,6 +181,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const getPetNutrition = useCallback((petId: string) => nutritionPlans.find((n) => n.petId === petId), [nutritionPlans]);
   const getPetDiagnostics = useCallback((petId: string) => diagnosticResults.filter((d) => d.petId === petId), [diagnosticResults]);
   const getPetCheckups = useCallback((petId: string) => monthlyCheckups.filter((c) => c.petId === petId), [monthlyCheckups]);
+  const getPetDocuments = useCallback((petId: string) => petDocuments.filter((d) => d.petId === petId), [petDocuments]);
 
   return (
     <AppContext.Provider
@@ -175,6 +193,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         navigateToFeature,
         navigateToAddPet,
         navigateToEditPet,
+        navigateToHealthHistory,
         navigateBack,
         setActiveTab,
         pets,
@@ -185,6 +204,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         diagnosticResults,
         monthlyCheckups,
         calendarEvents,
+        petDocuments,
         addPet,
         updatePet,
         deletePet,
@@ -192,6 +212,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         addMonthlyCheckup,
         updateNutritionPlan,
         toggleReminderDone,
+        addPetDocument,
         getPet,
         getSelectedPet,
         getPetReminders,
@@ -200,6 +221,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         getPetNutrition,
         getPetDiagnostics,
         getPetCheckups,
+        getPetDocuments,
       }}
     >
       {children}
