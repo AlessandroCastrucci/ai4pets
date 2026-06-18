@@ -1,4 +1,4 @@
-import { ChevronRight, Globe, Bell, Shield, Trash2, LogOut, Pencil } from 'lucide-react';
+import { ChevronRight, Shield, Trash2, LogOut, Pencil } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import { useAuth } from '../context/AuthContext';
 import { useApp } from '../context/AppContext';
@@ -29,7 +29,7 @@ function ActionRow({
   destructive = false,
   onClick,
 }: {
-  Icon: typeof Bell;
+  Icon: typeof Shield;
   label: string;
   sublabel?: string;
   iconBg?: string;
@@ -99,29 +99,6 @@ export default function AccountPage() {
             <InfoRow label="Name" value={user?.name ?? '—'} />
             <InfoRow label="Email" value={user?.email ?? '—'} />
             <InfoRow label="Member Since" value={memberSince} />
-          </SectionCard>
-        </div>
-
-        {/* Account Preferences */}
-        <div>
-          <SectionLabel>Account Preferences</SectionLabel>
-          <SectionCard>
-            <ActionRow
-              Icon={Globe}
-              label="Language"
-              sublabel="English"
-              iconBg="bg-sky-50"
-              iconColor="text-sky-500"
-              onClick={() => {}}
-            />
-            <ActionRow
-              Icon={Bell}
-              label="Notification Preferences"
-              sublabel="Manage your alert settings"
-              iconBg="bg-violet-50"
-              iconColor="text-violet-500"
-              onClick={() => {}}
-            />
           </SectionCard>
         </div>
 
