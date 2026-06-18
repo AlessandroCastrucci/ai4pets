@@ -63,7 +63,7 @@ function ToggleChip({ value, active, onClick }: { value: string; active: boolean
       className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${
         active
           ? 'bg-sky-500 text-white border-sky-500'
-          : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300'
+          : 'bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:border-slate-300'
       }`}
     >
       {value}
@@ -73,9 +73,9 @@ function ToggleChip({ value, active, onClick }: { value: string; active: boolean
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-2xl shadow-card overflow-hidden">
-      <div className="px-4 py-3 border-b border-slate-100">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{title}</p>
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card overflow-hidden">
+      <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+        <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">{title}</p>
       </div>
       <div className="px-4 py-4 space-y-4">{children}</div>
     </div>
@@ -85,13 +85,13 @@ function SectionCard({ title, children }: { title: string; children: React.React
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="text-xs font-semibold text-slate-600 block mb-1.5">{label}</label>
+      <label className="text-xs font-semibold text-slate-600 dark:text-slate-300 block mb-1.5">{label}</label>
       {children}
     </div>
   );
 }
 
-const inputCls = 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 transition-all';
+const inputCls = 'w-full bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 dark:focus:ring-sky-900 transition-all';
 const textareaCls = `${inputCls} resize-none`;
 
 export default function AddEditPetPage() {
@@ -165,7 +165,7 @@ export default function AddEditPetPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-full bg-slate-50">
+    <div className="flex flex-col min-h-full bg-slate-50 dark:bg-slate-900">
       <TopBar title={isEdit ? 'Edit Pet Profile' : 'New Pet'} showBack subtitle={isEdit ? existing?.name : undefined} />
 
       <main className="flex-1 px-4 py-4 pb-32 space-y-4 overflow-y-auto">
@@ -182,14 +182,14 @@ export default function AddEditPetPage() {
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
-            className="relative w-24 h-24 rounded-3xl bg-slate-100 border-2 border-dashed border-slate-300 flex flex-col items-center justify-center gap-1 hover:border-sky-400 hover:bg-sky-50 transition-all overflow-hidden"
+            className="relative w-24 h-24 rounded-3xl bg-slate-100 dark:bg-slate-700 border-2 border-dashed border-slate-300 dark:border-slate-600 flex flex-col items-center justify-center gap-1 hover:border-sky-400 hover:bg-sky-50 dark:hover:bg-sky-900/20 transition-all overflow-hidden"
           >
             {existing?.photo ? (
               <img src={existing.photo} alt="" className="absolute inset-0 w-full h-full object-cover" />
             ) : (
               <>
-                <Camera size={22} className="text-slate-400" strokeWidth={1.5} />
-                <span className="text-[10px] font-semibold text-slate-400">Add Photo</span>
+                <Camera size={22} className="text-slate-400 dark:text-slate-500" strokeWidth={1.5} />
+                <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500">Add Photo</span>
               </>
             )}
           </button>
@@ -217,7 +217,7 @@ export default function AddEditPetPage() {
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
                   form.species === 'dog'
                     ? 'bg-sky-500 text-white border-sky-500'
-                    : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300'
+                    : 'bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:border-slate-300'
                 }`}
               >
                 <Dog size={16} strokeWidth={2} />
@@ -229,7 +229,7 @@ export default function AddEditPetPage() {
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
                   form.species === 'cat'
                     ? 'bg-sky-500 text-white border-sky-500'
-                    : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300'
+                    : 'bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:border-slate-300'
                 }`}
               >
                 <Cat size={16} strokeWidth={2} />
@@ -261,7 +261,7 @@ export default function AddEditPetPage() {
               className={inputCls}
             />
             {form.dateOfBirth && (
-              <p className="text-xs text-slate-500 mt-1">Age: {calcAge(form.dateOfBirth)} year{calcAge(form.dateOfBirth) !== 1 ? 's' : ''}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Age: {calcAge(form.dateOfBirth)} year{calcAge(form.dateOfBirth) !== 1 ? 's' : ''}</p>
             )}
           </Field>
 
@@ -326,7 +326,7 @@ export default function AddEditPetPage() {
             {form.allergies.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {form.allergies.map((tag) => (
-                  <span key={tag} className="flex items-center gap-1.5 bg-rose-50 text-rose-700 border border-rose-200 text-xs font-semibold px-2.5 py-1 rounded-full">
+                  <span key={tag} className="flex items-center gap-1.5 bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 text-xs font-semibold px-2.5 py-1 rounded-full">
                     {tag}
                     <button type="button" onClick={() => removeAllergy(tag)} className="hover:text-rose-900">
                       <X size={11} strokeWidth={2.5} />
@@ -374,20 +374,20 @@ export default function AddEditPetPage() {
 
         {/* Documents */}
         <SectionCard title="Documents">
-          <p className="text-xs text-slate-400 -mt-2 mb-1">Uploaded documents appear in this pet's Health History.</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 -mt-2 mb-1">Uploaded documents appear in this pet's Health History.</p>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { label: 'Vaccination card', Icon: Syringe, color: 'text-violet-400', bg: 'bg-violet-50' },
-              { label: 'Blood test', Icon: FlaskConical, color: 'text-sky-400', bg: 'bg-sky-50' },
-              { label: 'Prescription', Icon: Pill, color: 'text-rose-400', bg: 'bg-rose-50' },
-              { label: 'Health document', Icon: FileText, color: 'text-amber-400', bg: 'bg-amber-50' },
+              { label: 'Vaccination card', Icon: Syringe, color: 'text-violet-400', bg: 'bg-violet-50 dark:bg-violet-900/20' },
+              { label: 'Blood test', Icon: FlaskConical, color: 'text-sky-400', bg: 'bg-sky-50 dark:bg-sky-900/20' },
+              { label: 'Prescription', Icon: Pill, color: 'text-rose-400', bg: 'bg-rose-50 dark:bg-rose-900/20' },
+              { label: 'Health document', Icon: FileText, color: 'text-amber-400', bg: 'bg-amber-50 dark:bg-amber-900/20' },
             ].map(({ label, Icon, color, bg }) => (
-              <div key={label} className="flex flex-col items-center gap-2 p-3 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50">
+              <div key={label} className="flex flex-col items-center gap-2 p-3 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50">
                 <div className={`w-9 h-9 rounded-xl ${bg} flex items-center justify-center`}>
                   <Icon size={18} className={color} strokeWidth={1.5} />
                 </div>
-                <span className="text-[10px] font-medium text-slate-500 text-center leading-tight">{label}</span>
-                <span className="text-[9px] text-slate-300 font-semibold uppercase tracking-wide">Coming soon</span>
+                <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 text-center leading-tight">{label}</span>
+                <span className="text-[9px] text-slate-300 dark:text-slate-600 font-semibold uppercase tracking-wide">Coming soon</span>
               </div>
             ))}
           </div>
@@ -398,7 +398,7 @@ export default function AddEditPetPage() {
           <button
             type="button"
             onClick={handleDelete}
-            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl border border-red-200 text-red-500 text-sm font-semibold hover:bg-red-50 transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl border border-red-200 dark:border-red-900 text-red-500 text-sm font-semibold hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
           >
             <Trash2 size={16} strokeWidth={2} />
             Remove Pet
@@ -407,7 +407,7 @@ export default function AddEditPetPage() {
       </main>
 
       {/* Sticky Save button */}
-      <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto px-4 py-4 bg-slate-50/95 backdrop-blur-sm border-t border-slate-200">
+      <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto px-4 py-4 bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-sm border-t border-slate-200 dark:border-slate-800">
         <button
           type="button"
           onClick={handleSave}

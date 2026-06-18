@@ -31,7 +31,7 @@ export default function PetCard({ pet, badge, badgeColor = 'amber' }: PetCardPro
   return (
     <button
       onClick={() => navigateToPet(pet.id)}
-      className="w-full bg-white rounded-2xl shadow-card p-4 flex items-center gap-4 hover:shadow-card-md active:scale-[0.99] transition-all text-left"
+      className="w-full bg-white dark:bg-slate-800 rounded-2xl shadow-card p-4 flex items-center gap-4 hover:shadow-card-md active:scale-[0.99] transition-all text-left"
     >
       <div className="relative flex-shrink-0">
         <img
@@ -45,18 +45,18 @@ export default function PetCard({ pet, badge, badgeColor = 'amber' }: PetCardPro
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between">
-          <h3 className="text-base font-semibold text-slate-900">{pet.name}</h3>
-          <ChevronRight size={16} className="text-slate-400 flex-shrink-0" />
+          <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{pet.name}</h3>
+          <ChevronRight size={16} className="text-slate-400 dark:text-slate-500 flex-shrink-0" />
         </div>
-        <p className="text-sm text-slate-500 mt-0.5">{pet.breed}</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{pet.breed}</p>
         <div className="flex items-center gap-3 mt-2">
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-slate-500 dark:text-slate-400">
             {pet.age} {pet.age === 1 ? 'year' : 'years'}
           </span>
-          <span className="text-slate-200 text-xs">·</span>
-          <span className="text-xs text-slate-500">{pet.weight} kg</span>
-          <span className="text-slate-200 text-xs">·</span>
-          <span className="text-xs text-slate-500 capitalize">{pet.gender}</span>
+          <span className="text-slate-200 dark:text-slate-600 text-xs">·</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400">{pet.weight} kg</span>
+          <span className="text-slate-200 dark:text-slate-600 text-xs">·</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 capitalize">{pet.gender}</span>
         </div>
         {badge && (
           <div className="mt-2">

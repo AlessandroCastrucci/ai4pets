@@ -279,7 +279,7 @@ function ChipButton({ active, onClick, children }: { active: boolean; onClick: (
       type="button"
       onClick={onClick}
       className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
-        active ? 'bg-sky-500 text-white border-sky-500' : 'bg-white text-slate-600 border-slate-200 hover:border-sky-300'
+        active ? 'bg-sky-500 text-white border-sky-500' : 'bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:border-sky-300'
       }`}
     >
       {children}
@@ -289,11 +289,11 @@ function ChipButton({ active, onClick, children }: { active: boolean; onClick: (
 
 function PetContextBanner({ pet }: { pet: { photo: string; name: string; breed: string; age: number; weight: number } }) {
   return (
-    <div className="flex items-center gap-3 bg-white rounded-2xl shadow-card px-3 py-2.5">
+    <div className="flex items-center gap-3 bg-white dark:bg-slate-800 rounded-2xl shadow-card px-3 py-2.5">
       <img src={pet.photo} alt={pet.name} className="w-10 h-10 rounded-xl object-cover flex-shrink-0" />
       <div>
-        <p className="text-sm font-bold text-slate-800">{pet.name}</p>
-        <p className="text-xs text-slate-400 mt-0.5">{pet.breed} · {pet.age} {pet.age === 1 ? 'year' : 'years'} · {pet.weight} kg</p>
+        <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{pet.name}</p>
+        <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{pet.breed} · {pet.age} {pet.age === 1 ? 'year' : 'years'} · {pet.weight} kg</p>
       </div>
     </div>
   );
@@ -302,7 +302,7 @@ function PetContextBanner({ pet }: { pet: { photo: string; name: string; breed: 
 function StepIndicator({ step }: { step: Step }) {
   const labels = ['Area', 'Photo', 'Symptoms', 'Result'];
   return (
-    <div className="bg-white border-b border-slate-100 px-4 py-2.5 flex items-center gap-2">
+    <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 px-4 py-2.5 flex items-center gap-2">
       {labels.map((label, i) => {
         const s = (i + 1) as 1 | 2 | 3 | 4;
         const active = step === s;
@@ -310,12 +310,12 @@ function StepIndicator({ step }: { step: Step }) {
         return (
           <div key={s} className="flex items-center gap-1.5 flex-1 last:flex-none">
             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
-              done ? 'bg-sky-500 text-white' : active ? 'bg-sky-500 text-white ring-2 ring-sky-200' : 'bg-slate-100 text-slate-400'
+              done ? 'bg-sky-500 text-white' : active ? 'bg-sky-500 text-white ring-2 ring-sky-200' : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500'
             }`}>
               {done ? '✓' : s}
             </div>
-            <span className={`text-[10px] font-semibold ${active ? 'text-sky-600' : done ? 'text-slate-400' : 'text-slate-300'}`}>{label}</span>
-            {i < 3 && <div className={`flex-1 h-0.5 rounded-full ${done ? 'bg-sky-400' : 'bg-slate-100'}`} />}
+            <span className={`text-[10px] font-semibold ${active ? 'text-sky-600' : done ? 'text-slate-400' : 'text-slate-300 dark:text-slate-600'}`}>{label}</span>
+            {i < 3 && <div className={`flex-1 h-0.5 rounded-full ${done ? 'bg-sky-400' : 'bg-slate-100 dark:bg-slate-700'}`} />}
           </div>
         );
       })}
@@ -407,7 +407,7 @@ export default function AIDiagnosticsPage() {
   const urgencyConf = result ? URGENCY_CONFIG[result.urgency] : null;
 
   return (
-    <div className="flex flex-col min-h-full bg-slate-50">
+    <div className="flex flex-col min-h-full bg-slate-50 dark:bg-slate-900">
       <TopBar title="AI Diagnostics" showBack subtitle={pet.name} />
       {step <= 4 && <StepIndicator step={step} />}
 
@@ -417,7 +417,7 @@ export default function AIDiagnosticsPage() {
         {step === 1 && (
           <>
             <PetContextBanner pet={pet} />
-            <p className="text-sm font-bold text-slate-800 px-1">Where is the problem?</p>
+            <p className="text-sm font-bold text-slate-800 dark:text-slate-100 px-1">Where is the problem?</p>
             <div className="grid grid-cols-3 gap-2.5">
               {BODY_AREAS.map((area) => {
                 const Illustration = AREA_ILLUSTRATIONS[area.id];
@@ -425,13 +425,13 @@ export default function AIDiagnosticsPage() {
                   <button
                     key={area.id}
                     onClick={() => { setSelectedArea(area.id); setStep(2); }}
-                    className="bg-white rounded-2xl shadow-card p-3 flex flex-col items-center gap-2 hover:shadow-card-md active:scale-[0.97] transition-all border border-transparent hover:border-sky-200"
+                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-card p-3 flex flex-col items-center gap-2 hover:shadow-card-md active:scale-[0.97] transition-all border border-transparent hover:border-sky-200 dark:hover:border-sky-700"
                   >
                     <div className="w-14 h-14">
                       <Illustration />
                     </div>
-                    <p className="text-[11px] font-semibold text-slate-700 text-center leading-tight">{area.label}</p>
-                    <p className="text-[10px] text-slate-400 text-center leading-tight">{area.sublabel}</p>
+                    <p className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 text-center leading-tight">{area.label}</p>
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500 text-center leading-tight">{area.sublabel}</p>
                   </button>
                 );
               })}
@@ -444,8 +444,8 @@ export default function AIDiagnosticsPage() {
           <>
             <PetContextBanner pet={pet} />
             <div>
-              <p className="text-sm font-semibold text-slate-800">Add a photo of {pet.name}'s {areaLabel.toLowerCase()}</p>
-              <p className="text-xs text-slate-400 mt-0.5">A close-up photo helps the AI produce a more accurate result.</p>
+              <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">Add a photo of {pet.name}'s {areaLabel.toLowerCase()}</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">A close-up photo helps the AI produce a more accurate result.</p>
             </div>
 
             {!photoSimulated ? (
@@ -453,35 +453,35 @@ export default function AIDiagnosticsPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={() => setPhotoSimulated(true)}
-                    className="bg-white rounded-2xl border-2 border-dashed border-sky-300 py-10 flex flex-col items-center gap-2.5 hover:bg-sky-50 active:bg-sky-100 transition-colors"
+                    className="bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-sky-300 dark:border-sky-700 py-10 flex flex-col items-center gap-2.5 hover:bg-sky-50 dark:hover:bg-sky-900/10 active:bg-sky-100 transition-colors"
                   >
-                    <div className="w-11 h-11 rounded-2xl bg-sky-50 flex items-center justify-center">
+                    <div className="w-11 h-11 rounded-2xl bg-sky-50 dark:bg-sky-900/20 flex items-center justify-center">
                       <Camera size={22} className="text-sky-500" strokeWidth={1.5} />
                     </div>
                     <p className="text-xs font-semibold text-sky-600">Take Photo</p>
                   </button>
                   <button
                     onClick={() => setPhotoSimulated(true)}
-                    className="bg-white rounded-2xl border-2 border-dashed border-slate-200 py-10 flex flex-col items-center gap-2.5 hover:bg-slate-50 active:bg-slate-100 transition-colors"
+                    className="bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 py-10 flex flex-col items-center gap-2.5 hover:bg-slate-50 dark:hover:bg-slate-700 active:bg-slate-100 transition-colors"
                   >
-                    <div className="w-11 h-11 rounded-2xl bg-slate-50 flex items-center justify-center">
-                      <Upload size={22} className="text-slate-400" strokeWidth={1.5} />
+                    <div className="w-11 h-11 rounded-2xl bg-slate-50 dark:bg-slate-700 flex items-center justify-center">
+                      <Upload size={22} className="text-slate-400 dark:text-slate-500" strokeWidth={1.5} />
                     </div>
-                    <p className="text-xs font-semibold text-slate-500">From Gallery</p>
+                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">From Gallery</p>
                   </button>
                 </div>
 
                 {/* Photo tips */}
-                <div className="bg-white rounded-2xl shadow-card overflow-hidden">
+                <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card overflow-hidden">
                   <button
                     onClick={() => setTipsOpen((p) => !p)}
                     className="w-full flex items-center justify-between px-4 py-3"
                   >
                     <div className="flex items-center gap-2">
                       <Lightbulb size={15} className="text-amber-500" strokeWidth={2} />
-                      <span className="text-xs font-semibold text-slate-700">Tips for a better photo</span>
+                      <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">Tips for a better photo</span>
                     </div>
-                    <ArrowRight size={14} className={`text-slate-300 transition-transform ${tipsOpen ? 'rotate-90' : ''}`} />
+                    <ArrowRight size={14} className={`text-slate-300 dark:text-slate-600 transition-transform ${tipsOpen ? 'rotate-90' : ''}`} />
                   </button>
                   {tipsOpen && (
                     <div className="px-4 pb-4 space-y-2">
@@ -493,26 +493,26 @@ export default function AIDiagnosticsPage() {
                       ].map((tip, i) => (
                         <div key={i} className="flex items-start gap-2">
                           <span className="text-amber-400 text-xs mt-0.5 flex-shrink-0">•</span>
-                          <p className="text-xs text-slate-500 leading-relaxed">{tip}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{tip}</p>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
 
-                <button onClick={() => setStep(3)} className="w-full text-sm text-slate-400 hover:text-slate-600 py-2 transition-colors">
+                <button onClick={() => setStep(3)} className="w-full text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 py-2 transition-colors">
                   Skip — continue without photo
                 </button>
               </div>
             ) : (
               <div className="space-y-3">
-                <div className="bg-white rounded-2xl overflow-hidden shadow-card">
-                  <div className="bg-gradient-to-br from-slate-100 to-slate-200 h-48 flex flex-col items-center justify-center gap-2">
+                <div className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-card">
+                  <div className="bg-gradient-to-br from-slate-100 dark:from-slate-700 to-slate-200 dark:to-slate-600 h-48 flex flex-col items-center justify-center gap-2">
                     <Camera size={32} className="text-slate-400" strokeWidth={1.5} />
                     <p className="text-xs text-slate-400">Photo captured</p>
                   </div>
                   <div className="px-4 py-3 flex items-center justify-between">
-                    <span className="text-xs text-slate-500">photo_{areaLabel.toLowerCase().replace(/[\s/]+/g, '_')}_2026.jpg</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">photo_{areaLabel.toLowerCase().replace(/[\s/]+/g, '_')}_2026.jpg</span>
                     <button onClick={() => setPhotoSimulated(false)} className="text-xs text-sky-500 font-semibold">Retake</button>
                   </div>
                 </div>
@@ -532,19 +532,19 @@ export default function AIDiagnosticsPage() {
           <>
             <PetContextBanner pet={pet} />
 
-            <div className="bg-white rounded-2xl shadow-card p-4 space-y-2">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Describe the problem <span className="text-red-400">*</span></p>
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card p-4 space-y-2">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Describe the problem <span className="text-red-400">*</span></p>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder={`e.g. "${pet.name} has been scratching frequently, there's slight redness, and it started 3 days ago..."`}
-                className="w-full bg-slate-50 rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:border-sky-400 resize-none leading-relaxed"
+                className="w-full bg-slate-50 dark:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-600 px-3 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-sky-400 resize-none leading-relaxed"
                 rows={4}
               />
             </div>
 
-            <div className="bg-white rounded-2xl shadow-card p-4 space-y-2.5">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">How long has it been present?</p>
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card p-4 space-y-2.5">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">How long has it been present?</p>
               <div className="flex flex-wrap gap-2">
                 {DURATION_OPTIONS.map((opt) => (
                   <ChipButton key={opt} active={duration === opt} onClick={() => setDuration(duration === opt ? '' : opt)}>
@@ -554,8 +554,8 @@ export default function AIDiagnosticsPage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-card p-4 space-y-2.5">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Observed symptoms</p>
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card p-4 space-y-2.5">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Observed symptoms</p>
               <div className="grid grid-cols-2 gap-2">
                 {SYMPTOMS_LIST.map((s) => {
                   const checked = checkedSymptoms.has(s);
@@ -564,11 +564,11 @@ export default function AIDiagnosticsPage() {
                       key={s}
                       onClick={() => toggleSymptom(s)}
                       className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-xs font-medium transition-all text-left ${
-                        checked ? 'bg-sky-50 border-sky-300 text-sky-700' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-sky-200'
+                        checked ? 'bg-sky-50 dark:bg-sky-900/20 border-sky-300 dark:border-sky-700 text-sky-700 dark:text-sky-400' : 'bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-sky-200'
                       }`}
                     >
                       <div className={`w-4 h-4 rounded-md border flex-shrink-0 flex items-center justify-center transition-colors ${
-                        checked ? 'bg-sky-500 border-sky-500' : 'border-slate-300 bg-white'
+                        checked ? 'bg-sky-500 border-sky-500' : 'border-slate-300 dark:border-slate-500 bg-white dark:bg-slate-600'
                       }`}>
                         {checked && <span className="text-white text-[9px] font-black leading-none">✓</span>}
                       </div>
@@ -579,14 +579,14 @@ export default function AIDiagnosticsPage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-card p-4 space-y-4">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card p-4 space-y-4">
               {[
                 { label: 'Eating', opts: EATING_OPTIONS, val: eating, set: setEating },
                 { label: 'Drinking', opts: DRINKING_OPTIONS, val: drinking, set: setDrinking },
                 { label: 'Activity level', opts: ACTIVITY_OPTIONS, val: activity, set: setActivity },
               ].map(({ label, opts, val, set }) => (
                 <div key={label}>
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">{label}</p>
+                  <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">{label}</p>
                   <div className="flex flex-wrap gap-2">
                     {opts.map((o) => (
                       <ChipButton key={o.id} active={val === o.id} onClick={() => set(val === o.id ? '' : o.id)}>
@@ -601,7 +601,7 @@ export default function AIDiagnosticsPage() {
             <div className="flex gap-3">
               <button
                 onClick={() => setStep(2)}
-                className="flex-1 bg-white border border-slate-200 text-slate-600 font-semibold text-sm py-3.5 rounded-2xl hover:bg-slate-50 transition-colors"
+                className="flex-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold text-sm py-3.5 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
               >
                 Back
               </button>
@@ -630,22 +630,22 @@ export default function AIDiagnosticsPage() {
             </div>
 
             {[
-              { Icon: Zap, title: 'Possible Causes', items: result.possibleCauses, color: 'text-sky-500', bg: 'bg-sky-50' },
-              { Icon: CheckCircle, title: 'What To Do Now', items: result.whatToDoNow, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-              { Icon: BookOpen, title: 'What To Monitor', items: result.whatToMonitor, color: 'text-amber-500', bg: 'bg-amber-50' },
-              { Icon: XCircle, title: 'What NOT To Do', items: result.whatNotToDo, color: 'text-red-500', bg: 'bg-red-50' },
+              { Icon: Zap, title: 'Possible Causes', items: result.possibleCauses, color: 'text-sky-500', bg: 'bg-sky-50 dark:bg-sky-900/20' },
+              { Icon: CheckCircle, title: 'What To Do Now', items: result.whatToDoNow, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-900/20' },
+              { Icon: BookOpen, title: 'What To Monitor', items: result.whatToMonitor, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-900/20' },
+              { Icon: XCircle, title: 'What NOT To Do', items: result.whatNotToDo, color: 'text-red-500', bg: 'bg-red-50 dark:bg-red-900/20' },
             ].map(({ Icon, title, items, color, bg }) => (
-              <div key={title} className="bg-white rounded-2xl shadow-card p-4">
+              <div key={title} className="bg-white dark:bg-slate-800 rounded-2xl shadow-card p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <div className={`w-7 h-7 rounded-lg ${bg} flex items-center justify-center`}>
                     <Icon size={15} className={color} strokeWidth={2} />
                   </div>
-                  <p className="text-sm font-semibold text-slate-800">{title}</p>
+                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{title}</p>
                 </div>
                 <ul className="space-y-2">
                   {items.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-slate-600 leading-relaxed">
-                      <span className="text-slate-300 mt-1 flex-shrink-0">•</span>
+                    <li key={i} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                      <span className="text-slate-300 dark:text-slate-600 mt-1 flex-shrink-0">•</span>
                       {item}
                     </li>
                   ))}
@@ -653,7 +653,7 @@ export default function AIDiagnosticsPage() {
               </div>
             ))}
 
-            <div className="bg-slate-800 rounded-2xl p-4">
+            <div className="bg-slate-800 dark:bg-slate-700 rounded-2xl p-4">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Follow-up Recommendation</p>
               <p className="text-sm text-slate-100 leading-relaxed">{result.followUpRecommendation}</p>
             </div>
@@ -691,7 +691,7 @@ export default function AIDiagnosticsPage() {
               <div className="space-y-3">
                 <button
                   onClick={() => setFollowUpOpen(true)}
-                  className="w-full bg-white border border-slate-200 text-slate-700 font-semibold text-sm py-3.5 rounded-2xl hover:bg-slate-50 active:bg-slate-100 transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-sm py-3.5 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-700 active:bg-slate-100 transition-colors flex items-center justify-center gap-2"
                 >
                   <MessageSquare size={16} className="text-sky-500" strokeWidth={2} />
                   Start Follow-up
@@ -707,30 +707,30 @@ export default function AIDiagnosticsPage() {
             )}
 
             {followUpOpen && (
-              <div className="bg-white rounded-2xl shadow-card overflow-hidden">
-                <div className="px-4 pt-4 pb-3 border-b border-slate-50">
-                  <p className="text-sm font-bold text-slate-800">How is {pet.name} today?</p>
-                  <p className="text-xs text-slate-400 mt-0.5">Following up on: {areaLabel} · {result.possibleIssue}</p>
+              <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card overflow-hidden">
+                <div className="px-4 pt-4 pb-3 border-b border-slate-50 dark:border-slate-700">
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-100">How is {pet.name} today?</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Following up on: {areaLabel} · {result.possibleIssue}</p>
                 </div>
 
                 {!followUpStatus && (
                   <div className="px-4 py-3 space-y-2">
                     {[
-                      { id: 'improved', label: 'Improved', Icon: CheckCircle, iconColor: 'text-emerald-500', bg: 'bg-emerald-50', border: 'border-emerald-200 hover:border-emerald-300' },
-                      { id: 'same', label: 'Same', Icon: AlertTriangle, iconColor: 'text-amber-500', bg: 'bg-amber-50', border: 'border-amber-200 hover:border-amber-300' },
-                      { id: 'worse', label: 'Worse', Icon: XCircle, iconColor: 'text-red-500', bg: 'bg-red-50', border: 'border-red-200 hover:border-red-300' },
-                      { id: 'upload-photo', label: 'Upload new photo', Icon: Camera, iconColor: 'text-sky-500', bg: 'bg-sky-50', border: 'border-sky-200 hover:border-sky-300' },
+                      { id: 'improved', label: 'Improved', Icon: CheckCircle, iconColor: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-900/20', border: 'border-emerald-200 dark:border-emerald-800 hover:border-emerald-300' },
+                      { id: 'same', label: 'Same', Icon: AlertTriangle, iconColor: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-900/20', border: 'border-amber-200 dark:border-amber-800 hover:border-amber-300' },
+                      { id: 'worse', label: 'Worse', Icon: XCircle, iconColor: 'text-red-500', bg: 'bg-red-50 dark:bg-red-900/20', border: 'border-red-200 dark:border-red-800 hover:border-red-300' },
+                      { id: 'upload-photo', label: 'Upload new photo', Icon: Camera, iconColor: 'text-sky-500', bg: 'bg-sky-50 dark:bg-sky-900/20', border: 'border-sky-200 dark:border-sky-800 hover:border-sky-300' },
                     ].map(({ id, label, Icon, iconColor, bg, border }) => (
                       <button
                         key={id}
                         onClick={() => handleFollowUpStatusSelect(id)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border bg-white transition-all ${border} active:scale-[0.99]`}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border bg-white dark:bg-slate-750 transition-all ${border} active:scale-[0.99]`}
                       >
                         <div className={`w-8 h-8 rounded-lg ${bg} flex items-center justify-center flex-shrink-0`}>
                           <Icon size={17} className={iconColor} strokeWidth={2} />
                         </div>
-                        <span className="text-sm font-semibold text-slate-700">{label}</span>
-                        <ChevronRight size={14} className="text-slate-300 ml-auto" />
+                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{label}</span>
+                        <ChevronRight size={14} className="text-slate-300 dark:text-slate-600 ml-auto" />
                       </button>
                     ))}
                   </div>
@@ -741,18 +741,18 @@ export default function AIDiagnosticsPage() {
                     {!followUpNewPhoto ? (
                       <button
                         onClick={() => setFollowUpNewPhoto(true)}
-                        className="w-full bg-slate-50 rounded-xl border-2 border-dashed border-sky-300 py-10 flex flex-col items-center gap-2 hover:bg-sky-50 transition-colors"
+                        className="w-full bg-slate-50 dark:bg-slate-700 rounded-xl border-2 border-dashed border-sky-300 dark:border-sky-700 py-10 flex flex-col items-center gap-2 hover:bg-sky-50 dark:hover:bg-sky-900/10 transition-colors"
                       >
                         <Camera size={26} className="text-sky-400" strokeWidth={1.5} />
                         <p className="text-xs font-semibold text-sky-600">Take or upload a follow-up photo</p>
                       </button>
                     ) : (
-                      <div className="bg-gradient-to-br from-slate-100 to-slate-200 h-36 rounded-xl flex flex-col items-center justify-center gap-2">
+                      <div className="bg-gradient-to-br from-slate-100 dark:from-slate-700 to-slate-200 dark:to-slate-600 h-36 rounded-xl flex flex-col items-center justify-center gap-2">
                         <Camera size={24} className="text-slate-400" strokeWidth={1.5} />
                         <p className="text-xs text-slate-400">Follow-up photo captured</p>
                       </div>
                     )}
-                    <p className="text-xs text-slate-500 leading-relaxed">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                       The AI will use this alongside the original {areaLabel.toLowerCase()} diagnosis to track {pet.name}'s progression.
                     </p>
                     <button
@@ -776,20 +776,20 @@ export default function AIDiagnosticsPage() {
                       <span className="text-[10px] text-slate-400">· {areaLabel}</span>
                     </div>
                     {followUpReply && (
-                      <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
-                        <p className="text-xs text-slate-700 leading-relaxed">{followUpReply}</p>
+                      <div className="bg-slate-50 dark:bg-slate-700 rounded-xl p-3 border border-slate-100 dark:border-slate-600">
+                        <p className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed">{followUpReply}</p>
                       </div>
                     )}
 
                     <div className="space-y-2">
-                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Have another question?</p>
+                      <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Have another question?</p>
                       <div className="flex gap-2">
                         <input
                           type="text"
                           value={followUpQuestion}
                           onChange={(e) => setFollowUpQuestion(e.target.value)}
                           placeholder="Ask a follow-up question..."
-                          className="flex-1 bg-slate-50 rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:border-sky-400"
+                          className="flex-1 bg-slate-50 dark:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-600 px-3 py-2 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-sky-400"
                         />
                         <button
                           onClick={handleAskFollowUpQuestion}
@@ -800,8 +800,8 @@ export default function AIDiagnosticsPage() {
                         </button>
                       </div>
                       {followUpQuestionReply && (
-                        <div className="bg-sky-50 rounded-xl p-3 border border-sky-100">
-                          <p className="text-xs text-sky-800 leading-relaxed">{followUpQuestionReply}</p>
+                        <div className="bg-sky-50 dark:bg-sky-900/20 rounded-xl p-3 border border-sky-100 dark:border-sky-800">
+                          <p className="text-xs text-sky-800 dark:text-sky-300 leading-relaxed">{followUpQuestionReply}</p>
                         </div>
                       )}
                     </div>

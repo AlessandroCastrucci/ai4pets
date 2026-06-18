@@ -24,7 +24,7 @@ export default function MyPetsPage() {
   const { pets, reminders, vaccines, navigateToAddPet } = useApp();
 
   return (
-    <div className="flex flex-col min-h-full bg-slate-50">
+    <div className="flex flex-col min-h-full bg-slate-50 dark:bg-slate-900">
       <TopBar
         title="My Pets"
         rightSlot={
@@ -38,7 +38,7 @@ export default function MyPetsPage() {
         }
       />
       <main className="flex-1 px-4 py-4 space-y-3 pb-24">
-        <p className="text-xs text-slate-500 font-medium uppercase tracking-wide px-1">
+        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wide px-1">
           {pets.length} {pets.length === 1 ? 'pet' : 'pets'}
         </p>
         {pets.map((pet) => {
@@ -55,7 +55,7 @@ export default function MyPetsPage() {
         <div className="pt-2">
           <button
             onClick={navigateToAddPet}
-            className="w-full border-2 border-dashed border-slate-200 rounded-2xl py-5 flex flex-col items-center gap-2 text-slate-400 hover:border-sky-300 hover:text-sky-400 hover:bg-sky-50/50 active:bg-sky-50 transition-all"
+            className="w-full border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl py-5 flex flex-col items-center gap-2 text-slate-400 dark:text-slate-500 hover:border-sky-300 hover:text-sky-400 hover:bg-sky-50/50 dark:hover:bg-sky-900/20 active:bg-sky-50 transition-all"
           >
             <PlusCircle size={24} strokeWidth={1.5} />
             <span className="text-sm font-medium">Add a new pet</span>

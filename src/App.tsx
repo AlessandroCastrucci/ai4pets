@@ -47,7 +47,7 @@ function AuthenticatedApp() {
   const showBottomNav = currentScreen === null;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col max-w-md mx-auto relative">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col max-w-md mx-auto relative">
       <div className="flex-1 overflow-y-auto" style={{ paddingBottom: showBottomNav ? '72px' : '0' }}>
         <AppScreen />
       </div>
@@ -69,7 +69,7 @@ export default function App() {
 
   if (!isAuthenticated) {
     return (
-      <div className="max-w-md mx-auto min-h-screen">
+      <div className="max-w-md mx-auto min-h-screen dark:bg-slate-900">
         <AuthScreens />
       </div>
     );

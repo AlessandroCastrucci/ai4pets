@@ -287,12 +287,12 @@ function getMockResponse(question: string, ctx: PetCtx): string {
 function PetSelector({ pets, onSelect }: { pets: Pet[]; onSelect: (petId: string) => void }) {
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 gap-6">
-      <div className="w-16 h-16 rounded-2xl bg-sky-50 flex items-center justify-center">
+      <div className="w-16 h-16 rounded-2xl bg-sky-50 dark:bg-sky-900/40 flex items-center justify-center">
         <Bot size={32} className="text-sky-500" />
       </div>
       <div className="text-center">
-        <h2 className="text-lg font-semibold text-slate-800">AI Pet Assistant</h2>
-        <p className="text-sm text-slate-500 mt-1">Which pet do you want to talk about?</p>
+        <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">AI Pet Assistant</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Which pet do you want to talk about?</p>
       </div>
       <div className="w-full space-y-3">
         {pets.map((pet) => {
@@ -301,16 +301,16 @@ function PetSelector({ pets, onSelect }: { pets: Pet[]; onSelect: (petId: string
             <button
               key={pet.id}
               onClick={() => onSelect(pet.id)}
-              className="w-full bg-white rounded-2xl shadow-card p-4 flex items-center gap-3 hover:shadow-card-md active:scale-[0.99] transition-all"
+              className="w-full bg-white dark:bg-slate-800 rounded-2xl shadow-card p-4 flex items-center gap-3 hover:shadow-card-md active:scale-[0.99] transition-all"
             >
               <img src={pet.photo} alt={pet.name} className="w-12 h-12 rounded-xl object-cover" />
               <div className="flex-1 text-left">
-                <p className="text-sm font-semibold text-slate-800">{pet.name}</p>
-                <p className="text-xs text-slate-500">
+                <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{pet.name}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   {pet.breed} · {pet.age}y · {pet.weight}kg
                 </p>
               </div>
-              <SpeciesIcon size={16} className="text-slate-400" />
+              <SpeciesIcon size={16} className="text-slate-400 dark:text-slate-500" />
             </button>
           );
         })}
@@ -391,7 +391,7 @@ export default function AIAssistantPage() {
 
   if (!chatPetCtx) {
     return (
-      <div className="flex flex-col min-h-full bg-slate-50">
+      <div className="flex flex-col min-h-full bg-slate-50 dark:bg-slate-900">
         <TopBar title="AI Assistant" />
         <PetSelector pets={pets} onSelect={selectPet} />
       </div>
@@ -402,7 +402,7 @@ export default function AIAssistantPage() {
   const quickQuestions = getContextualQuestions(chatPetCtx);
 
   return (
-    <div className="flex flex-col min-h-full bg-slate-50">
+    <div className="flex flex-col min-h-full bg-slate-50 dark:bg-slate-900">
       <TopBar
         title="AI Assistant"
         subtitle={pet.name}
@@ -420,13 +420,13 @@ export default function AIAssistantPage() {
       />
 
       {/* Pet context chip */}
-      <div className="px-4 py-2 bg-white border-b border-slate-100">
+      <div className="px-4 py-2 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2">
           <img src={pet.photo} alt={pet.name} className="w-6 h-6 rounded-full object-cover" />
-          <span className="text-xs font-medium text-slate-600">
+          <span className="text-xs font-medium text-slate-600 dark:text-slate-300">
             Chatting about <strong>{pet.name}</strong>
           </span>
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-slate-400 dark:text-slate-500">
             · {pet.breed} · {pet.age}y · {pet.weight}kg
           </span>
         </div>
@@ -437,7 +437,7 @@ export default function AIAssistantPage() {
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             {msg.role === 'assistant' && (
-              <div className="w-7 h-7 rounded-full bg-sky-50 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
+              <div className="w-7 h-7 rounded-full bg-sky-50 dark:bg-sky-900/40 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
                 <Bot size={15} className="text-sky-500" />
               </div>
             )}
@@ -445,7 +445,7 @@ export default function AIAssistantPage() {
               className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-line ${
                 msg.role === 'user'
                   ? 'bg-sky-500 text-white rounded-tr-sm'
-                  : 'bg-white text-slate-800 shadow-card rounded-tl-sm'
+                  : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 shadow-card rounded-tl-sm'
               }`}
             >
               {msg.text}
@@ -454,14 +454,14 @@ export default function AIAssistantPage() {
         ))}
         {typing && (
           <div className="flex justify-start">
-            <div className="w-7 h-7 rounded-full bg-sky-50 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
+            <div className="w-7 h-7 rounded-full bg-sky-50 dark:bg-sky-900/40 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
               <Bot size={15} className="text-sky-500" />
             </div>
-            <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-card flex gap-1 items-center">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl rounded-tl-sm px-4 py-3 shadow-card flex gap-1 items-center">
               {[0, 1, 2].map((i) => (
                 <div
                   key={i}
-                  className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce"
+                  className="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-500 rounded-full animate-bounce"
                   style={{ animationDelay: `${i * 0.15}s` }}
                 />
               ))}
@@ -472,26 +472,26 @@ export default function AIAssistantPage() {
       </div>
 
       {/* Quick questions + input */}
-      <div className="fixed bottom-[72px] left-0 right-0 max-w-md mx-auto bg-gradient-to-t from-slate-50 pt-4 pb-2 px-4">
+      <div className="fixed bottom-[72px] left-0 right-0 max-w-md mx-auto bg-gradient-to-t from-slate-50 dark:from-slate-900 pt-4 pb-2 px-4">
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {quickQuestions.map((q) => (
             <button
               key={q}
               onClick={() => sendMessage(q)}
-              className="flex-shrink-0 px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs text-slate-600 hover:border-sky-300 hover:text-sky-600 transition-colors shadow-card"
+              className="flex-shrink-0 px-3 py-1.5 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 hover:border-sky-300 hover:text-sky-600 transition-colors shadow-card"
             >
               {q}
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-2 bg-white rounded-2xl border border-slate-200 shadow-card px-3 py-2">
+        <div className="flex items-center gap-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-card px-3 py-2">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && sendMessage(input)}
             placeholder={`Ask about ${pet.name}...`}
-            className="flex-1 text-sm text-slate-800 placeholder:text-slate-400 outline-none bg-transparent"
+            className="flex-1 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none bg-transparent"
           />
           <button
             onClick={() => sendMessage(input)}
