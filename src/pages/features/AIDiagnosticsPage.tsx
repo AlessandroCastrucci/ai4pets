@@ -8,6 +8,147 @@ import TopBar from '../../components/TopBar';
 import { useApp } from '../../context/AppContext';
 import type { BodyArea, UrgencyLevel, DiagnosticResult } from '../../types';
 
+/* ─── Custom illustrated SVG icons ─────────────────────────────────────── */
+
+function IllustrationEye() {
+  return (
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <ellipse cx="20" cy="20" rx="14" ry="8" fill="#e0f2fe" stroke="#38bdf8" strokeWidth="1.8"/>
+      <circle cx="20" cy="20" r="5" fill="#0ea5e9"/>
+      <circle cx="20" cy="20" r="2.5" fill="#0c4a6e"/>
+      <circle cx="22" cy="18" r="1.2" fill="white"/>
+      <path d="M6 20 Q20 8 34 20" stroke="#7dd3fc" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+    </svg>
+  );
+}
+
+function IllustrationEar() {
+  return (
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <path d="M12 8 C8 8 6 14 6 20 C6 28 10 34 16 34 C20 34 22 30 22 28 C22 26 20 24 20 22 C20 18 24 16 24 12 C24 8 20 6 16 6 C14.5 6 13 6.8 12 8Z" fill="#ede9fe" stroke="#8b5cf6" strokeWidth="1.8" strokeLinejoin="round"/>
+      <path d="M14 12 C12 14 12 18 14 22 C15 24 16 26 16 28" stroke="#a78bfa" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+    </svg>
+  );
+}
+
+function IllustrationSkinFur() {
+  return (
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <ellipse cx="20" cy="22" rx="13" ry="11" fill="#ccfbf1" stroke="#14b8a6" strokeWidth="1.8"/>
+      <circle cx="14" cy="14" r="5" fill="#ccfbf1" stroke="#14b8a6" strokeWidth="1.8"/>
+      <circle cx="26" cy="14" r="5" fill="#ccfbf1" stroke="#14b8a6" strokeWidth="1.8"/>
+      {/* fur lines */}
+      <line x1="15" y1="18" x2="13" y2="22" stroke="#14b8a6" strokeWidth="1.2" strokeLinecap="round"/>
+      <line x1="20" y1="17" x2="20" y2="22" stroke="#14b8a6" strokeWidth="1.2" strokeLinecap="round"/>
+      <line x1="25" y1="18" x2="27" y2="22" stroke="#14b8a6" strokeWidth="1.2" strokeLinecap="round"/>
+      {/* irritation dots */}
+      <circle cx="20" cy="26" r="1.5" fill="#f87171"/>
+      <circle cx="24" cy="24" r="1" fill="#fca5a5"/>
+      <circle cx="16" cy="25" r="1" fill="#fca5a5"/>
+    </svg>
+  );
+}
+
+function IllustrationPaws() {
+  return (
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      {/* main pad */}
+      <ellipse cx="20" cy="26" rx="8" ry="7" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1.8"/>
+      {/* toe pads */}
+      <ellipse cx="12" cy="18" rx="3.5" ry="3" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1.6"/>
+      <ellipse cx="28" cy="18" rx="3.5" ry="3" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1.6"/>
+      <ellipse cx="16" cy="14" rx="3.2" ry="2.8" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1.6"/>
+      <ellipse cx="24" cy="14" rx="3.2" ry="2.8" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1.6"/>
+    </svg>
+  );
+}
+
+function IllustrationMouth() {
+  return (
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      {/* open mouth shape */}
+      <path d="M8 18 Q8 10 20 10 Q32 10 32 18 L32 24 Q32 34 20 34 Q8 34 8 24 Z" fill="#d1fae5" stroke="#10b981" strokeWidth="1.8"/>
+      {/* upper teeth */}
+      <rect x="12" y="18" width="4" height="5" rx="1.5" fill="white" stroke="#10b981" strokeWidth="1"/>
+      <rect x="18" y="17" width="4" height="6" rx="1.5" fill="white" stroke="#10b981" strokeWidth="1"/>
+      <rect x="24" y="18" width="4" height="5" rx="1.5" fill="white" stroke="#10b981" strokeWidth="1"/>
+      {/* tongue */}
+      <ellipse cx="20" cy="29" rx="6" ry="3.5" fill="#fda4af"/>
+      <line x1="20" y1="25.5" x2="20" y2="32" stroke="#fb7185" strokeWidth="1" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+function IllustrationWound() {
+  return (
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      {/* bandage body */}
+      <rect x="6" y="16" width="28" height="8" rx="4" fill="#fee2e2" stroke="#ef4444" strokeWidth="1.8"/>
+      {/* bandage pads */}
+      <rect x="15" y="14" width="10" height="12" rx="2" fill="#fecaca" stroke="#ef4444" strokeWidth="1.4"/>
+      {/* bandage cross */}
+      <line x1="20" y1="16" x2="20" y2="26" stroke="#ef4444" strokeWidth="1.5" strokeLinecap="round"/>
+      <line x1="16" y1="20" x2="24" y2="20" stroke="#ef4444" strokeWidth="1.5" strokeLinecap="round"/>
+      {/* stitches on sides */}
+      <line x1="9" y1="18" x2="9" y2="22" stroke="#ef4444" strokeWidth="1.2" strokeLinecap="round"/>
+      <line x1="31" y1="18" x2="31" y2="22" stroke="#ef4444" strokeWidth="1.2" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+function IllustrationStool() {
+  return (
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <ellipse cx="20" cy="32" rx="11" ry="3.5" fill="#d1d5db"/>
+      <path d="M13 30 Q12 24 16 22 Q14 18 18 16 Q16 12 20 11 Q24 12 22 16 Q26 18 24 22 Q28 24 27 30 Z" fill="#e2e8f0" stroke="#94a3b8" strokeWidth="1.6" strokeLinejoin="round"/>
+      {/* wavy lines indicating smell / concern */}
+      <path d="M30 16 Q32 14 30 12 Q32 10 30 8" stroke="#fca5a5" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
+      <path d="M33 18 Q35 16 33 14 Q35 12 33 10" stroke="#fca5a5" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+    </svg>
+  );
+}
+
+function IllustrationVomit() {
+  return (
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      {/* stomach */}
+      <ellipse cx="20" cy="18" rx="10" ry="9" fill="#ffe4e6" stroke="#f43f5e" strokeWidth="1.8"/>
+      {/* X eyes */}
+      <line x1="15" y1="13" x2="17" y2="15" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round"/>
+      <line x1="17" y1="13" x2="15" y2="15" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round"/>
+      <line x1="23" y1="13" x2="25" y2="15" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round"/>
+      <line x1="25" y1="13" x2="23" y2="15" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round"/>
+      {/* wavy mouth */}
+      <path d="M15 20 Q17 22 20 20 Q23 18 25 20" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      {/* drip */}
+      <path d="M18 27 Q18 32 20 34 Q22 32 22 27" fill="#bbf7d0" stroke="#22c55e" strokeWidth="1.2"/>
+    </svg>
+  );
+}
+
+function IllustrationOther() {
+  return (
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <circle cx="20" cy="20" r="14" fill="#f8fafc" stroke="#94a3b8" strokeWidth="1.8"/>
+      <text x="20" y="26" textAnchor="middle" fontSize="18" fontWeight="700" fill="#64748b" fontFamily="serif">?</text>
+    </svg>
+  );
+}
+
+const AREA_ILLUSTRATIONS: Record<BodyArea, React.ElementType> = {
+  'skin-fur': IllustrationSkinFur,
+  eyes: IllustrationEye,
+  ears: IllustrationEar,
+  paws: IllustrationPaws,
+  'mouth-teeth': IllustrationMouth,
+  wound: IllustrationWound,
+  stool: IllustrationStool,
+  vomit: IllustrationVomit,
+  other: IllustrationOther,
+};
+
+/* ─── Area definitions (icons kept for steps 2-5 banners) ──────────────── */
+
 interface AreaDef {
   id: BodyArea;
   label: string;
@@ -296,23 +437,23 @@ export default function AIDiagnosticsPage() {
           <>
             <PetContextBanner pet={pet} />
             <p className="text-sm font-bold text-slate-800 px-1">Where is the problem?</p>
-            <div className="space-y-1.5">
-              {BODY_AREAS.map((area) => (
-                <button
-                  key={area.id}
-                  onClick={() => { setSelectedArea(area.id); setStep(2); }}
-                  className="w-full bg-white rounded-2xl shadow-card px-4 py-3 flex items-center gap-3 hover:shadow-card-md active:scale-[0.99] transition-all text-left border border-transparent hover:border-sky-200"
-                >
-                  <div className={`w-9 h-9 rounded-xl ${area.bg} flex items-center justify-center flex-shrink-0`}>
-                    <area.Icon size={18} className={area.iconColor} strokeWidth={1.5} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-800">{area.label}</p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">{area.sublabel}</p>
-                  </div>
-                  <ChevronRight size={16} className="text-slate-300 flex-shrink-0" />
-                </button>
-              ))}
+            <div className="grid grid-cols-3 gap-2.5">
+              {BODY_AREAS.map((area) => {
+                const Illustration = AREA_ILLUSTRATIONS[area.id];
+                return (
+                  <button
+                    key={area.id}
+                    onClick={() => { setSelectedArea(area.id); setStep(2); }}
+                    className="bg-white rounded-2xl shadow-card p-3 flex flex-col items-center gap-2 hover:shadow-card-md active:scale-[0.97] transition-all border border-transparent hover:border-sky-200"
+                  >
+                    <div className="w-14 h-14">
+                      <Illustration />
+                    </div>
+                    <p className="text-[11px] font-semibold text-slate-700 text-center leading-tight">{area.label}</p>
+                    <p className="text-[10px] text-slate-400 text-center leading-tight">{area.sublabel}</p>
+                  </button>
+                );
+              })}
             </div>
           </>
         )}
