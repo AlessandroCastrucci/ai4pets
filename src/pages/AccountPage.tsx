@@ -1,4 +1,4 @@
-import { ChevronRight, Shield, Trash2, LogOut, Pencil } from 'lucide-react';
+import { ChevronRight, Trash2, LogOut, Pencil } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import { useAuth } from '../context/AuthContext';
 import { useApp } from '../context/AppContext';
@@ -29,7 +29,7 @@ function ActionRow({
   destructive = false,
   onClick,
 }: {
-  Icon: typeof Shield;
+  Icon: typeof Trash2;
   label: string;
   sublabel?: string;
   iconBg?: string;
@@ -102,25 +102,10 @@ export default function AccountPage() {
           </SectionCard>
         </div>
 
-        {/* Privacy & Security */}
+        {/* Session */}
         <div>
-          <SectionLabel>Privacy &amp; Security</SectionLabel>
+          <SectionLabel>Session</SectionLabel>
           <SectionCard>
-            <ActionRow
-              Icon={Shield}
-              label="Privacy Policy"
-              iconBg="bg-slate-100"
-              iconColor="text-slate-500"
-              onClick={() => {}}
-            />
-            <ActionRow
-              Icon={Shield}
-              label="Data Management"
-              sublabel="View and manage your data"
-              iconBg="bg-slate-100"
-              iconColor="text-slate-500"
-              onClick={() => {}}
-            />
             <ActionRow
               Icon={Trash2}
               label="Delete Account"
@@ -131,14 +116,9 @@ export default function AccountPage() {
               onClick={() => {}}
             />
           </SectionCard>
-        </div>
-
-        {/* Session */}
-        <div>
-          <SectionLabel>Session</SectionLabel>
           <button
             onClick={logout}
-            className="w-full bg-white rounded-2xl shadow-card px-4 py-3.5 flex items-center gap-3 hover:bg-red-50 active:bg-red-100 transition-colors"
+            className="w-full mt-3 bg-white rounded-2xl shadow-card px-4 py-3.5 flex items-center gap-3 hover:bg-red-50 active:bg-red-100 transition-colors"
           >
             <div className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
               <LogOut size={16} className="text-red-500" strokeWidth={2} />

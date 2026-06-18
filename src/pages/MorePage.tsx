@@ -1,4 +1,4 @@
-import { Bell, Shield, Info, ChevronRight, LogOut, UtensilsCrossed, Bot, Stethoscope, Download, FileText, Syringe } from 'lucide-react';
+import { Bell, Shield, Info, ChevronRight, UtensilsCrossed, Bot, Stethoscope, Download, FileText, Syringe } from 'lucide-react';
 import { useState } from 'react';
 import TopBar from '../components/TopBar';
 import { useAuth } from '../context/AuthContext';
@@ -68,7 +68,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 export default function MorePage() {
-  const { logout, user } = useAuth();
+  const { user } = useAuth();
   const { navigateToAccount } = useApp();
 
   const [notifTherapy, setNotifTherapy] = useState(true);
@@ -171,6 +171,14 @@ export default function MorePage() {
               onClick={() => {}}
             />
             <Row
+              Icon={Shield}
+              label="Data Management"
+              sublabel="View and manage your data"
+              iconBg="bg-slate-100"
+              iconColor="text-slate-500"
+              onClick={() => {}}
+            />
+            <Row
               Icon={Download}
               label="Export Health History"
               sublabel="Download full health records"
@@ -227,17 +235,6 @@ export default function MorePage() {
             />
           </SectionCard>
         </div>
-
-        {/* Sign Out */}
-        <button
-          onClick={logout}
-          className="w-full bg-white rounded-2xl shadow-card px-4 py-3.5 flex items-center gap-3 hover:bg-red-50 active:bg-red-100 transition-colors"
-        >
-          <div className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
-            <LogOut size={16} className="text-red-500" strokeWidth={2} />
-          </div>
-          <span className="text-sm font-semibold text-red-500">Sign Out</span>
-        </button>
 
       </main>
     </div>
