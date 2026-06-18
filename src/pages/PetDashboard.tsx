@@ -208,12 +208,7 @@ export default function PetDashboard() {
               </div>
             )}
 
-            {pet.vetNotes && (
-              <div className="mt-3 pt-3 border-t border-slate-100">
-                <p className="text-[11px] font-semibold text-slate-400 mb-1">Vet Notes</p>
-                <p className="text-[11px] text-slate-600 leading-relaxed">{pet.vetNotes}</p>
-              </div>
-            )}
+
           </div>
         </div>
 
