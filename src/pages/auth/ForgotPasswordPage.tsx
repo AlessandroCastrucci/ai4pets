@@ -24,12 +24,12 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-sky-50 via-blue-50 to-slate-100">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-sky-50 via-blue-50 to-slate-100 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
       {/* Back button */}
       <div className="px-4 pt-4" style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
         <button
           onClick={() => navigateToAuth('login')}
-          className="flex items-center gap-1 text-slate-500 hover:text-slate-700 transition-colors py-2"
+          className="flex items-center gap-1 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors py-2"
         >
           <ChevronLeft size={18} strokeWidth={2} />
           <span className="text-sm font-medium">Back to Sign In</span>
@@ -41,17 +41,17 @@ export default function ForgotPasswordPage() {
           <>
             {/* Header */}
             <div className="mb-8">
-              <div className="w-14 h-14 rounded-2xl bg-sky-100 flex items-center justify-center mb-4">
+              <div className="w-14 h-14 rounded-2xl bg-sky-100 dark:bg-sky-900/30 flex items-center justify-center mb-4">
                 <Mail size={26} className="text-sky-500" strokeWidth={1.8} />
               </div>
-              <h1 className="text-2xl font-bold text-slate-900">Reset password</h1>
-              <p className="text-slate-500 text-sm mt-1 leading-relaxed">
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Reset password</h1>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1 leading-relaxed">
                 Enter your email and we'll send you a link to reset your password.
               </p>
             </div>
 
             {/* Card */}
-            <div className="bg-white rounded-3xl shadow-card-md p-6 space-y-4">
+            <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-card-md p-6 space-y-4">
               {error && (
                 <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3">
                   <p className="text-sm text-red-700">{error}</p>
@@ -60,7 +60,7 @@ export default function ForgotPasswordPage() {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="text-xs font-semibold text-slate-600 block mb-1.5">Email address</label>
+                  <label className="text-xs font-semibold text-slate-600 dark:text-slate-300 block mb-1.5">Email address</label>
                   <input
                     type="email"
                     value={email}
@@ -68,7 +68,7 @@ export default function ForgotPasswordPage() {
                     placeholder="you@example.com"
                     required
                     autoComplete="email"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 transition-all"
+                    className="w-full bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 dark:focus:ring-sky-900 transition-all"
                   />
                 </div>
 
@@ -92,12 +92,12 @@ export default function ForgotPasswordPage() {
         ) : (
           /* Success state */
           <div className="text-center px-4">
-            <div className="w-20 h-20 rounded-3xl bg-emerald-50 flex items-center justify-center mx-auto mb-6">
+            <div className="w-20 h-20 rounded-3xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center mx-auto mb-6">
               <CheckCircle size={40} className="text-emerald-500" strokeWidth={1.5} />
             </div>
-            <h2 className="text-xl font-bold text-slate-900 mb-3">Check your email</h2>
-            <p className="text-slate-500 text-sm leading-relaxed mb-8">
-              If an account exists for <strong className="text-slate-700">{email}</strong>, a password reset link has been sent.
+            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3">Check your email</h2>
+            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-8">
+              If an account exists for <strong className="text-slate-700 dark:text-slate-300">{email}</strong>, a password reset link has been sent.
             </p>
             <button
               onClick={() => navigateToAuth('login')}
