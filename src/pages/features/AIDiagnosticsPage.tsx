@@ -5,6 +5,128 @@ import {
   Shield, HelpCircle, Layers, Volume2, Dog, Lightbulb, ArrowRight,
   Sparkles, FileText, Pill, History,
 } from 'lucide-react';
+
+// ─── Quick Check Illustrations ────────────────────────────────────────────────
+
+function EyeIllustration({ stroke }: { stroke: string }) {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      {/* Upper eyelid */}
+      <path d="M6 24 C12 12, 36 12, 42 24" stroke={stroke} strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      {/* Lower eyelid */}
+      <path d="M6 24 C12 35, 36 35, 42 24" stroke={stroke} strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      {/* Iris */}
+      <circle cx="24" cy="24" r="7" stroke={stroke} strokeWidth="2" fill="none" />
+      {/* Pupil */}
+      <circle cx="24" cy="24" r="3" fill={stroke} opacity="0.7" />
+      {/* Highlight */}
+      <circle cx="26.5" cy="21.5" r="1.5" fill="white" opacity="0.9" />
+      {/* Teardrop */}
+      <path d="M10 28 Q9 31 11 33 Q13 31 12 28 Z" fill={stroke} opacity="0.5" />
+      {/* Eyelashes top */}
+      <line x1="16" y1="14" x2="15" y2="11" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
+      <line x1="24" y1="12" x2="24" y2="9"  stroke={stroke} strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
+      <line x1="32" y1="14" x2="33" y2="11" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
+    </svg>
+  );
+}
+
+function EarIllustration({ stroke }: { stroke: string }) {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      {/* Outer ear shape – floppy dog ear */}
+      <path d="M14 8 Q10 6 10 14 L11 36 Q11 41 18 42 Q26 43 28 36 L30 18 Q30 9 24 7 Z"
+            stroke={stroke} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+            fill={stroke} fillOpacity="0.1" />
+      {/* Inner canal curve 1 */}
+      <path d="M17 14 Q16 22 17 30" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" opacity="0.55" />
+      {/* Inner canal curve 2 */}
+      <path d="M21 12 Q20 22 21 32" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" opacity="0.55" />
+      {/* Irritation dots */}
+      <circle cx="15" cy="37" r="1.5" fill={stroke} opacity="0.45" />
+      <circle cx="19" cy="39" r="1.5" fill={stroke} opacity="0.45" />
+    </svg>
+  );
+}
+
+function SkinIllustration({ stroke }: { stroke: string }) {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      {/* Dog body */}
+      <ellipse cx="23" cy="28" rx="14" ry="9" stroke={stroke} strokeWidth="2.2" fill={stroke} fillOpacity="0.1" />
+      {/* Head */}
+      <circle cx="36" cy="20" r="7" stroke={stroke} strokeWidth="2.2" fill={stroke} fillOpacity="0.1" />
+      {/* Snout bump */}
+      <ellipse cx="41" cy="22" rx="3" ry="2" stroke={stroke} strokeWidth="1.5" fill={stroke} fillOpacity="0.1" />
+      {/* Ear */}
+      <path d="M33 14 Q31 9 27 11 Q28 15 33 16 Z" stroke={stroke} strokeWidth="1.5" fill={stroke} fillOpacity="0.2" />
+      {/* Front legs */}
+      <line x1="15" y1="35" x2="13" y2="43" stroke={stroke} strokeWidth="2.2" strokeLinecap="round" />
+      <line x1="20" y1="36" x2="19" y2="44" stroke={stroke} strokeWidth="2.2" strokeLinecap="round" />
+      {/* Back legs */}
+      <line x1="30" y1="35" x2="31" y2="43" stroke={stroke} strokeWidth="2.2" strokeLinecap="round" />
+      {/* Tail */}
+      <path d="M9 26 Q4 22 6 17" stroke={stroke} strokeWidth="2.2" strokeLinecap="round" fill="none" />
+      {/* Rash dots on back */}
+      <circle cx="18" cy="22" r="2"   stroke={stroke} strokeWidth="1.5" strokeDasharray="2 1" fill="none" opacity="0.7" />
+      <circle cx="24" cy="20" r="1.5" stroke={stroke} strokeWidth="1.5" strokeDasharray="2 1" fill="none" opacity="0.7" />
+      <circle cx="14" cy="25" r="1.5" stroke={stroke} strokeWidth="1.5" strokeDasharray="2 1" fill="none" opacity="0.7" />
+    </svg>
+  );
+}
+
+function PawIllustration({ stroke }: { stroke: string }) {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      {/* Central pad */}
+      <ellipse cx="24" cy="31" rx="9" ry="7.5" stroke={stroke} strokeWidth="2.2"
+               fill={stroke} fillOpacity="0.18" />
+      {/* Toe pad 1 */}
+      <ellipse cx="12" cy="22" rx="4.5" ry="4"   stroke={stroke} strokeWidth="2" fill={stroke} fillOpacity="0.18" />
+      {/* Toe pad 2 */}
+      <ellipse cx="20" cy="17" rx="4.5" ry="4"   stroke={stroke} strokeWidth="2" fill={stroke} fillOpacity="0.18" />
+      {/* Toe pad 3 */}
+      <ellipse cx="29" cy="17" rx="4.5" ry="4"   stroke={stroke} strokeWidth="2" fill={stroke} fillOpacity="0.18" />
+      {/* Toe pad 4 */}
+      <ellipse cx="37" cy="22" rx="4.5" ry="4"   stroke={stroke} strokeWidth="2" fill={stroke} fillOpacity="0.18" />
+    </svg>
+  );
+}
+
+function VomitIllustration({ stroke }: { stroke: string }) {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      {/* Stomach shape */}
+      <path d="M14 30 Q10 24 14 18 Q18 12 24 13 Q31 13 34 19 Q38 26 34 31 Q30 38 24 38 Q17 38 14 30 Z"
+            stroke={stroke} strokeWidth="2.2" fill={stroke} fillOpacity="0.12" />
+      {/* Nausea wave lines rising upward */}
+      <path d="M18 10 Q20 7 22 10 Q24 13 26 10" stroke={stroke} strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.7" />
+      <path d="M20 5  Q22 2 24 5  Q26 8  28 5"  stroke={stroke} strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.45" />
+      {/* Discomfort curved line inside belly */}
+      <path d="M18 25 Q24 22 30 25" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.5" />
+    </svg>
+  );
+}
+
+function DiarrheaIllustration({ stroke }: { stroke: string }) {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      {/* Stool pile – bottom layer */}
+      <ellipse cx="24" cy="38" rx="12" ry="4.5" stroke={stroke} strokeWidth="2" fill={stroke} fillOpacity="0.15" />
+      {/* Middle layer */}
+      <ellipse cx="24" cy="32" rx="9"  ry="4"   stroke={stroke} strokeWidth="2" fill={stroke} fillOpacity="0.15" />
+      {/* Top layer */}
+      <ellipse cx="24" cy="27" rx="6"  ry="3.5" stroke={stroke} strokeWidth="2" fill={stroke} fillOpacity="0.15" />
+      {/* Tip swirl */}
+      <path d="M24 24 Q26 21 24 19 Q22 17 24 15" stroke={stroke} strokeWidth="2" strokeLinecap="round" fill="none" />
+      {/* Motion lines – urgency */}
+      <line x1="10" y1="28" x2="6"  y2="28" stroke={stroke} strokeWidth="1.8" strokeLinecap="round" opacity="0.55" />
+      <line x1="10" y1="33" x2="5"  y2="33" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" opacity="0.4"  />
+      <line x1="38" y1="28" x2="42" y2="28" stroke={stroke} strokeWidth="1.8" strokeLinecap="round" opacity="0.55" />
+      <line x1="38" y1="33" x2="43" y2="33" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" opacity="0.4"  />
+    </svg>
+  );
+}
 import TopBar from '../../components/TopBar';
 import { useApp } from '../../context/AppContext';
 import type { BodyArea, UrgencyLevel, DiagnosticResult } from '../../types';
@@ -36,9 +158,10 @@ interface AreaDef {
 
 interface QuickCheck {
   label: string;
+  hint: string;
   area: BodyArea;
-  Icon: React.ElementType;
-  color: string;
+  Illustration: ({ stroke }: { stroke: string }) => React.ReactElement;
+  stroke: string;
   bg: string;
 }
 
@@ -57,12 +180,12 @@ const BODY_AREAS: AreaDef[] = [
 ];
 
 const QUICK_CHECKS: QuickCheck[] = [
-  { label: 'Eye problem',  area: 'eyes',     Icon: Eye,      color: 'text-sky-500',    bg: 'bg-sky-50'    },
-  { label: 'Ear problem',  area: 'ears',     Icon: Volume2,  color: 'text-violet-500', bg: 'bg-violet-50' },
-  { label: 'Skin problem', area: 'skin-fur', Icon: Layers,   color: 'text-teal-500',   bg: 'bg-teal-50'   },
-  { label: 'Paw problem',  area: 'paws',     Icon: Dog,      color: 'text-amber-500',  bg: 'bg-amber-50'  },
-  { label: 'Vomiting',     area: 'vomit',    Icon: Wind,     color: 'text-rose-500',   bg: 'bg-rose-50'   },
-  { label: 'Diarrhea',     area: 'stool',    Icon: Droplets, color: 'text-slate-500',  bg: 'bg-slate-100' },
+  { label: 'Eye problem',  hint: 'Discharge · Redness',    area: 'eyes',     Illustration: EyeIllustration,       stroke: '#0ea5e9', bg: 'bg-sky-50'    },
+  { label: 'Ear problem',  hint: 'Scratching · Odour',     area: 'ears',     Illustration: EarIllustration,       stroke: '#8b5cf6', bg: 'bg-violet-50' },
+  { label: 'Skin problem', hint: 'Rash · Itching',         area: 'skin-fur', Illustration: SkinIllustration,      stroke: '#14b8a6', bg: 'bg-teal-50'   },
+  { label: 'Paw problem',  hint: 'Licking · Limping',      area: 'paws',     Illustration: PawIllustration,       stroke: '#f59e0b', bg: 'bg-amber-50'  },
+  { label: 'Vomiting',     hint: 'Nausea · Upset',         area: 'vomit',    Illustration: VomitIllustration,     stroke: '#f43f5e', bg: 'bg-rose-50'   },
+  { label: 'Diarrhea',     hint: 'Loose stool · Urgency',  area: 'stool',    Illustration: DiarrheaIllustration,  stroke: '#64748b', bg: 'bg-slate-100' },
 ];
 
 const AREA_KEYWORDS: Record<BodyArea, string[]> = {
@@ -517,12 +640,13 @@ export default function AIDiagnosticsPage() {
                   <button
                     key={qc.area}
                     onClick={() => startQuickCheck(qc.area)}
-                    className="bg-white rounded-2xl shadow-card flex flex-col items-center gap-2 py-4 px-2 hover:shadow-card-md active:scale-95 transition-all border border-transparent hover:border-sky-200"
+                    className={`${qc.bg} rounded-2xl flex flex-col items-center gap-1 pt-4 pb-3 px-2 hover:brightness-95 active:scale-95 transition-all border border-transparent hover:border-sky-200`}
                   >
-                    <div className={`w-10 h-10 rounded-xl ${qc.bg} flex items-center justify-center`}>
-                      <qc.Icon size={20} className={qc.color} strokeWidth={1.5} />
+                    <div className="w-12 h-12">
+                      <qc.Illustration stroke={qc.stroke} />
                     </div>
-                    <span className="text-[11px] font-semibold text-slate-700 text-center leading-tight">{qc.label}</span>
+                    <span className="text-[11px] font-bold text-slate-700 text-center leading-tight mt-1">{qc.label}</span>
+                    <span className="text-[9.5px] text-slate-400 text-center leading-tight">{qc.hint}</span>
                   </button>
                 ))}
               </div>
