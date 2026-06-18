@@ -73,14 +73,15 @@ export interface NutritionPlan {
 }
 
 export type BodyArea =
+  | 'skin-fur'
   | 'eyes'
-  | 'mouth-teeth'
-  | 'skin-coat'
-  | 'paws'
-  | 'abdomen'
   | 'ears'
-  | 'back'
-  | 'tail';
+  | 'paws'
+  | 'mouth-teeth'
+  | 'stool'
+  | 'vomit'
+  | 'wound'
+  | 'other';
 
 export type UrgencyLevel = 'low' | 'medium' | 'high';
 
