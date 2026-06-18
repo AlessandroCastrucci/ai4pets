@@ -36,6 +36,9 @@ interface AppContextType {
   navigateToHealthHistory: () => void;
   navigateBack: () => void;
   setActiveTab: (tab: TabName) => void;
+  assistantInitPetId: string | null;
+  navigateToAssistant: (petId?: string) => void;
+  clearAssistantInitPet: () => void;
 
   // Data — read
   pets: Pet[];
@@ -76,6 +79,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [activeTab, setActiveTabState] = useState<TabName>('pets');
   const [currentScreen, setCurrentScreen] = useState<ScreenName>(null);
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null);
+  const [assistantInitPetId, setAssistantInitPetId] = useState<string | null>(null);
 
   const [pets, setPets] = useState<Pet[]>(PETS);
   const [reminders, setReminders] = useState<Reminder[]>(REMINDERS);
@@ -133,6 +137,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setActiveTabState(tab);
     setCurrentScreen(null);
     setSelectedPetId(null);
+  }, []);
+
+  const navigateToAssistant = useCallback((petId?: string) => {
+    setActiveTabState('assistant');
+    setCurrentScreen(null);
+    setSelectedPetId(null);
+    if (petId) setAssistantInitPetId(petId);
+  }, []);
+
+  const clearAssistantInitPet = useCallback(() => {
+    setAssistantInitPetId(null);
   }, []);
 
   const addPet = useCallback((pet: Pet) => {
@@ -196,6 +211,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         navigateToHealthHistory,
         navigateBack,
         setActiveTab,
+        assistantInitPetId,
+        navigateToAssistant,
+        clearAssistantInitPet,
         pets,
         reminders,
         vaccines,

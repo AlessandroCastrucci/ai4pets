@@ -1,4 +1,4 @@
-import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock, Pencil, ClipboardList } from 'lucide-react';
+import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock, Pencil, ClipboardList, Bot, ChevronRight } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import ReminderCard from '../components/ReminderCard';
 import StatusBadge from '../components/StatusBadge';
@@ -76,6 +76,7 @@ export default function PetDashboard() {
     navigateToFeature,
     navigateToEditPet,
     navigateToHealthHistory,
+    navigateToAssistant,
     getPetReminders,
     getPetVaccines,
     getPetDiagnostics,
@@ -237,6 +238,23 @@ export default function PetDashboard() {
               </button>
             ))}
           </div>
+        </section>
+
+        {/* AI Assistant CTA */}
+        <section>
+          <button
+            onClick={() => navigateToAssistant(pet.id)}
+            className="w-full bg-sky-500 rounded-2xl p-4 flex items-center gap-3 hover:bg-sky-600 active:scale-[0.99] transition-all shadow-card"
+          >
+            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+              <Bot size={20} className="text-white" />
+            </div>
+            <div className="flex-1 text-left">
+              <p className="text-sm font-semibold text-white">Chat with AI Assistant</p>
+              <p className="text-xs text-white/70">Ask anything about {pet.name}'s health</p>
+            </div>
+            <ChevronRight size={16} className="text-white/70 flex-shrink-0" />
+          </button>
         </section>
 
         {/* Upcoming reminders */}
