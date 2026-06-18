@@ -26,7 +26,7 @@ export default function MyPetsPage() {
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
       <TopBar title="My Pets" />
-      <main className="flex-1 px-4 py-4 space-y-3 pb-24">
+      <main className="flex-1 px-4 py-4 space-y-4 pb-24">
         <p className="text-xs text-slate-500 font-medium uppercase tracking-wide px-1">
           {pets.length} {pets.length === 1 ? 'pet' : 'pets'}
         </p>
