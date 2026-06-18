@@ -7,6 +7,12 @@ interface User {
   email: string;
 }
 
+interface StoredSession {
+  name: string;
+  email: string;
+  isAuthenticated: boolean;
+}
+
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
@@ -19,11 +25,37 @@ interface AuthContextType {
   updateUser: (name: string, email: string) => void;
 }
 
+const STORAGE_KEY = 'ttcare_auth_user';
+
+function loadSession(): { user: User; isAuthenticated: true } | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed: StoredSession = JSON.parse(raw);
+    if (parsed.isAuthenticated && parsed.name && parsed.email) {
+      return { user: { name: parsed.name, email: parsed.email }, isAuthenticated: true };
+    }
+  } catch {
+    // corrupted entry — ignore
+  }
+  return null;
+}
+
+function saveSession(name: string, email: string) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ name, email, isAuthenticated: true }));
+}
+
+function clearSession() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const restored = loadSession();
+
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(restored?.isAuthenticated ?? false);
+  const [user, setUser] = useState<User | null>(restored?.user ?? null);
   const [authScreen, setAuthScreen] = useState<AuthScreen>('welcome');
 
   const navigateToAuth = useCallback((screen: AuthScreen) => {
@@ -36,6 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     await new Promise((r) => setTimeout(r, 900));
     const name = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    saveSession(name, email);
     setUser({ name, email });
     setIsAuthenticated(true);
     setAuthScreen('welcome');
@@ -46,12 +79,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!email.includes('@')) throw new Error('Please enter a valid email address.');
     if (password.length < 6) throw new Error('Password must be at least 6 characters.');
     await new Promise((r) => setTimeout(r, 900));
-    setUser({ name: name.trim(), email });
+    const trimmedName = name.trim();
+    saveSession(trimmedName, email);
+    setUser({ name: trimmedName, email });
     setIsAuthenticated(true);
     setAuthScreen('welcome');
   }, []);
 
   const logout = useCallback(() => {
+    clearSession();
     setIsAuthenticated(false);
     setUser(null);
     setAuthScreen('welcome');
@@ -63,7 +99,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const updateUser = useCallback((name: string, email: string) => {
-    setUser({ name: name.trim(), email: email.trim() });
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    saveSession(trimmedName, trimmedEmail);
+    setUser({ name: trimmedName, email: trimmedEmail });
   }, []);
 
   return (
