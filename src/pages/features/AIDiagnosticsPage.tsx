@@ -148,9 +148,6 @@ const BODY_AREAS: AreaDef[] = [
   { id: 'ears',        label: 'Ears',          sublabel: 'Scratching, bad smell',    bg: 'bg-violet-50' },
   { id: 'paws',        label: 'Paws',          sublabel: 'Licking, limping',         bg: 'bg-amber-50' },
   { id: 'mouth-teeth', label: 'Teeth / Mouth', sublabel: 'Bad breath, gums',        bg: 'bg-emerald-50' },
-  { id: 'wound',       label: 'Wound',         sublabel: 'Cuts, bites',             bg: 'bg-red-50' },
-  { id: 'stool',       label: 'Stool',         sublabel: 'Diarrhea, blood',         bg: 'bg-slate-100' },
-  { id: 'vomit',       label: 'Vomit',         sublabel: 'Vomiting, nausea',        bg: 'bg-rose-50' },
   { id: 'other',       label: 'Other',         sublabel: 'Something else',          bg: 'bg-slate-50' },
 ];
 
