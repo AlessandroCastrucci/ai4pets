@@ -1,4 +1,4 @@
-import { Bell, Shield, Info, ChevronRight, User, Moon, LogOut } from 'lucide-react';
+import { Bell, Shield, Info, ChevronRight, User, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import TopBar from '../components/TopBar';
 import { useAuth } from '../context/AuthContext';
@@ -65,7 +65,6 @@ export default function MorePage() {
   const [notifReminders, setNotifReminders] = useState(true);
   const [notifVaccines, setNotifVaccines] = useState(true);
   const [notifCheckups, setNotifCheckups] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
 
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
@@ -112,21 +111,6 @@ export default function MorePage() {
               iconBg="bg-emerald-50"
               iconColor="text-emerald-500"
               right={<Toggle checked={notifCheckups} onChange={setNotifCheckups} />}
-            />
-          </SectionCard>
-        </div>
-
-        {/* Appearance */}
-        <div>
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1 mb-2">Appearance</p>
-          <SectionCard>
-            <Row
-              Icon={Moon}
-              label="Dark Mode"
-              sublabel="Coming soon"
-              iconBg="bg-slate-100"
-              iconColor="text-slate-500"
-              right={<Toggle checked={darkMode} onChange={setDarkMode} />}
             />
           </SectionCard>
         </div>
