@@ -2,7 +2,6 @@ import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock
 import TopBar from '../components/TopBar';
 import ReminderCard from '../components/ReminderCard';
 import StatusBadge from '../components/StatusBadge';
-import PetSwitchBar from '../components/PetSwitchBar';
 import { useApp } from '../context/AppContext';
 
 const GRID_FEATURES = [
@@ -128,8 +127,6 @@ export default function PetDashboard() {
           </button>
         }
       />
-      <PetSwitchBar />
-
       <main className="flex-1 px-4 py-4 pb-24 space-y-5">
         {/* Pet profile card */}
         <div className="bg-white rounded-2xl shadow-card overflow-hidden">
