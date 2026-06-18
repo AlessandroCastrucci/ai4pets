@@ -37,18 +37,18 @@ export default function ReminderCard({ reminder, pet, showPet = false }: Reminde
   const { date, time, isToday } = formatDateTime(reminder.datetime);
 
   return (
-    <div className={`bg-white dark:bg-slate-800 rounded-2xl shadow-card p-4 flex items-start gap-3 transition-opacity ${reminder.done ? 'opacity-50' : ''}`}>
+    <div className={`bg-white rounded-2xl shadow-card p-4 flex items-start gap-3 transition-opacity ${reminder.done ? 'opacity-50' : ''}`}>
       <div className={`w-10 h-10 rounded-xl ${config.bg} flex items-center justify-center flex-shrink-0`}>
         <config.Icon size={18} className={config.color} strokeWidth={2} />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{reminder.title}</p>
+            <p className="text-sm font-semibold text-slate-800 truncate">{reminder.title}</p>
             {showPet && pet && (
               <div className="flex items-center gap-1.5 mt-0.5">
                 <img src={pet.photo} alt={pet.name} className="w-4 h-4 rounded-full object-cover" />
-                <span className="text-xs text-slate-500 dark:text-slate-400">{pet.name}</span>
+                <span className="text-xs text-slate-500">{pet.name}</span>
               </div>
             )}
           </div>
@@ -57,7 +57,7 @@ export default function ReminderCard({ reminder, pet, showPet = false }: Reminde
             className={`flex-shrink-0 w-6 h-6 rounded-full border-2 transition-colors ${
               reminder.done
                 ? 'bg-emerald-500 border-emerald-500'
-                : 'border-slate-300 dark:border-slate-600 hover:border-emerald-400'
+                : 'border-slate-300 hover:border-emerald-400'
             } flex items-center justify-center`}
             aria-label={reminder.done ? 'Mark as pending' : 'Mark as done'}
           >
@@ -69,16 +69,16 @@ export default function ReminderCard({ reminder, pet, showPet = false }: Reminde
           </button>
         </div>
         <div className="flex items-center gap-2 mt-1.5">
-          <span className={`text-xs font-medium ${isToday ? 'text-amber-600' : 'text-slate-500 dark:text-slate-400'}`}>
+          <span className={`text-xs font-medium ${isToday ? 'text-amber-600' : 'text-slate-500'}`}>
             {date}
           </span>
-          <span className="text-slate-300 dark:text-slate-600 text-xs">·</span>
-          <span className="text-xs text-slate-400 dark:text-slate-500">{time}</span>
-          <span className="text-slate-300 dark:text-slate-600 text-xs">·</span>
-          <span className="text-xs text-slate-400 dark:text-slate-500">{config.label}</span>
+          <span className="text-slate-300 text-xs">·</span>
+          <span className="text-xs text-slate-400">{time}</span>
+          <span className="text-slate-300 text-xs">·</span>
+          <span className="text-xs text-slate-400">{config.label}</span>
         </div>
         {reminder.notes && (
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{reminder.notes}</p>
+          <p className="text-xs text-slate-500 mt-1 leading-relaxed">{reminder.notes}</p>
         )}
       </div>
     </div>

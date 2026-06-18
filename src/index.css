@@ -22,10 +22,6 @@
     overscroll-behavior: none;
   }
 
-  .dark body {
-    background-color: #0f172a;
-  }
-
   #root {
     min-height: 100dvh;
   }

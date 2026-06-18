@@ -7,6 +7,7 @@ import type {
   Therapy,
   NutritionPlan,
   DiagnosticResult,
+  DiagnosticFollowUp,
   MonthlyCheckup,
   CalendarEvent,
   TabName,
@@ -19,6 +20,7 @@ import {
   THERAPIES,
   NUTRITION_PLANS,
   DIAGNOSTIC_RESULTS,
+  DIAGNOSTIC_FOLLOW_UPS,
   MONTHLY_CHECKUPS,
   CALENDAR_EVENTS,
   PET_DOCUMENTS,
@@ -36,6 +38,7 @@ interface AppContextType {
   navigateToHealthHistory: () => void;
   navigateBack: () => void;
   setActiveTab: (tab: TabName) => void;
+  switchPet: (petId: string) => void;
   assistantInitPetId: string | null;
   navigateToAssistant: (petId?: string) => void;
   clearAssistantInitPet: () => void;
@@ -47,6 +50,7 @@ interface AppContextType {
   therapies: Therapy[];
   nutritionPlans: NutritionPlan[];
   diagnosticResults: DiagnosticResult[];
+  diagnosticFollowUps: DiagnosticFollowUp[];
   monthlyCheckups: MonthlyCheckup[];
   calendarEvents: CalendarEvent[];
   petDocuments: PetDocument[];
@@ -55,7 +59,9 @@ interface AppContextType {
   addPet: (pet: Pet) => void;
   updatePet: (pet: Pet) => void;
   deletePet: (petId: string) => void;
+  addReminder: (reminder: Reminder) => void;
   addDiagnosticResult: (result: DiagnosticResult) => void;
+  addDiagnosticFollowUp: (followUp: DiagnosticFollowUp) => void;
   addMonthlyCheckup: (checkup: MonthlyCheckup) => void;
   updateNutritionPlan: (plan: NutritionPlan) => void;
   toggleReminderDone: (id: string) => void;
@@ -69,6 +75,7 @@ interface AppContextType {
   getPetTherapies: (petId: string) => Therapy[];
   getPetNutrition: (petId: string) => NutritionPlan | undefined;
   getPetDiagnostics: (petId: string) => DiagnosticResult[];
+  getPetFollowUps: (petId: string) => DiagnosticFollowUp[];
   getPetCheckups: (petId: string) => MonthlyCheckup[];
   getPetDocuments: (petId: string) => PetDocument[];
 }
@@ -87,6 +94,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [therapies] = useState<Therapy[]>(THERAPIES);
   const [nutritionPlans, setNutritionPlans] = useState<NutritionPlan[]>(NUTRITION_PLANS);
   const [diagnosticResults, setDiagnosticResults] = useState<DiagnosticResult[]>(DIAGNOSTIC_RESULTS);
+  const [diagnosticFollowUps, setDiagnosticFollowUps] = useState<DiagnosticFollowUp[]>(DIAGNOSTIC_FOLLOW_UPS);
   const [monthlyCheckups, setMonthlyCheckups] = useState<MonthlyCheckup[]>(MONTHLY_CHECKUPS);
   const [calendarEvents] = useState<CalendarEvent[]>(CALENDAR_EVENTS);
   const [petDocuments, setPetDocuments] = useState<PetDocument[]>(PET_DOCUMENTS);
@@ -139,6 +147,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setSelectedPetId(null);
   }, []);
 
+  const switchPet = useCallback((petId: string) => {
+    setSelectedPetId(petId);
+  }, []);
+
   const navigateToAssistant = useCallback((petId?: string) => {
     setActiveTabState('assistant');
     setCurrentScreen(null);
@@ -162,8 +174,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setPets((prev) => prev.filter((p) => p.id !== petId));
   }, []);
 
+  const addReminder = useCallback((reminder: Reminder) => {
+    setReminders((prev) => [...prev, reminder]);
+  }, []);
+
   const addDiagnosticResult = useCallback((result: DiagnosticResult) => {
     setDiagnosticResults((prev) => [result, ...prev]);
+  }, []);
+
+  const addDiagnosticFollowUp = useCallback((followUp: DiagnosticFollowUp) => {
+    setDiagnosticFollowUps((prev) => [followUp, ...prev]);
   }, []);
 
   const addMonthlyCheckup = useCallback((checkup: MonthlyCheckup) => {
@@ -195,6 +215,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const getPetTherapies = useCallback((petId: string) => therapies.filter((t) => t.petId === petId), [therapies]);
   const getPetNutrition = useCallback((petId: string) => nutritionPlans.find((n) => n.petId === petId), [nutritionPlans]);
   const getPetDiagnostics = useCallback((petId: string) => diagnosticResults.filter((d) => d.petId === petId), [diagnosticResults]);
+  const getPetFollowUps = useCallback((petId: string) => diagnosticFollowUps.filter((f) => f.petId === petId), [diagnosticFollowUps]);
   const getPetCheckups = useCallback((petId: string) => monthlyCheckups.filter((c) => c.petId === petId), [monthlyCheckups]);
   const getPetDocuments = useCallback((petId: string) => petDocuments.filter((d) => d.petId === petId), [petDocuments]);
 
@@ -211,6 +232,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         navigateToHealthHistory,
         navigateBack,
         setActiveTab,
+        switchPet,
         assistantInitPetId,
         navigateToAssistant,
         clearAssistantInitPet,
@@ -220,13 +242,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
         therapies,
         nutritionPlans,
         diagnosticResults,
+        diagnosticFollowUps,
         monthlyCheckups,
         calendarEvents,
         petDocuments,
         addPet,
         updatePet,
         deletePet,
+        addReminder,
         addDiagnosticResult,
+        addDiagnosticFollowUp,
         addMonthlyCheckup,
         updateNutritionPlan,
         toggleReminderDone,
@@ -238,6 +263,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         getPetTherapies,
         getPetNutrition,
         getPetDiagnostics,
+        getPetFollowUps,
         getPetCheckups,
         getPetDocuments,
       }}

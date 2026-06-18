@@ -117,6 +117,16 @@ export interface MonthlyCheckup {
   photoSkin?: string;
 }
 
+export interface DiagnosticFollowUp {
+  id: string;
+  petId: string;
+  diagnosticId: string;
+  date: string;
+  status: 'improved' | 'same' | 'worse';
+  notes?: string;
+  photoUrl?: string;
+}
+
 export interface CalendarEvent {
   id: string;
   petId: string;

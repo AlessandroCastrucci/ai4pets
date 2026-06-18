@@ -30,7 +30,7 @@ export default function RemindersPage() {
   const done = filtered.filter((r) => r.done);
 
   return (
-    <div className="flex flex-col min-h-full bg-slate-50 dark:bg-slate-900">
+    <div className="flex flex-col min-h-full bg-slate-50">
       <TopBar title="Reminders" />
       <main className="flex-1 px-4 py-4 pb-24 space-y-4">
         {/* Pet filter chips */}
@@ -45,7 +45,7 @@ export default function RemindersPage() {
                 className={`flex items-center gap-1.5 flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                   active
                     ? 'bg-sky-500 text-white border-sky-500'
-                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-sky-300'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-sky-300'
                 }`}
               >
                 {pet && (
@@ -65,8 +65,8 @@ export default function RemindersPage() {
               onClick={() => setTypeFilter(value)}
               className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
                 typeFilter === value
-                  ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 border-slate-800 dark:border-slate-200'
-                  : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-slate-400'
+                  ? 'bg-slate-800 text-white border-slate-800'
+                  : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400'
               }`}
             >
               {label}
@@ -76,7 +76,7 @@ export default function RemindersPage() {
 
         {pending.length > 0 && (
           <section className="space-y-3">
-            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide px-1">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1">
               Upcoming · {pending.length}
             </p>
             {pending.map((r) => (
@@ -87,7 +87,7 @@ export default function RemindersPage() {
 
         {done.length > 0 && (
           <section className="space-y-3">
-            <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide px-1">
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide px-1">
               Completed · {done.length}
             </p>
             {done.map((r) => (
@@ -97,7 +97,7 @@ export default function RemindersPage() {
         )}
 
         {filtered.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16 text-slate-400 dark:text-slate-500">
+          <div className="flex flex-col items-center justify-center py-16 text-slate-400">
             <p className="text-sm">No reminders found</p>
             <p className="text-xs mt-1">Try adjusting your filters</p>
           </div>

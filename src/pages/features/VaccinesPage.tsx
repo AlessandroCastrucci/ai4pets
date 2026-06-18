@@ -1,11 +1,12 @@
 import { CheckCircle, AlertTriangle, XCircle, Calendar } from 'lucide-react';
 import TopBar from '../../components/TopBar';
+import PetSwitchBar from '../../components/PetSwitchBar';
 import StatusBadge from '../../components/StatusBadge';
 import { useApp } from '../../context/AppContext';
 import type { Vaccine } from '../../types';
 
 function getVaccineStatus(nextDue: string): { label: string; urgency: 'low' | 'medium' | 'high' } {
-  const today = new Date('2026-06-17');
+  const today = new Date('2026-06-18');
   const due = new Date(nextDue);
   const diff = Math.ceil((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
   if (diff < 0) return { label: 'Overdue', urgency: 'high' };
@@ -14,7 +15,7 @@ function getVaccineStatus(nextDue: string): { label: string; urgency: 'low' | 'm
 }
 
 function daysUntil(dateStr: string): number {
-  const today = new Date('2026-06-17');
+  const today = new Date('2026-06-18');
   const date = new Date(dateStr);
   return Math.ceil((date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 }
@@ -26,7 +27,7 @@ function VaccineCard({ vaccine }: { vaccine: Vaccine }) {
   const iconColor = urgency === 'low' ? 'text-emerald-500' : urgency === 'medium' ? 'text-amber-500' : 'text-red-500';
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card p-4">
+    <div className="bg-white rounded-2xl shadow-card p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 flex-1 min-w-0">
           <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
@@ -35,23 +36,23 @@ function VaccineCard({ vaccine }: { vaccine: Vaccine }) {
             <StatusIcon size={18} className={iconColor} strokeWidth={2} />
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-snug">{vaccine.name}</p>
-            {vaccine.vet && <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{vaccine.vet}</p>}
+            <p className="text-sm font-semibold text-slate-800 leading-snug">{vaccine.name}</p>
+            {vaccine.vet && <p className="text-xs text-slate-400 mt-0.5">{vaccine.vet}</p>}
           </div>
         </div>
         <StatusBadge label={label} variant="vaccine" />
       </div>
 
-      <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700 grid grid-cols-2 gap-3">
+      <div className="mt-3 pt-3 border-t border-slate-100 grid grid-cols-2 gap-3">
         <div>
-          <p className="text-[11px] text-slate-400 dark:text-slate-500 mb-0.5">Last administered</p>
+          <p className="text-[11px] text-slate-400 mb-0.5">Last administered</p>
           <div className="flex items-center gap-1.5">
-            <Calendar size={11} className="text-slate-400 dark:text-slate-500" strokeWidth={2} />
-            <p className="text-xs font-medium text-slate-700 dark:text-slate-300">{vaccine.dateAdministered}</p>
+            <Calendar size={11} className="text-slate-400" strokeWidth={2} />
+            <p className="text-xs font-medium text-slate-700">{vaccine.dateAdministered}</p>
           </div>
         </div>
         <div>
-          <p className="text-[11px] text-slate-400 dark:text-slate-500 mb-0.5">Next due</p>
+          <p className="text-[11px] text-slate-400 mb-0.5">Next due</p>
           <div className="flex items-center gap-1.5">
             <Calendar size={11} className={iconColor} strokeWidth={2} />
             <p className={`text-xs font-semibold ${iconColor}`}>
@@ -70,8 +71,8 @@ function VaccineCard({ vaccine }: { vaccine: Vaccine }) {
       </div>
 
       {vaccine.notes && (
-        <div className="mt-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl px-3 py-2">
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{vaccine.notes}</p>
+        <div className="mt-3 bg-slate-50 rounded-xl px-3 py-2">
+          <p className="text-xs text-slate-500 leading-relaxed">{vaccine.notes}</p>
         </div>
       )}
     </div>
@@ -96,8 +97,9 @@ export default function VaccinesPage() {
   const upToDate = sorted.filter((v) => getVaccineStatus(v.nextDue).label === 'Up to Date');
 
   return (
-    <div className="flex flex-col min-h-full bg-slate-50 dark:bg-slate-900">
+    <div className="flex flex-col min-h-full bg-slate-50">
       <TopBar title="Vaccines" showBack subtitle={pet.name} />
+      <PetSwitchBar />
       <main className="flex-1 px-4 py-4 pb-24 space-y-4 overflow-y-auto">
 
         {/* Summary row */}
@@ -136,8 +138,8 @@ export default function VaccinesPage() {
         )}
 
         {vaccines.length === 0 && (
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card px-4 py-12 text-center">
-            <p className="text-sm text-slate-400 dark:text-slate-500">No vaccine records for {pet.name}</p>
+          <div className="bg-white rounded-2xl shadow-card px-4 py-12 text-center">
+            <p className="text-sm text-slate-400">No vaccine records for {pet.name}</p>
           </div>
         )}
       </main>

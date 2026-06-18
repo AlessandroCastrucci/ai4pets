@@ -6,6 +6,7 @@ import type {
   Therapy,
   NutritionPlan,
   DiagnosticResult,
+  DiagnosticFollowUp,
   MonthlyCheckup,
   CalendarEvent,
 } from '../types';
@@ -19,8 +20,13 @@ export const PETS: Pet[] = [
     age: 4,
     weight: 22,
     gender: 'female',
+    sterilized: true,
     photo: 'https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=400',
     accentColor: 'sky',
+    knownDiseases: 'Seasonal environmental allergy',
+    allergies: ['Grass pollen', 'Dust mites'],
+    activeMedications: 'Flea & tick prevention (monthly topical)',
+    vetNotes: 'Monitor paw licking during pollen season. Weight stable at 22 kg. Next dental check recommended.',
   },
   {
     id: 'rocky',
@@ -30,8 +36,11 @@ export const PETS: Pet[] = [
     age: 2,
     weight: 30,
     gender: 'male',
+    sterilized: false,
     photo: 'https://images.pexels.com/photos/333083/pexels-photo-333083.jpeg?auto=compress&cs=tinysrgb&w=400',
     accentColor: 'amber',
+    activeMedications: 'Omega-3 supplementation (ongoing)',
+    vetNotes: 'High energy — benefits from daily training. Joint supplements recommended as preventive measure.',
   },
   {
     id: 'micio',
@@ -41,8 +50,12 @@ export const PETS: Pet[] = [
     age: 3,
     weight: 4.5,
     gender: 'male',
+    sterilized: true,
     photo: 'https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&w=400',
     accentColor: 'emerald',
+    knownDiseases: 'Prone to hairball formation',
+    activeMedications: 'Malt-based hairball paste (twice weekly)',
+    vetNotes: 'Indoor cat. Keep weight under 5 kg. Slightly lower appetite than average — monitor intake.',
   },
 ];
 
@@ -52,7 +65,7 @@ export const REMINDERS: Reminder[] = [
     petId: 'rocky',
     type: 'therapy',
     title: 'Omega-3 Therapy',
-    datetime: '2026-06-17T18:00:00',
+    datetime: '2026-06-18T18:00:00',
     notes: '2 capsules with evening meal',
     done: false,
   },
@@ -90,6 +103,24 @@ export const REMINDERS: Reminder[] = [
     datetime: '2026-07-01T08:00:00',
     notes: 'Monthly topical treatment',
     done: false,
+  },
+  {
+    id: 'r6',
+    petId: 'luna',
+    type: 'checkup',
+    title: 'Follow-up: Mild contact dermatitis or environmental allergy',
+    datetime: '2026-06-12T09:00:00',
+    notes: '2-day follow-up for AI Diagnostic (paws)',
+    done: true,
+  },
+  {
+    id: 'r7',
+    petId: 'micio',
+    type: 'checkup',
+    title: 'Follow-up: Mild conjunctivitis or eye irritation',
+    datetime: '2026-05-30T09:00:00',
+    notes: '2-day follow-up for AI Diagnostic (eyes)',
+    done: true,
   },
 ];
 
@@ -292,6 +323,55 @@ export const DIAGNOSTIC_RESULTS: DiagnosticResult[] = [
     followUpRecommendation:
       'If discharge turns yellow or green, or squinting continues beyond 48 hours, seek veterinary evaluation promptly.',
   },
+  {
+    id: 'd3',
+    petId: 'rocky',
+    date: '2026-06-05',
+    bodyArea: 'ears',
+    symptoms: 'Head shaking frequently, scratching at right ear, slight dark discharge',
+    possibleIssue: 'Possible early-stage otitis or ear canal irritation',
+    urgency: 'medium',
+    possibleCauses: [
+      'Moisture buildup after outdoor activity',
+      'Early-stage bacterial or yeast infection',
+      'Ear mite irritation',
+    ],
+    whatToDoNow: [
+      'Inspect ear canal gently for redness or dark discharge',
+      'Keep ears dry and well-ventilated',
+      'Use pet-safe ear cleaning solution if already prescribed',
+    ],
+    whatToMonitor: [
+      'Frequency of head shaking and ear scratching',
+      'Odour or increasing discharge from ear canal',
+      'Any signs of pain when touching the ear',
+    ],
+    whatNotToDo: [
+      'Do not insert cotton swabs deep into the ear canal',
+      'Do not use alcohol-based products near the ear',
+    ],
+    followUpRecommendation:
+      'If shaking, scratching, or discharge persists beyond 48 hours, a veterinary ear examination is recommended.',
+  },
+];
+
+export const DIAGNOSTIC_FOLLOW_UPS: DiagnosticFollowUp[] = [
+  {
+    id: 'fu1',
+    petId: 'luna',
+    diagnosticId: 'd1',
+    date: '2026-06-12',
+    status: 'improved',
+    notes: 'Paw licking has reduced significantly. No more redness visible between toes.',
+  },
+  {
+    id: 'fu2',
+    petId: 'micio',
+    diagnosticId: 'd2',
+    date: '2026-05-30',
+    status: 'same',
+    notes: 'Slight discharge still present in left eye. Monitoring continues.',
+  },
 ];
 
 export const MONTHLY_CHECKUPS: MonthlyCheckup[] = [
@@ -318,7 +398,7 @@ export const MONTHLY_CHECKUPS: MonthlyCheckup[] = [
   {
     id: 'mc3',
     petId: 'rocky',
-    date: '2026-05-15',
+    date: '2026-06-01',
     weight: 30,
     appetite: 5,
     energyLevel: 5,
@@ -334,6 +414,16 @@ export const MONTHLY_CHECKUPS: MonthlyCheckup[] = [
     energyLevel: 3,
     stoolQuality: 'soft',
     behaviorChanges: 'Slightly less interested in play. Monitoring food intake.',
+  },
+  {
+    id: 'mc5',
+    petId: 'rocky',
+    date: '2026-05-01',
+    weight: 29.5,
+    appetite: 5,
+    energyLevel: 5,
+    stoolQuality: 'normal',
+    behaviorChanges: 'Very energetic and responsive to training.',
   },
 ];
 
