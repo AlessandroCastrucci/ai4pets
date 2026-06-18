@@ -147,4 +147,6 @@ export type ScreenName =
   | 'ai-checkup'
   | 'nutrition'
   | 'vaccines'
-  | 'therapies';
+  | 'therapies'
+  | 'account'
+  | 'edit-profile';

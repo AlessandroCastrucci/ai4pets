@@ -36,6 +36,8 @@ interface AppContextType {
   navigateToAddPet: () => void;
   navigateToEditPet: () => void;
   navigateToHealthHistory: () => void;
+  navigateToAccount: () => void;
+  navigateToEditProfile: () => void;
   navigateBack: () => void;
   setActiveTab: (tab: TabName) => void;
   switchPet: (petId: string) => void;
@@ -124,6 +126,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setCurrentScreen('pet-health-history');
   }, []);
 
+  const navigateToAccount = useCallback(() => {
+    setCurrentScreen('account');
+  }, []);
+
+  const navigateToEditProfile = useCallback(() => {
+    setCurrentScreen('edit-profile');
+  }, []);
+
   const navigateBack = useCallback(() => {
     if (currentScreen === 'add-pet') {
       setCurrentScreen(null);
@@ -133,6 +143,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setCurrentScreen('pet-dashboard');
     } else if (currentScreen === 'pet-health-history') {
       setCurrentScreen('pet-dashboard');
+    } else if (currentScreen === 'edit-profile') {
+      setCurrentScreen('account');
+    } else if (currentScreen === 'account') {
+      setCurrentScreen(null);
+      setActiveTabState('more');
     } else if (currentScreen !== null && currentScreen !== 'pet-dashboard') {
       setCurrentScreen('pet-dashboard');
     } else {
@@ -230,6 +245,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         navigateToAddPet,
         navigateToEditPet,
         navigateToHealthHistory,
+        navigateToAccount,
+        navigateToEditProfile,
         navigateBack,
         setActiveTab,
         switchPet,

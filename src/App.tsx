@@ -15,6 +15,8 @@ import AICheckupPage from './pages/features/AICheckupPage';
 import NutritionPage from './pages/features/NutritionPage';
 import VaccinesPage from './pages/features/VaccinesPage';
 import TherapiesPage from './pages/features/TherapiesPage';
+import AccountPage from './pages/AccountPage';
+import EditProfilePage from './pages/EditProfilePage';
 import WelcomePage from './pages/auth/WelcomePage';
 import LoginPage from './pages/auth/LoginPage';
 import SignUpPage from './pages/auth/SignUpPage';
@@ -32,6 +34,8 @@ function AppScreen() {
   if (currentScreen === 'vaccines') return <VaccinesPage />;
   if (currentScreen === 'therapies') return <TherapiesPage />;
   if (currentScreen === 'pet-dashboard') return <PetDashboard />;
+  if (currentScreen === 'account') return <AccountPage />;
+  if (currentScreen === 'edit-profile') return <EditProfilePage />;
 
   switch (activeTab) {
     case 'pets': return <MyPetsPage />;

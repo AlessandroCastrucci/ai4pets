@@ -1,14 +1,10 @@
-import { Bell, Shield, Info, ChevronRight, User, LogOut } from 'lucide-react';
+import { Bell, Shield, Info, ChevronRight, LogOut, UtensilsCrossed, Bot, Stethoscope, Download, FileText, Syringe } from 'lucide-react';
 import { useState } from 'react';
 import TopBar from '../components/TopBar';
 import { useAuth } from '../context/AuthContext';
+import { useApp } from '../context/AppContext';
 
-interface ToggleProps {
-  checked: boolean;
-  onChange: (v: boolean) => void;
-}
-
-function Toggle({ checked, onChange }: ToggleProps) {
+function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <button
       role="switch"
@@ -38,6 +34,7 @@ function Row({
   right,
   iconBg = 'bg-sky-50',
   iconColor = 'text-sky-500',
+  onClick,
 }: {
   Icon: typeof Bell;
   label: string;
@@ -45,9 +42,13 @@ function Row({
   right?: React.ReactNode;
   iconBg?: string;
   iconColor?: string;
+  onClick?: () => void;
 }) {
   return (
-    <div className="flex items-center gap-3 px-4 py-3.5">
+    <div
+      className={`flex items-center gap-3 px-4 py-3.5 ${onClick ? 'cursor-pointer active:bg-slate-50' : ''}`}
+      onClick={onClick}
+    >
       <div className={`w-8 h-8 rounded-xl ${iconBg} flex items-center justify-center flex-shrink-0`}>
         <Icon size={16} className={iconColor} strokeWidth={2} />
       </div>
@@ -55,49 +56,68 @@ function Row({
         <p className="text-sm font-medium text-slate-800">{label}</p>
         {sublabel && <p className="text-xs text-slate-500 mt-0.5">{sublabel}</p>}
       </div>
-      {right ?? <ChevronRight size={16} className="text-slate-300" />}
+      {right !== undefined ? right : (onClick !== undefined ? <ChevronRight size={16} className="text-slate-300" /> : null)}
     </div>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1 mb-2">{children}</p>
   );
 }
 
 export default function MorePage() {
   const { logout, user } = useAuth();
-  const [notifReminders, setNotifReminders] = useState(true);
+  const { navigateToAccount } = useApp();
+
+  const [notifTherapy, setNotifTherapy] = useState(true);
   const [notifVaccines, setNotifVaccines] = useState(true);
-  const [notifCheckups, setNotifCheckups] = useState(false);
+  const [notifMeals, setNotifMeals] = useState(false);
+  const [notifAiFollowUp, setNotifAiFollowUp] = useState(false);
+  const [notifMonthly, setNotifMonthly] = useState(true);
+  const [notifAnnual, setNotifAnnual] = useState(false);
+
+  const initials = user?.name
+    ? user.name.split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2)
+    : 'U';
 
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
       <TopBar title="More" />
       <main className="flex-1 px-4 py-4 pb-24 space-y-5">
-        {/* Profile */}
+
+        {/* Account card */}
         <SectionCard>
-          <div className="flex items-center gap-3 px-4 py-4">
+          <button
+            onClick={navigateToAccount}
+            className="w-full flex items-center gap-3 px-4 py-4 hover:bg-slate-50 active:bg-slate-100 transition-colors"
+          >
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center flex-shrink-0">
-              <User size={22} className="text-white" strokeWidth={2} />
+              <span className="text-white font-bold text-base leading-none">{initials}</span>
             </div>
-            <div className="flex-1">
+            <div className="flex-1 text-left">
               <p className="text-sm font-semibold text-slate-800">{user?.name ?? 'My Account'}</p>
-              <p className="text-xs text-slate-500 mt-0.5">{user?.email ?? 'Manage your profile and preferences'}</p>
+              <p className="text-xs text-slate-500 mt-0.5">{user?.email ?? 'Manage your profile'}</p>
             </div>
-            <ChevronRight size={16} className="text-slate-300" />
-          </div>
+            <ChevronRight size={16} className="text-slate-300 flex-shrink-0" />
+          </button>
         </SectionCard>
 
-        {/* Notification Preferences */}
+        {/* Notifications */}
         <div>
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1 mb-2">Notifications</p>
+          <SectionLabel>Notifications</SectionLabel>
           <SectionCard>
             <Row
-              Icon={Bell}
-              label="Reminders & Therapies"
+              Icon={Stethoscope}
+              label="Therapy Reminders"
               sublabel="Daily medication and therapy alerts"
               iconBg="bg-violet-50"
               iconColor="text-violet-500"
-              right={<Toggle checked={notifReminders} onChange={setNotifReminders} />}
+              right={<Toggle checked={notifTherapy} onChange={setNotifTherapy} />}
             />
             <Row
-              Icon={Shield}
+              Icon={Syringe}
               label="Vaccine Due Dates"
               sublabel="Upcoming vaccine reminders"
               iconBg="bg-sky-50"
@@ -105,22 +125,106 @@ export default function MorePage() {
               right={<Toggle checked={notifVaccines} onChange={setNotifVaccines} />}
             />
             <Row
-              Icon={Info}
-              label="Checkup Reminders"
-              sublabel="Monthly and annual checkup alerts"
+              Icon={UtensilsCrossed}
+              label="Meal Reminders"
+              sublabel="Scheduled feeding time alerts"
+              iconBg="bg-amber-50"
+              iconColor="text-amber-500"
+              right={<Toggle checked={notifMeals} onChange={setNotifMeals} />}
+            />
+            <Row
+              Icon={Bot}
+              label="AI Follow-up Reminders"
+              sublabel="Follow-up on AI diagnostics"
               iconBg="bg-emerald-50"
               iconColor="text-emerald-500"
-              right={<Toggle checked={notifCheckups} onChange={setNotifCheckups} />}
+              right={<Toggle checked={notifAiFollowUp} onChange={setNotifAiFollowUp} />}
+            />
+            <Row
+              Icon={Info}
+              label="Monthly Checkup Reminders"
+              sublabel="Monthly health checkup alerts"
+              iconBg="bg-blue-50"
+              iconColor="text-blue-500"
+              right={<Toggle checked={notifMonthly} onChange={setNotifMonthly} />}
+            />
+            <Row
+              Icon={Bell}
+              label="Annual Checkup Reminders"
+              sublabel="Yearly vet checkup alerts"
+              iconBg="bg-rose-50"
+              iconColor="text-rose-500"
+              right={<Toggle checked={notifAnnual} onChange={setNotifAnnual} />}
+            />
+          </SectionCard>
+        </div>
+
+        {/* Data & Privacy */}
+        <div>
+          <SectionLabel>Data &amp; Privacy</SectionLabel>
+          <SectionCard>
+            <Row
+              Icon={Shield}
+              label="Privacy Policy"
+              iconBg="bg-slate-100"
+              iconColor="text-slate-500"
+              onClick={() => {}}
+            />
+            <Row
+              Icon={Download}
+              label="Export Health History"
+              sublabel="Download full health records"
+              iconBg="bg-teal-50"
+              iconColor="text-teal-500"
+              onClick={() => {}}
+            />
+            <Row
+              Icon={FileText}
+              label="Export AI Diagnostics"
+              sublabel="Download diagnostics report"
+              iconBg="bg-sky-50"
+              iconColor="text-sky-500"
+              onClick={() => {}}
+            />
+            <Row
+              Icon={Syringe}
+              label="Export Vaccines"
+              sublabel="Download vaccination records"
+              iconBg="bg-emerald-50"
+              iconColor="text-emerald-500"
+              onClick={() => {}}
             />
           </SectionCard>
         </div>
 
         {/* About */}
         <div>
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1 mb-2">About</p>
+          <SectionLabel>About</SectionLabel>
           <SectionCard>
-            <Row Icon={Info} label="About PetCare AI" sublabel="Version 1.0.0 (MVP)" iconBg="bg-slate-100" iconColor="text-slate-500" />
-            <Row Icon={Shield} label="Privacy Policy" iconBg="bg-slate-100" iconColor="text-slate-500" />
+            <Row
+              Icon={Info}
+              label="About TTCARE VET"
+              sublabel="Your premium pet health companion"
+              iconBg="bg-slate-100"
+              iconColor="text-slate-500"
+              onClick={() => {}}
+            />
+            <Row
+              Icon={Info}
+              label="App Version"
+              sublabel="1.0.0 (MVP)"
+              iconBg="bg-slate-100"
+              iconColor="text-slate-500"
+              right={null}
+            />
+            <Row
+              Icon={Bell}
+              label="Support"
+              sublabel="Get help and contact us"
+              iconBg="bg-slate-100"
+              iconColor="text-slate-500"
+              onClick={() => {}}
+            />
           </SectionCard>
         </div>
 
@@ -134,6 +238,7 @@ export default function MorePage() {
           </div>
           <span className="text-sm font-semibold text-red-500">Sign Out</span>
         </button>
+
       </main>
     </div>
   );

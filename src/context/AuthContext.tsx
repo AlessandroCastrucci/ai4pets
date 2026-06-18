@@ -16,6 +16,7 @@ interface AuthContextType {
   signup: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   resetPassword: (email: string) => Promise<void>;
+  updateUser: (name: string, email: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -61,8 +62,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await new Promise((r) => setTimeout(r, 900));
   }, []);
 
+  const updateUser = useCallback((name: string, email: string) => {
+    setUser({ name: name.trim(), email: email.trim() });
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, authScreen, navigateToAuth, login, signup, logout, resetPassword }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, authScreen, navigateToAuth, login, signup, logout, resetPassword, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
