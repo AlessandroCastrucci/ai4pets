@@ -3,10 +3,27 @@ import {
   Camera, Upload, ChevronRight, AlertTriangle, CheckCircle, XCircle,
   Eye, BookOpen, Save, MessageSquare, Zap, Smile, Droplets, Wind,
   Shield, HelpCircle, Layers, Volume2, Dog, Lightbulb, ArrowRight,
+  Sparkles, FileText, Pill, History,
 } from 'lucide-react';
 import TopBar from '../../components/TopBar';
 import { useApp } from '../../context/AppContext';
 import type { BodyArea, UrgencyLevel, DiagnosticResult } from '../../types';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type DiagStep =
+  | 'start'
+  | 'photo'
+  | 'ai-suggest'
+  | 'confirm-area'
+  | 'area-history'
+  | 'dont-know'
+  | 'optional-photo'
+  | 'symptoms'
+  | 'result'
+  | 'saved';
+
+type EntryMode = 'photo' | 'quick-check' | 'dont-know' | null;
 
 interface AreaDef {
   id: BodyArea;
@@ -17,17 +34,54 @@ interface AreaDef {
   iconColor: string;
 }
 
+interface QuickCheck {
+  label: string;
+  area: BodyArea;
+  Icon: React.ElementType;
+  color: string;
+  bg: string;
+}
+
+// ─── Constants ────────────────────────────────────────────────────────────────
+
 const BODY_AREAS: AreaDef[] = [
-  { id: 'skin-fur', label: 'Skin / Fur', sublabel: 'Rashes, hair loss, itching', Icon: Layers, bg: 'bg-teal-50', iconColor: 'text-teal-500' },
-  { id: 'eyes', label: 'Eyes', sublabel: 'Discharge, redness, squinting', Icon: Eye, bg: 'bg-sky-50', iconColor: 'text-sky-500' },
-  { id: 'ears', label: 'Ears', sublabel: 'Scratching, odour, discharge', Icon: Volume2, bg: 'bg-violet-50', iconColor: 'text-violet-500' },
-  { id: 'paws', label: 'Paws', sublabel: 'Licking, swelling, limping', Icon: Dog, bg: 'bg-amber-50', iconColor: 'text-amber-500' },
-  { id: 'mouth-teeth', label: 'Teeth / Mouth', sublabel: 'Bad breath, tartar, gums', Icon: Smile, bg: 'bg-emerald-50', iconColor: 'text-emerald-500' },
-  { id: 'stool', label: 'Stool', sublabel: 'Diarrhea, blood, consistency', Icon: Droplets, bg: 'bg-slate-100', iconColor: 'text-slate-500' },
-  { id: 'vomit', label: 'Vomit', sublabel: 'Frequency, content, colour', Icon: Wind, bg: 'bg-rose-50', iconColor: 'text-rose-500' },
-  { id: 'wound', label: 'Wound', sublabel: 'Cuts, bites, lacerations', Icon: Shield, bg: 'bg-red-50', iconColor: 'text-red-500' },
-  { id: 'other', label: 'Other', sublabel: 'Something else entirely', Icon: HelpCircle, bg: 'bg-slate-50', iconColor: 'text-slate-400' },
+  { id: 'skin-fur',    label: 'Skin / Fur',    sublabel: 'Rashes, hair loss, itching',      Icon: Layers,     bg: 'bg-teal-50',    iconColor: 'text-teal-500'    },
+  { id: 'eyes',        label: 'Eyes',           sublabel: 'Discharge, redness, squinting',   Icon: Eye,        bg: 'bg-sky-50',     iconColor: 'text-sky-500'     },
+  { id: 'ears',        label: 'Ears',           sublabel: 'Scratching, odour, discharge',    Icon: Volume2,    bg: 'bg-violet-50',  iconColor: 'text-violet-500'  },
+  { id: 'paws',        label: 'Paws',           sublabel: 'Licking, swelling, limping',      Icon: Dog,        bg: 'bg-amber-50',   iconColor: 'text-amber-500'   },
+  { id: 'mouth-teeth', label: 'Teeth / Mouth',  sublabel: 'Bad breath, tartar, gums',        Icon: Smile,      bg: 'bg-emerald-50', iconColor: 'text-emerald-500' },
+  { id: 'stool',       label: 'Stool',          sublabel: 'Diarrhea, blood, consistency',    Icon: Droplets,   bg: 'bg-slate-100',  iconColor: 'text-slate-500'   },
+  { id: 'vomit',       label: 'Vomit',          sublabel: 'Frequency, content, colour',      Icon: Wind,       bg: 'bg-rose-50',    iconColor: 'text-rose-500'    },
+  { id: 'wound',       label: 'Wound',          sublabel: 'Cuts, bites, lacerations',        Icon: Shield,     bg: 'bg-red-50',     iconColor: 'text-red-500'     },
+  { id: 'other',       label: 'Other',          sublabel: 'Something else entirely',         Icon: HelpCircle, bg: 'bg-slate-50',   iconColor: 'text-slate-400'   },
 ];
+
+const QUICK_CHECKS: QuickCheck[] = [
+  { label: 'Eye problem',  area: 'eyes',     Icon: Eye,      color: 'text-sky-500',    bg: 'bg-sky-50'    },
+  { label: 'Ear problem',  area: 'ears',     Icon: Volume2,  color: 'text-violet-500', bg: 'bg-violet-50' },
+  { label: 'Skin problem', area: 'skin-fur', Icon: Layers,   color: 'text-teal-500',   bg: 'bg-teal-50'   },
+  { label: 'Paw problem',  area: 'paws',     Icon: Dog,      color: 'text-amber-500',  bg: 'bg-amber-50'  },
+  { label: 'Vomiting',     area: 'vomit',    Icon: Wind,     color: 'text-rose-500',   bg: 'bg-rose-50'   },
+  { label: 'Diarrhea',     area: 'stool',    Icon: Droplets, color: 'text-slate-500',  bg: 'bg-slate-100' },
+];
+
+const AREA_KEYWORDS: Record<BodyArea, string[]> = {
+  eyes:          ['eye', 'ocular', 'drop', 'redness', 'squint', 'discharge', 'blink', 'tear', 'vision'],
+  ears:          ['ear', 'otitis', 'scratch', 'shake', 'odour', 'dark', 'wax'],
+  'skin-fur':    ['skin', 'fur', 'coat', 'rash', 'itch', 'dermatit', 'allerg', 'hair', 'hot spot', 'flake'],
+  paws:          ['paw', 'lick', 'limp', 'toe', 'claw', 'foot', 'feet'],
+  'mouth-teeth': ['mouth', 'teeth', 'tooth', 'gum', 'breath', 'tartar', 'dental', 'oral'],
+  stool:         ['stool', 'diarrhea', 'bowel', 'blood', 'consisten', 'soft', 'loose', 'feces'],
+  vomit:         ['vomit', 'nausea', 'sick', 'bile', 'regurgit', 'throw up'],
+  wound:         ['wound', 'cut', 'bite', 'bleed', 'lacerat', 'injury', 'sore'],
+  other:         [],
+};
+
+const PHOTO_SUGGESTIONS: Record<string, { primary: BodyArea; secondary: BodyArea }> = {
+  luna:  { primary: 'paws',     secondary: 'skin-fur' },
+  rocky: { primary: 'skin-fur', secondary: 'ears'     },
+  micio: { primary: 'eyes',     secondary: 'skin-fur' },
+};
 
 type MockResult = Omit<DiagnosticResult, 'id' | 'petId' | 'date' | 'bodyArea' | 'symptoms'>;
 
@@ -133,23 +187,41 @@ const FOLLOW_UP_REPLIES: Record<string, Record<UrgencyLevel, string>> = {
   },
 };
 
-const SYMPTOMS_LIST = [
-  'Itching', 'Redness', 'Swelling', 'Loss of appetite',
-  'Vomiting', 'Diarrhea', 'Fatigue', 'Pain',
-];
+const SYMPTOMS_LIST = ['Itching', 'Redness', 'Swelling', 'Loss of appetite', 'Vomiting', 'Diarrhea', 'Fatigue', 'Pain'];
 const DURATION_OPTIONS = ['Today', '1–3 days', '4–7 days', 'More than a week'];
-const EATING_OPTIONS = [{ id: 'normally', label: 'Normally' }, { id: 'less', label: 'Less than usual' }, { id: 'not-eating', label: 'Not eating' }];
+const EATING_OPTIONS   = [{ id: 'normally', label: 'Normally' }, { id: 'less', label: 'Less than usual' }, { id: 'not-eating', label: 'Not eating' }];
 const DRINKING_OPTIONS = [{ id: 'normally', label: 'Normally' }, { id: 'less', label: 'Less than usual' }, { id: 'more', label: 'More than usual' }];
 const ACTIVITY_OPTIONS = [{ id: 'active', label: 'Active' }, { id: 'tired', label: 'Tired' }, { id: 'apathetic', label: 'Apathetic' }];
 
 type UrgencyConfig = { bg: string; text: string; Icon: typeof AlertTriangle; label: string };
 const URGENCY_CONFIG: Record<UrgencyLevel, UrgencyConfig> = {
-  low: { bg: 'bg-emerald-50 border-emerald-200', text: 'text-emerald-700', Icon: CheckCircle, label: 'Low Urgency' },
-  medium: { bg: 'bg-amber-50 border-amber-200', text: 'text-amber-700', Icon: AlertTriangle, label: 'Medium Urgency' },
-  high: { bg: 'bg-red-50 border-red-200', text: 'text-red-700', Icon: AlertTriangle, label: 'High Urgency' },
+  low:    { bg: 'bg-emerald-50 border-emerald-200', text: 'text-emerald-700', Icon: CheckCircle, label: 'Low Urgency'    },
+  medium: { bg: 'bg-amber-50 border-amber-200',     text: 'text-amber-700',   Icon: AlertTriangle, label: 'Medium Urgency' },
+  high:   { bg: 'bg-red-50 border-red-200',         text: 'text-red-700',     Icon: AlertTriangle, label: 'High Urgency'   },
 };
 
-type Step = 1 | 2 | 3 | 4 | 5;
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function fmtDate(iso: string) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function areaMatchesText(area: BodyArea, text: string): boolean {
+  const lower = text.toLowerCase();
+  return AREA_KEYWORDS[area].some((kw) => lower.includes(kw));
+}
+
+function suggestAreaFromText(text: string): BodyArea {
+  const lower = text.toLowerCase();
+  for (const area of Object.keys(AREA_KEYWORDS) as BodyArea[]) {
+    if (area === 'other') continue;
+    if (AREA_KEYWORDS[area].some((kw) => lower.includes(kw))) return area;
+  }
+  return 'other';
+}
+
+// ─── Small components ─────────────────────────────────────────────────────────
 
 function ChipButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
@@ -165,75 +237,184 @@ function ChipButton({ active, onClick, children }: { active: boolean; onClick: (
   );
 }
 
-function PetContextBanner({ pet }: { pet: { photo: string; name: string; species: string; breed: string; age: number; weight: number } }) {
+function AreaGrid({ selectedArea, onSelect }: { selectedArea: BodyArea | null; onSelect: (a: BodyArea) => void }) {
   return (
-    <div className="flex items-center gap-3 bg-white rounded-2xl shadow-card px-4 py-3">
-      <img src={pet.photo} alt={pet.name} className="w-12 h-12 rounded-xl object-cover flex-shrink-0" />
-      <div>
-        <p className="text-sm font-bold text-slate-800">Analyzing {pet.name}</p>
-        <p className="text-xs text-slate-400 mt-0.5 capitalize">{pet.species} · {pet.breed} · {pet.age} yrs · {pet.weight} kg</p>
-      </div>
-    </div>
-  );
-}
-
-function StepIndicator({ step }: { step: Step }) {
-  const labels = ['Area', 'Photo', 'Symptoms', 'Result'];
-  return (
-    <div className="bg-white border-b border-slate-100 px-4 py-2.5 flex items-center gap-2">
-      {labels.map((label, i) => {
-        const s = (i + 1) as 1 | 2 | 3 | 4;
-        const active = step === s;
-        const done = step > s;
+    <div className="grid grid-cols-3 gap-2">
+      {BODY_AREAS.map((area) => {
+        const active = selectedArea === area.id;
         return (
-          <div key={s} className="flex items-center gap-1.5 flex-1 last:flex-none">
-            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
-              done ? 'bg-sky-500 text-white' : active ? 'bg-sky-500 text-white ring-2 ring-sky-200' : 'bg-slate-100 text-slate-400'
-            }`}>
-              {done ? '✓' : s}
+          <button
+            key={area.id}
+            onClick={() => onSelect(area.id)}
+            className={`flex flex-col items-center gap-2 p-3 rounded-2xl border-2 transition-all active:scale-95 ${
+              active ? 'border-sky-400 bg-sky-50' : 'border-slate-100 bg-white hover:border-sky-200'
+            }`}
+          >
+            <div className={`w-10 h-10 rounded-xl ${area.bg} flex items-center justify-center`}>
+              <area.Icon size={20} className={area.iconColor} strokeWidth={1.5} />
             </div>
-            <span className={`text-[10px] font-semibold ${active ? 'text-sky-600' : done ? 'text-slate-400' : 'text-slate-300'}`}>{label}</span>
-            {i < 3 && <div className={`flex-1 h-0.5 rounded-full ${done ? 'bg-sky-400' : 'bg-slate-100'}`} />}
-          </div>
+            <span className={`text-[11px] font-semibold text-center leading-tight ${active ? 'text-sky-700' : 'text-slate-700'}`}>{area.label}</span>
+          </button>
         );
       })}
     </div>
   );
 }
 
+function HealthContextCard({
+  pet, lastDiagIssue, lastDiagDate, activeTherapyText, vaccineStatus, vaccineColor,
+}: {
+  pet: { photo: string; name: string; species: string; breed: string; age: number; weight: number };
+  lastDiagIssue: string | null;
+  lastDiagDate: string | null;
+  activeTherapyText: string;
+  vaccineStatus: string;
+  vaccineColor: string;
+}) {
+  return (
+    <div className="bg-white rounded-2xl shadow-card overflow-hidden">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-50">
+        <img src={pet.photo} alt={pet.name} className="w-11 h-11 rounded-xl object-cover flex-shrink-0" />
+        <div>
+          <p className="text-sm font-bold text-slate-800">{pet.name}</p>
+          <p className="text-[11px] text-slate-400 capitalize">{pet.species} · {pet.breed} · {pet.age} yrs · {pet.weight} kg</p>
+        </div>
+      </div>
+      <div className="px-4 py-3 grid grid-cols-3 divide-x divide-slate-100">
+        <div className="pr-3">
+          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Last issue</p>
+          {lastDiagIssue ? (
+            <>
+              <p className="text-[11px] font-semibold text-slate-700 leading-snug line-clamp-2">{lastDiagIssue}</p>
+              <p className="text-[10px] text-slate-400 mt-0.5">{lastDiagDate}</p>
+            </>
+          ) : (
+            <p className="text-[11px] text-slate-400">No records</p>
+          )}
+        </div>
+        <div className="px-3">
+          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Therapy</p>
+          <p className="text-[11px] font-semibold text-slate-700 leading-snug line-clamp-2">{activeTherapyText}</p>
+        </div>
+        <div className="pl-3">
+          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Vaccines</p>
+          <p className={`text-[11px] font-semibold leading-snug ${vaccineColor}`}>{vaccineStatus}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
+
 export default function AIDiagnosticsPage() {
-  const { getSelectedPet, addDiagnosticResult, setActiveTab } = useApp();
+  const { getSelectedPet, addDiagnosticResult, setActiveTab, getPetDiagnostics, getPetTherapies, getPetVaccines, getPetDocuments } = useApp();
   const pet = getSelectedPet();
 
-  const [step, setStep] = useState<Step>(1);
-  const [selectedArea, setSelectedArea] = useState<BodyArea | null>(null);
-  const [photoSimulated, setPhotoSimulated] = useState(false);
-  const [tipsOpen, setTipsOpen] = useState(false);
-  const [description, setDescription] = useState('');
-  const [duration, setDuration] = useState('');
-  const [checkedSymptoms, setCheckedSymptoms] = useState<Set<string>>(new Set());
-  const [eating, setEating] = useState('');
-  const [drinking, setDrinking] = useState('');
-  const [activity, setActivity] = useState('');
-  const [result, setResult] = useState<DiagnosticResult | null>(null);
-  const [followUpOpen, setFollowUpOpen] = useState(false);
-  const [followUpStatus, setFollowUpStatus] = useState<string | null>(null);
-  const [followUpReply, setFollowUpReply] = useState('');
-  const [followUpQuestion, setFollowUpQuestion] = useState('');
+  const [step, setStep]                           = useState<DiagStep>('start');
+  const [entryMode, setEntryMode]                 = useState<EntryMode>(null);
+  const [selectedArea, setSelectedArea]           = useState<BodyArea | null>(null);
+  const [suggestedArea, setSuggestedArea]         = useState<BodyArea | null>(null);
+  const [photoSimulated, setPhotoSimulated]       = useState(false);
+  const [tipsOpen, setTipsOpen]                   = useState(false);
+  const [dontKnowText, setDontKnowText]           = useState('');
+  const [description, setDescription]             = useState('');
+  const [duration, setDuration]                   = useState('');
+  const [checkedSymptoms, setCheckedSymptoms]     = useState<Set<string>>(new Set());
+  const [eating, setEating]                       = useState('');
+  const [drinking, setDrinking]                   = useState('');
+  const [activity, setActivity]                   = useState('');
+  const [result, setResult]                       = useState<DiagnosticResult | null>(null);
+  const [resultFromDontKnow, setResultFromDontKnow] = useState(false);
+  const [followUpOpen, setFollowUpOpen]           = useState(false);
+  const [followUpStatus, setFollowUpStatus]       = useState<string | null>(null);
+  const [followUpReply, setFollowUpReply]         = useState('');
+  const [followUpQuestion, setFollowUpQuestion]   = useState('');
   const [followUpQuestionReply, setFollowUpQuestionReply] = useState('');
-  const [followUpNewPhoto, setFollowUpNewPhoto] = useState(false);
+  const [followUpNewPhoto, setFollowUpNewPhoto]   = useState(false);
 
   if (!pet) return null;
 
   const safePet = pet;
+
+  // ── Context data ────────────────────────────────────────────────────────────
+  const petDiags     = getPetDiagnostics(safePet.id);
+  const petTherapies = getPetTherapies(safePet.id);
+  const petVaccines  = getPetVaccines(safePet.id);
+  const petDocs      = getPetDocuments(safePet.id);
+
+  const lastDiag = [...petDiags].sort((a, b) => b.date.localeCompare(a.date))[0] ?? null;
+  const activeTherapy = petTherapies.find((t) => t.status === 'active');
+  const overdueVaccine = petVaccines.find((v) => v.nextDue <= '2026-06-18');
+
+  const healthCtxProps = {
+    pet: safePet,
+    lastDiagIssue: lastDiag ? lastDiag.possibleIssue : null,
+    lastDiagDate: lastDiag ? fmtDate(lastDiag.date) : null,
+    activeTherapyText: activeTherapy ? activeTherapy.name : 'None active',
+    vaccineStatus: overdueVaccine ? 'Overdue' : 'Up to date',
+    vaccineColor: overdueVaccine ? 'text-amber-600' : 'text-emerald-600',
+  };
+
+  // ── Area-specific history ───────────────────────────────────────────────────
+  const relatedDiags     = selectedArea ? petDiags.filter((d) => d.bodyArea === selectedArea) : [];
+  const relatedDocs      = selectedArea ? petDocs.filter((d) => areaMatchesText(selectedArea, d.label)) : [];
+  const relatedTherapies = selectedArea ? petTherapies.filter((t) =>
+    areaMatchesText(selectedArea, t.name) || areaMatchesText(selectedArea, t.notes ?? ''),
+  ) : [];
   const areaLabel = BODY_AREAS.find((a) => a.id === selectedArea)?.label ?? '';
 
-  function toggleSymptom(s: string) {
-    setCheckedSymptoms((prev) => {
-      const next = new Set(prev);
-      if (next.has(s)) next.delete(s); else next.add(s);
-      return next;
-    });
+  // ── Navigation helpers ──────────────────────────────────────────────────────
+  function startPhotoPath() {
+    setEntryMode('photo');
+    setPhotoSimulated(false);
+    setStep('photo');
+  }
+
+  function startQuickCheck(area: BodyArea) {
+    setEntryMode('quick-check');
+    setSelectedArea(area);
+    setStep('area-history');
+  }
+
+  function startDontKnow() {
+    setEntryMode('dont-know');
+    setDontKnowText('');
+    setStep('dont-know');
+  }
+
+  function handlePhotoAnalyze() {
+    const suggestion = PHOTO_SUGGESTIONS[safePet.id] ?? { primary: 'other', secondary: 'other' };
+    setSuggestedArea(suggestion.primary);
+    setStep('ai-suggest');
+  }
+
+  function acceptSuggestion() {
+    setSelectedArea(suggestedArea!);
+    setStep('area-history');
+  }
+
+  function rejectSuggestion() {
+    setSelectedArea(null);
+    setStep('confirm-area');
+  }
+
+  function handleConfirmArea(area: BodyArea) {
+    setSelectedArea(area);
+    setStep('area-history');
+  }
+
+  function handleDontKnowAnalyze() {
+    const area = suggestAreaFromText(dontKnowText);
+    setSuggestedArea(area);
+    setSelectedArea(area);
+    setStep('area-history');
+  }
+
+  function continueFromAreaHistory() {
+    if (entryMode === 'photo')        setStep('symptoms');
+    else if (entryMode === 'quick-check') setStep('photo');
+    else                              setStep('optional-photo');
   }
 
   function handleAnalyze() {
@@ -243,7 +424,7 @@ export default function AIDiagnosticsPage() {
       description,
       duration ? `Duration: ${duration}` : '',
       checkedSymptoms.size > 0 ? `Symptoms: ${[...checkedSymptoms].join(', ')}` : '',
-      eating ? `Eating: ${eating}` : '',
+      eating   ? `Eating: ${eating}`     : '',
       drinking ? `Drinking: ${drinking}` : '',
       activity ? `Activity: ${activity}` : '',
     ].filter(Boolean).join(' | ');
@@ -258,13 +439,14 @@ export default function AIDiagnosticsPage() {
       ...mock,
     };
     setResult(newResult);
-    setStep(4);
+    setResultFromDontKnow(entryMode === 'dont-know');
+    setStep('result');
   }
 
   function handleSave() {
     if (result) {
       addDiagnosticResult(result);
-      setStep(5);
+      setStep('saved');
     }
   }
 
@@ -282,49 +464,124 @@ export default function AIDiagnosticsPage() {
     );
   }
 
+  function toggleSymptom(s: string) {
+    setCheckedSymptoms((prev) => {
+      const next = new Set(prev);
+      if (next.has(s)) next.delete(s); else next.add(s);
+      return next;
+    });
+  }
+
   const urgencyConf = result ? URGENCY_CONFIG[result.urgency] : null;
 
+  // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
-      <TopBar title="AI Diagnostics" showBack subtitle={pet.name} />
-      {step <= 4 && <StepIndicator step={step} />}
+      <TopBar title="AI Diagnostics" showBack subtitle={safePet.name} />
 
       <main className="flex-1 px-4 py-4 pb-28 space-y-4 overflow-y-auto">
 
-        {/* Step 1: Area selection */}
-        {step === 1 && (
+        {/* ── START ── */}
+        {step === 'start' && (
           <>
-            <PetContextBanner pet={pet} />
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1">Where is {pet.name} showing symptoms?</p>
+            <HealthContextCard {...healthCtxProps} />
+
+            {/* Recent issues */}
+            {petDiags.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest px-1">Recent Issues</p>
+                {[...petDiags].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 2).map((d) => {
+                  const areaDef = BODY_AREAS.find((x) => x.id === d.bodyArea);
+                  const uc = URGENCY_CONFIG[d.urgency];
+                  return (
+                    <div key={d.id} className="bg-white rounded-2xl shadow-card px-4 py-3 flex items-center gap-3">
+                      <div className={`w-9 h-9 rounded-xl ${areaDef?.bg ?? 'bg-slate-50'} flex items-center justify-center flex-shrink-0`}>
+                        {areaDef && <areaDef.Icon size={18} className={areaDef.iconColor} strokeWidth={1.5} />}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-semibold text-slate-800 truncate">{d.possibleIssue}</p>
+                        <p className="text-[10px] text-slate-400 mt-0.5">{areaDef?.label} · {fmtDate(d.date)}</p>
+                      </div>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${uc.bg} ${uc.text}`}>{d.urgency}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Quick Checks */}
             <div className="space-y-2">
-              {BODY_AREAS.map((area) => (
-                <button
-                  key={area.id}
-                  onClick={() => { setSelectedArea(area.id); setStep(2); }}
-                  className="w-full bg-white rounded-2xl shadow-card px-4 py-3.5 flex items-center gap-3 hover:shadow-card-md active:scale-[0.99] transition-all text-left border border-transparent hover:border-sky-200"
-                >
-                  <div className={`w-10 h-10 rounded-xl ${area.bg} flex items-center justify-center flex-shrink-0`}>
-                    <area.Icon size={20} className={area.iconColor} strokeWidth={1.5} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-800">{area.label}</p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">{area.sublabel}</p>
-                  </div>
-                  <ChevronRight size={16} className="text-slate-300 flex-shrink-0" />
-                </button>
-              ))}
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest px-1">Quick Checks</p>
+              <div className="grid grid-cols-3 gap-2">
+                {QUICK_CHECKS.map((qc) => (
+                  <button
+                    key={qc.area}
+                    onClick={() => startQuickCheck(qc.area)}
+                    className="bg-white rounded-2xl shadow-card flex flex-col items-center gap-2 py-4 px-2 hover:shadow-card-md active:scale-95 transition-all border border-transparent hover:border-sky-200"
+                  >
+                    <div className={`w-10 h-10 rounded-xl ${qc.bg} flex items-center justify-center`}>
+                      <qc.Icon size={20} className={qc.color} strokeWidth={1.5} />
+                    </div>
+                    <span className="text-[11px] font-semibold text-slate-700 text-center leading-tight">{qc.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Entry options */}
+            <div className="space-y-2">
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest px-1">Full Analysis</p>
+              <button
+                onClick={startPhotoPath}
+                className="w-full bg-sky-500 text-white rounded-2xl px-4 py-3.5 flex items-center gap-3 hover:bg-sky-600 active:bg-sky-700 transition-colors"
+              >
+                <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Camera size={18} className="text-white" strokeWidth={2} />
+                </div>
+                <div className="text-left flex-1">
+                  <p className="text-sm font-bold">Photo-based analysis</p>
+                  <p className="text-xs opacity-80 mt-0.5">Take or upload a photo — AI suggests the area</p>
+                </div>
+                <ChevronRight size={16} className="text-white/60" />
+              </button>
+
+              <button
+                onClick={startDontKnow}
+                className="w-full bg-white rounded-2xl shadow-card px-4 py-3.5 flex items-center gap-3 hover:shadow-card-md active:scale-[0.99] transition-all border border-transparent hover:border-sky-200"
+              >
+                <div className="w-9 h-9 bg-slate-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <HelpCircle size={18} className="text-slate-400" strokeWidth={1.5} />
+                </div>
+                <div className="text-left flex-1">
+                  <p className="text-sm font-semibold text-slate-800">I don't know where the problem is</p>
+                  <p className="text-xs text-slate-400 mt-0.5">Describe symptoms — AI identifies the area</p>
+                </div>
+                <ChevronRight size={16} className="text-slate-300" />
+              </button>
             </div>
           </>
         )}
 
-        {/* Step 2: Photo */}
-        {step === 2 && (
+        {/* ── PHOTO ── */}
+        {(step === 'photo' || step === 'optional-photo') && (
           <>
-            <PetContextBanner pet={pet} />
-            <div>
-              <p className="text-sm font-semibold text-slate-800">Add a photo of {pet.name}'s {areaLabel.toLowerCase()}</p>
-              <p className="text-xs text-slate-400 mt-0.5">A close-up photo helps the AI produce a more accurate result.</p>
+            <div className="bg-white rounded-2xl shadow-card px-4 py-3 flex items-center gap-3">
+              <img src={safePet.photo} alt={safePet.name} className="w-11 h-11 rounded-xl object-cover flex-shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-slate-800">
+                  {step === 'optional-photo' ? `Photo of ${safePet.name} (optional)` : `Photo for analysis`}
+                </p>
+                <p className="text-xs text-slate-400 capitalize">{safePet.species} · {safePet.name}</p>
+              </div>
             </div>
+
+            {step === 'optional-photo' && selectedArea && (
+              <div className="bg-sky-50 border border-sky-100 rounded-2xl px-4 py-3">
+                <p className="text-xs text-sky-700 leading-relaxed">
+                  AI identified area: <span className="font-bold">{areaLabel}</span>. A photo can help, but you can skip and go straight to results.
+                </p>
+              </div>
+            )}
 
             {!photoSimulated ? (
               <div className="space-y-3">
@@ -349,7 +606,6 @@ export default function AIDiagnosticsPage() {
                   </button>
                 </div>
 
-                {/* Photo tips */}
                 <div className="bg-white rounded-2xl shadow-card overflow-hidden">
                   <button
                     onClick={() => setTipsOpen((p) => !p)}
@@ -378,9 +634,18 @@ export default function AIDiagnosticsPage() {
                   )}
                 </div>
 
-                <button onClick={() => setStep(3)} className="w-full text-sm text-slate-400 hover:text-slate-600 py-2 transition-colors">
-                  Skip — continue without photo
-                </button>
+                {step === 'optional-photo' ? (
+                  <button
+                    onClick={() => { setPhotoSimulated(false); setStep('symptoms'); }}
+                    className="w-full bg-sky-500 text-white font-semibold text-sm py-3.5 rounded-2xl hover:bg-sky-600 transition-colors"
+                  >
+                    Skip — analyze without photo
+                  </button>
+                ) : (
+                  <button onClick={() => setStep('start')} className="w-full text-sm text-slate-400 hover:text-slate-600 py-2 transition-colors">
+                    Back
+                  </button>
+                )}
               </div>
             ) : (
               <div className="space-y-3">
@@ -390,32 +655,239 @@ export default function AIDiagnosticsPage() {
                     <p className="text-xs text-slate-400">Photo captured</p>
                   </div>
                   <div className="px-4 py-3 flex items-center justify-between">
-                    <span className="text-xs text-slate-500">photo_{areaLabel.toLowerCase().replace(/[\s/]+/g, '_')}_2026.jpg</span>
+                    <span className="text-xs text-slate-500">photo_{safePet.name.toLowerCase()}_2026.jpg</span>
                     <button onClick={() => setPhotoSimulated(false)} className="text-xs text-sky-500 font-semibold">Retake</button>
                   </div>
                 </div>
                 <button
-                  onClick={() => setStep(3)}
-                  className="w-full bg-sky-500 text-white font-semibold text-sm py-3.5 rounded-2xl hover:bg-sky-600 active:bg-sky-700 transition-colors"
+                  onClick={() => {
+                    if (step === 'photo') handlePhotoAnalyze();
+                    else setStep('symptoms');
+                  }}
+                  className="w-full bg-sky-500 text-white font-semibold text-sm py-3.5 rounded-2xl hover:bg-sky-600 active:bg-sky-700 transition-colors flex items-center justify-center gap-2"
                 >
-                  Continue
+                  {step === 'photo' ? (
+                    <><Sparkles size={16} strokeWidth={2} /> Analyze Photo</>
+                  ) : (
+                    <>Continue</>
+                  )}
                 </button>
               </div>
             )}
           </>
         )}
 
-        {/* Step 3: Symptoms */}
-        {step === 3 && (
+        {/* ── AI SUGGEST ── */}
+        {step === 'ai-suggest' && suggestedArea && (() => {
+          const def = BODY_AREAS.find((a) => a.id === suggestedArea)!;
+          return (
+            <>
+              <div className="bg-white rounded-2xl shadow-card px-4 py-3 flex items-center gap-3">
+                <img src={safePet.photo} alt={safePet.name} className="w-11 h-11 rounded-xl object-cover flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-bold text-slate-800">Photo analyzed</p>
+                  <p className="text-xs text-slate-400">{safePet.name} · AI area suggestion</p>
+                </div>
+              </div>
+
+              <div className="bg-sky-50 border border-sky-200 rounded-2xl p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={16} className="text-sky-500" strokeWidth={2} />
+                  <p className="text-sm font-bold text-sky-700">AI identified a possible area</p>
+                </div>
+                <div className={`flex items-center gap-3 bg-white rounded-xl px-3 py-3 border-2 border-sky-300`}>
+                  <div className={`w-10 h-10 rounded-xl ${def.bg} flex items-center justify-center flex-shrink-0`}>
+                    <def.Icon size={20} className={def.iconColor} strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-slate-800">{def.label}</p>
+                    <p className="text-xs text-slate-400 mt-0.5">{def.sublabel}</p>
+                  </div>
+                </div>
+                <p className="text-xs text-sky-700 leading-relaxed">
+                  Based on the photo, the AI suggests <span className="font-bold">{def.label}</span> as the area of concern. Does this look right?
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={rejectSuggestion}
+                  className="bg-white border border-slate-200 text-slate-700 font-semibold text-sm py-3.5 rounded-2xl hover:bg-slate-50 transition-colors"
+                >
+                  Change area
+                </button>
+                <button
+                  onClick={acceptSuggestion}
+                  className="bg-sky-500 text-white font-semibold text-sm py-3.5 rounded-2xl hover:bg-sky-600 active:bg-sky-700 transition-colors"
+                >
+                  Yes, that's it
+                </button>
+              </div>
+            </>
+          );
+        })()}
+
+        {/* ── CONFIRM AREA ── */}
+        {step === 'confirm-area' && (
           <>
-            <PetContextBanner pet={pet} />
+            <div className="bg-white rounded-2xl shadow-card px-4 py-3 flex items-center gap-3">
+              <img src={safePet.photo} alt={safePet.name} className="w-11 h-11 rounded-xl object-cover flex-shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-slate-800">Select the problem area</p>
+                <p className="text-xs text-slate-400">{safePet.name}</p>
+              </div>
+            </div>
+            <p className="text-xs text-slate-500 px-1">Where is {safePet.name} showing symptoms?</p>
+            <AreaGrid selectedArea={selectedArea} onSelect={handleConfirmArea} />
+          </>
+        )}
+
+        {/* ── DONT KNOW ── */}
+        {step === 'dont-know' && (
+          <>
+            <div className="bg-white rounded-2xl shadow-card px-4 py-3 flex items-center gap-3">
+              <img src={safePet.photo} alt={safePet.name} className="w-11 h-11 rounded-xl object-cover flex-shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-slate-800">Describe {safePet.name}'s symptoms</p>
+                <p className="text-xs text-slate-400">AI will identify the area</p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-card p-4 space-y-2">
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">What did you notice? <span className="text-red-400">*</span></p>
+              <textarea
+                value={dontKnowText}
+                onChange={(e) => setDontKnowText(e.target.value)}
+                placeholder={`e.g. "${safePet.name} has been shaking their head a lot and scratching near the ear, there's a slight smell..."`}
+                className="w-full bg-slate-50 rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:border-sky-400 resize-none leading-relaxed"
+                rows={5}
+              />
+              <p className="text-[11px] text-slate-400 leading-relaxed">Describe what you see, feel, or smell. Be as specific as possible. The AI will find the most likely area.</p>
+            </div>
+
+            <button
+              onClick={handleDontKnowAnalyze}
+              disabled={dontKnowText.trim().length < 10}
+              className="w-full bg-sky-500 text-white font-semibold text-sm py-3.5 rounded-2xl hover:bg-sky-600 active:bg-sky-700 transition-colors disabled:opacity-40 flex items-center justify-center gap-2"
+            >
+              <Sparkles size={16} strokeWidth={2} />
+              Identify area with AI
+            </button>
+
+            <button onClick={() => setStep('start')} className="w-full text-sm text-slate-400 hover:text-slate-600 py-2 transition-colors">
+              Back
+            </button>
+          </>
+        )}
+
+        {/* ── AREA HISTORY ── */}
+        {step === 'area-history' && selectedArea && (
+          <>
+            <div className="bg-white rounded-2xl shadow-card px-4 py-3 flex items-center gap-3">
+              <img src={safePet.photo} alt={safePet.name} className="w-11 h-11 rounded-xl object-cover flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-slate-800">Before we analyze</p>
+                <p className="text-xs text-slate-400">{safePet.name} · {areaLabel} history</p>
+              </div>
+              {(() => {
+                const def = BODY_AREAS.find((a) => a.id === selectedArea)!;
+                return (
+                  <div className={`w-9 h-9 rounded-xl ${def.bg} flex items-center justify-center flex-shrink-0`}>
+                    <def.Icon size={18} className={def.iconColor} strokeWidth={1.5} />
+                  </div>
+                );
+              })()}
+            </div>
+
+            {relatedDiags.length === 0 && relatedDocs.length === 0 && relatedTherapies.length === 0 ? (
+              <div className="bg-white rounded-2xl shadow-card px-4 py-6 flex flex-col items-center gap-2 text-center">
+                <History size={28} className="text-slate-300" strokeWidth={1.5} />
+                <p className="text-sm font-semibold text-slate-600">No related history found</p>
+                <p className="text-xs text-slate-400">No past diagnoses, documents or therapies related to {areaLabel.toLowerCase()} were found for {safePet.name}.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {relatedDiags.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest px-1">Past Diagnoses</p>
+                    {relatedDiags.map((d) => {
+                      const uc = URGENCY_CONFIG[d.urgency];
+                      return (
+                        <div key={d.id} className="bg-white rounded-2xl shadow-card px-4 py-3">
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="text-xs font-semibold text-slate-800 leading-snug flex-1">{d.possibleIssue}</p>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border flex-shrink-0 ${uc.bg} ${uc.text}`}>{d.urgency}</span>
+                          </div>
+                          <p className="text-[10px] text-slate-400 mt-1">{fmtDate(d.date)}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {relatedTherapies.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest px-1">Related Therapies</p>
+                    {relatedTherapies.map((t) => (
+                      <div key={t.id} className="bg-white rounded-2xl shadow-card px-4 py-3 flex items-center gap-3">
+                        <div className="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <Pill size={15} className="text-emerald-500" strokeWidth={1.5} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold text-slate-800 truncate">{t.name}</p>
+                          <p className="text-[10px] text-slate-400 mt-0.5 capitalize">{t.status} · {t.dosage} · {t.frequency}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {relatedDocs.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest px-1">Related Documents</p>
+                    {relatedDocs.map((d) => (
+                      <div key={d.id} className="bg-white rounded-2xl shadow-card px-4 py-3 flex items-center gap-3">
+                        <div className="w-8 h-8 bg-sky-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <FileText size={15} className="text-sky-500" strokeWidth={1.5} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold text-slate-800 truncate">{d.label}</p>
+                          <p className="text-[10px] text-slate-400 mt-0.5">{fmtDate(d.uploadedAt)}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            <button
+              onClick={continueFromAreaHistory}
+              className="w-full bg-sky-500 text-white font-semibold text-sm py-3.5 rounded-2xl hover:bg-sky-600 active:bg-sky-700 transition-colors flex items-center justify-center gap-2"
+            >
+              Continue to Analysis
+              <ArrowRight size={15} strokeWidth={2} />
+            </button>
+          </>
+        )}
+
+        {/* ── SYMPTOMS ── */}
+        {step === 'symptoms' && (
+          <>
+            <div className="bg-white rounded-2xl shadow-card px-4 py-3 flex items-center gap-3">
+              <img src={safePet.photo} alt={safePet.name} className="w-11 h-11 rounded-xl object-cover flex-shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-slate-800">Describe the symptoms</p>
+                <p className="text-xs text-slate-400">{safePet.name} · {areaLabel}</p>
+              </div>
+            </div>
 
             <div className="bg-white rounded-2xl shadow-card p-4 space-y-2">
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Describe the problem <span className="text-red-400">*</span></p>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder={`e.g. "${pet.name} has been scratching frequently, there's slight redness, and it started 3 days ago..."`}
+                placeholder={`e.g. "${safePet.name} has been scratching frequently, there's slight redness, and it started 3 days ago..."`}
                 className="w-full bg-slate-50 rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:border-sky-400 resize-none leading-relaxed"
                 rows={4}
               />
@@ -459,9 +931,9 @@ export default function AIDiagnosticsPage() {
 
             <div className="bg-white rounded-2xl shadow-card p-4 space-y-4">
               {[
-                { label: 'Eating', opts: EATING_OPTIONS, val: eating, set: setEating },
-                { label: 'Drinking', opts: DRINKING_OPTIONS, val: drinking, set: setDrinking },
-                { label: 'Activity level', opts: ACTIVITY_OPTIONS, val: activity, set: setActivity },
+                { label: 'Eating',        opts: EATING_OPTIONS,   val: eating,    set: setEating    },
+                { label: 'Drinking',      opts: DRINKING_OPTIONS, val: drinking,  set: setDrinking  },
+                { label: 'Activity level',opts: ACTIVITY_OPTIONS, val: activity,  set: setActivity  },
               ].map(({ label, opts, val, set }) => (
                 <div key={label}>
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">{label}</p>
@@ -476,28 +948,27 @@ export default function AIDiagnosticsPage() {
               ))}
             </div>
 
-            <div className="flex gap-3">
-              <button
-                onClick={() => setStep(2)}
-                className="flex-1 bg-white border border-slate-200 text-slate-600 font-semibold text-sm py-3.5 rounded-2xl hover:bg-slate-50 transition-colors"
-              >
-                Back
-              </button>
-              <button
-                onClick={handleAnalyze}
-                disabled={description.trim().length < 5}
-                className="flex-1 bg-sky-500 text-white font-semibold text-sm py-3.5 rounded-2xl hover:bg-sky-600 active:bg-sky-700 transition-colors disabled:opacity-40"
-              >
-                Analyze
-              </button>
-            </div>
+            <button
+              onClick={handleAnalyze}
+              disabled={description.trim().length < 5}
+              className="w-full bg-sky-500 text-white font-semibold text-sm py-3.5 rounded-2xl hover:bg-sky-600 active:bg-sky-700 transition-colors disabled:opacity-40 flex items-center justify-center gap-2"
+            >
+              <Sparkles size={16} strokeWidth={2} />
+              Analyze
+            </button>
           </>
         )}
 
-        {/* Step 4: AI Result */}
-        {step === 4 && result && urgencyConf && (
+        {/* ── RESULT ── */}
+        {step === 'result' && result && urgencyConf && (
           <>
-            <PetContextBanner pet={pet} />
+            <div className="bg-white rounded-2xl shadow-card px-4 py-3 flex items-center gap-3">
+              <img src={safePet.photo} alt={safePet.name} className="w-11 h-11 rounded-xl object-cover flex-shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-slate-800">AI Analysis — {safePet.name}</p>
+                <p className="text-xs text-slate-400">{areaLabel} · 2026-06-18</p>
+              </div>
+            </div>
 
             <div className={`rounded-2xl border px-4 py-3.5 flex items-center gap-3 ${urgencyConf.bg}`}>
               <urgencyConf.Icon size={22} className={urgencyConf.text} strokeWidth={2} />
@@ -508,10 +979,10 @@ export default function AIDiagnosticsPage() {
             </div>
 
             {[
-              { Icon: Zap, title: 'Possible Causes', items: result.possibleCauses, color: 'text-sky-500', bg: 'bg-sky-50' },
-              { Icon: CheckCircle, title: 'What To Do Now', items: result.whatToDoNow, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-              { Icon: BookOpen, title: 'What To Monitor', items: result.whatToMonitor, color: 'text-amber-500', bg: 'bg-amber-50' },
-              { Icon: XCircle, title: 'What NOT To Do', items: result.whatNotToDo, color: 'text-red-500', bg: 'bg-red-50' },
+              { Icon: Zap,         title: 'Possible Causes',  items: result.possibleCauses, color: 'text-sky-500',     bg: 'bg-sky-50'     },
+              { Icon: CheckCircle, title: 'What To Do Now',   items: result.whatToDoNow,    color: 'text-emerald-500', bg: 'bg-emerald-50' },
+              { Icon: BookOpen,    title: 'What To Monitor',  items: result.whatToMonitor,  color: 'text-amber-500',   bg: 'bg-amber-50'   },
+              { Icon: XCircle,     title: 'What NOT To Do',   items: result.whatNotToDo,    color: 'text-red-500',     bg: 'bg-red-50'     },
             ].map(({ Icon, title, items, color, bg }) => (
               <div key={title} className="bg-white rounded-2xl shadow-card p-4">
                 <div className="flex items-center gap-2 mb-3">
@@ -536,6 +1007,17 @@ export default function AIDiagnosticsPage() {
               <p className="text-sm text-slate-100 leading-relaxed">{result.followUpRecommendation}</p>
             </div>
 
+            <div className="bg-slate-100 rounded-2xl px-4 py-3">
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                {resultFromDontKnow && (
+                  <>AI identified area: <span className="font-semibold text-slate-700">{areaLabel}</span> · </>
+                )}
+                This result was generated using <span className="font-semibold text-slate-700">{safePet.name}'s</span> profile
+                {photoSimulated ? ', uploaded photo,' : ''}
+                {' '}selected symptoms and previous related health history.
+              </p>
+            </div>
+
             <button
               onClick={handleSave}
               className="w-full bg-sky-500 text-white font-semibold text-sm py-3.5 rounded-2xl hover:bg-sky-600 active:bg-sky-700 transition-colors flex items-center justify-center gap-2"
@@ -546,14 +1028,14 @@ export default function AIDiagnosticsPage() {
           </>
         )}
 
-        {/* Step 5: Saved + Follow-up */}
-        {step === 5 && result && urgencyConf && (
+        {/* ── SAVED ── */}
+        {step === 'saved' && result && urgencyConf && (
           <>
             <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center gap-3">
               <CheckCircle size={22} className="text-emerald-600 flex-shrink-0" strokeWidth={2} />
               <div>
                 <p className="text-sm font-bold text-emerald-800">Saved to Health Timeline</p>
-                <p className="text-xs text-emerald-600 mt-0.5">{pet.name}'s record has been updated in Health History</p>
+                <p className="text-xs text-emerald-600 mt-0.5">{safePet.name}'s record has been updated in Health History</p>
               </div>
             </div>
 
@@ -587,17 +1069,17 @@ export default function AIDiagnosticsPage() {
             {followUpOpen && (
               <div className="bg-white rounded-2xl shadow-card overflow-hidden">
                 <div className="px-4 pt-4 pb-3 border-b border-slate-50">
-                  <p className="text-sm font-bold text-slate-800">How is {pet.name} today?</p>
+                  <p className="text-sm font-bold text-slate-800">How is {safePet.name} today?</p>
                   <p className="text-xs text-slate-400 mt-0.5">Following up on: {areaLabel} · {result.possibleIssue}</p>
                 </div>
 
                 {!followUpStatus && (
                   <div className="px-4 py-3 space-y-2">
                     {[
-                      { id: 'improved', label: 'Improved', Icon: CheckCircle, iconColor: 'text-emerald-500', bg: 'bg-emerald-50', border: 'border-emerald-200 hover:border-emerald-300' },
-                      { id: 'same', label: 'Same', Icon: AlertTriangle, iconColor: 'text-amber-500', bg: 'bg-amber-50', border: 'border-amber-200 hover:border-amber-300' },
-                      { id: 'worse', label: 'Worse', Icon: XCircle, iconColor: 'text-red-500', bg: 'bg-red-50', border: 'border-red-200 hover:border-red-300' },
-                      { id: 'upload-photo', label: 'Upload new photo', Icon: Camera, iconColor: 'text-sky-500', bg: 'bg-sky-50', border: 'border-sky-200 hover:border-sky-300' },
+                      { id: 'improved',     label: 'Improved',          Icon: CheckCircle,  iconColor: 'text-emerald-500', bg: 'bg-emerald-50', border: 'border-emerald-200 hover:border-emerald-300' },
+                      { id: 'same',         label: 'Same',              Icon: AlertTriangle,iconColor: 'text-amber-500',   bg: 'bg-amber-50',   border: 'border-amber-200 hover:border-amber-300'   },
+                      { id: 'worse',        label: 'Worse',             Icon: XCircle,      iconColor: 'text-red-500',     bg: 'bg-red-50',     border: 'border-red-200 hover:border-red-300'       },
+                      { id: 'upload-photo', label: 'Upload new photo',  Icon: Camera,       iconColor: 'text-sky-500',     bg: 'bg-sky-50',     border: 'border-sky-200 hover:border-sky-300'       },
                     ].map(({ id, label, Icon, iconColor, bg, border }) => (
                       <button
                         key={id}
@@ -631,7 +1113,7 @@ export default function AIDiagnosticsPage() {
                       </div>
                     )}
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      The AI will use this alongside the original {areaLabel.toLowerCase()} diagnosis to track {pet.name}'s progression.
+                      The AI will use this alongside the original {areaLabel.toLowerCase()} diagnosis to track {safePet.name}'s progression.
                     </p>
                     <button
                       onClick={() => setActiveTab('assistant')}
@@ -647,7 +1129,7 @@ export default function AIDiagnosticsPage() {
                   <div className="px-4 py-4 space-y-3">
                     <div className={`rounded-xl border px-3 py-2 flex items-center gap-2 ${
                       followUpStatus === 'improved' ? 'bg-emerald-50 border-emerald-200' :
-                      followUpStatus === 'same' ? 'bg-amber-50 border-amber-200' :
+                      followUpStatus === 'same'     ? 'bg-amber-50 border-amber-200'     :
                       'bg-red-50 border-red-200'
                     }`}>
                       <span className="text-xs font-bold text-slate-600 capitalize">{followUpStatus}</span>
@@ -658,7 +1140,6 @@ export default function AIDiagnosticsPage() {
                         <p className="text-xs text-slate-700 leading-relaxed">{followUpReply}</p>
                       </div>
                     )}
-
                     <div className="space-y-2">
                       <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Have another question?</p>
                       <div className="flex gap-2">
@@ -683,7 +1164,6 @@ export default function AIDiagnosticsPage() {
                         </div>
                       )}
                     </div>
-
                     <button
                       onClick={() => setActiveTab('assistant')}
                       className="w-full text-sky-500 font-semibold text-sm py-2.5 rounded-xl hover:bg-sky-50 transition-colors flex items-center justify-center gap-2"
@@ -697,6 +1177,7 @@ export default function AIDiagnosticsPage() {
             )}
           </>
         )}
+
       </main>
     </div>
   );
