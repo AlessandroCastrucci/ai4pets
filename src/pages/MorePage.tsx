@@ -10,10 +10,19 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className={`w-11 h-6 rounded-full transition-colors flex-shrink-0 relative ${checked ? 'bg-sky-500' : 'bg-slate-200'}`}
+      style={{ width: 44, height: 24 }}
+      className={`rounded-full transition-colors flex-shrink-0 relative ${checked ? 'bg-sky-500' : 'bg-slate-200'}`}
     >
       <span
-        className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${checked ? 'translate-x-5' : 'translate-x-0.5'}`}
+        style={{
+          position: 'absolute',
+          top: 2,
+          left: 2,
+          width: 20,
+          height: 20,
+          transform: checked ? 'translateX(20px)' : 'translateX(0)',
+        }}
+        className="rounded-full bg-white shadow-sm transition-transform"
       />
     </button>
   );
