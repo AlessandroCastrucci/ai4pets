@@ -25,18 +25,7 @@ export default function MyPetsPage() {
 
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
-      <TopBar
-        title="My Pets"
-        rightSlot={
-          <button
-            onClick={navigateToAddPet}
-            className="flex items-center gap-1.5 text-sky-500 text-sm font-medium py-1 px-2 rounded-lg hover:bg-sky-50 active:bg-sky-100 transition-colors"
-          >
-            <PlusCircle size={17} strokeWidth={2} />
-            <span>Add</span>
-          </button>
-        }
-      />
+      <TopBar title="My Pets" />
       <main className="flex-1 px-4 py-4 space-y-3 pb-24">
         <p className="text-xs text-slate-500 font-medium uppercase tracking-wide px-1">
           {pets.length} {pets.length === 1 ? 'pet' : 'pets'}
