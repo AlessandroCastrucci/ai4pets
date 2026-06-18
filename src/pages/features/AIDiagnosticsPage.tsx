@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import {
   Camera, Upload, ChevronRight, AlertTriangle, CheckCircle, XCircle,
-  Eye, BookOpen, Save, MessageSquare, Zap, Smile, Droplets, Wind,
-  Shield, HelpCircle, Layers, Volume2, Dog, Lightbulb, ArrowRight,
+  BookOpen, Save, MessageSquare, Zap, Lightbulb, ArrowRight,
 } from 'lucide-react';
 import TopBar from '../../components/TopBar';
 import { useApp } from '../../context/AppContext';
@@ -31,20 +30,36 @@ function IllustrationEar() {
   );
 }
 
-function IllustrationSkinFur() {
+function IllustrationSkinBody() {
   return (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <ellipse cx="20" cy="22" rx="13" ry="11" fill="#ccfbf1" stroke="#14b8a6" strokeWidth="1.8"/>
-      <circle cx="14" cy="14" r="5" fill="#ccfbf1" stroke="#14b8a6" strokeWidth="1.8"/>
-      <circle cx="26" cy="14" r="5" fill="#ccfbf1" stroke="#14b8a6" strokeWidth="1.8"/>
-      {/* fur lines */}
-      <line x1="15" y1="18" x2="13" y2="22" stroke="#14b8a6" strokeWidth="1.2" strokeLinecap="round"/>
-      <line x1="20" y1="17" x2="20" y2="22" stroke="#14b8a6" strokeWidth="1.2" strokeLinecap="round"/>
-      <line x1="25" y1="18" x2="27" y2="22" stroke="#14b8a6" strokeWidth="1.2" strokeLinecap="round"/>
-      {/* irritation dots */}
-      <circle cx="20" cy="26" r="1.5" fill="#f87171"/>
-      <circle cx="24" cy="24" r="1" fill="#fca5a5"/>
-      <circle cx="16" cy="25" r="1" fill="#fca5a5"/>
+    <svg viewBox="0 0 56 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      {/* Body */}
+      <ellipse cx="22" cy="27" rx="15" ry="9" fill="#ccfbf1" stroke="#14b8a6" strokeWidth="1.8"/>
+      {/* Head */}
+      <circle cx="40" cy="16" r="10" fill="#ccfbf1" stroke="#14b8a6" strokeWidth="1.8"/>
+      {/* Snout/muzzle */}
+      <path d="M47 19 Q54 20.5 53 26 Q52 29 48 27" fill="#b2f5ea" stroke="#14b8a6" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round"/>
+      {/* Floppy ear */}
+      <path d="M40 7 C44 2 51 4 48 10 C46 15 40 15 39 10 Z" fill="#99f6e4" stroke="#14b8a6" strokeWidth="1.6" strokeLinejoin="round"/>
+      {/* Eye */}
+      <circle cx="44" cy="13" r="2.2" fill="#0d9488"/>
+      <circle cx="45" cy="12.2" r="0.8" fill="white"/>
+      {/* Nose */}
+      <ellipse cx="52" cy="25" rx="2" ry="1.2" fill="#0d9488"/>
+      {/* Neck connection (body→head overlap) */}
+      {/* Front right leg */}
+      <rect x="33" y="34" width="5" height="9" rx="2.5" fill="#99f6e4" stroke="#14b8a6" strokeWidth="1.5"/>
+      {/* Front left leg */}
+      <rect x="27.5" y="34" width="4" height="7.5" rx="2" fill="#b2f5ea" stroke="#14b8a6" strokeWidth="1.2"/>
+      {/* Back right leg */}
+      <rect x="16" y="34" width="5" height="9" rx="2.5" fill="#99f6e4" stroke="#14b8a6" strokeWidth="1.5"/>
+      {/* Back left leg */}
+      <rect x="10.5" y="34" width="4" height="7.5" rx="2" fill="#b2f5ea" stroke="#14b8a6" strokeWidth="1.2"/>
+      {/* Tail — curves upward from rear */}
+      <path d="M7.5 25 C4 19 2 13 6 9" stroke="#14b8a6" strokeWidth="2.4" strokeLinecap="round"/>
+      {/* Coat sheen lines */}
+      <path d="M13 24 C15 22 16.5 26 18.5 24" stroke="#0d9488" strokeWidth="1.1" strokeLinecap="round" opacity="0.5"/>
+      <path d="M19.5 27.5 C21.5 25.5 23 29.5 25 27.5" stroke="#0d9488" strokeWidth="1.1" strokeLinecap="round" opacity="0.5"/>
     </svg>
   );
 }
@@ -79,53 +94,6 @@ function IllustrationMouth() {
   );
 }
 
-function IllustrationWound() {
-  return (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      {/* bandage body */}
-      <rect x="6" y="16" width="28" height="8" rx="4" fill="#fee2e2" stroke="#ef4444" strokeWidth="1.8"/>
-      {/* bandage pads */}
-      <rect x="15" y="14" width="10" height="12" rx="2" fill="#fecaca" stroke="#ef4444" strokeWidth="1.4"/>
-      {/* bandage cross */}
-      <line x1="20" y1="16" x2="20" y2="26" stroke="#ef4444" strokeWidth="1.5" strokeLinecap="round"/>
-      <line x1="16" y1="20" x2="24" y2="20" stroke="#ef4444" strokeWidth="1.5" strokeLinecap="round"/>
-      {/* stitches on sides */}
-      <line x1="9" y1="18" x2="9" y2="22" stroke="#ef4444" strokeWidth="1.2" strokeLinecap="round"/>
-      <line x1="31" y1="18" x2="31" y2="22" stroke="#ef4444" strokeWidth="1.2" strokeLinecap="round"/>
-    </svg>
-  );
-}
-
-function IllustrationStool() {
-  return (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <ellipse cx="20" cy="32" rx="11" ry="3.5" fill="#d1d5db"/>
-      <path d="M13 30 Q12 24 16 22 Q14 18 18 16 Q16 12 20 11 Q24 12 22 16 Q26 18 24 22 Q28 24 27 30 Z" fill="#e2e8f0" stroke="#94a3b8" strokeWidth="1.6" strokeLinejoin="round"/>
-      {/* wavy lines indicating smell / concern */}
-      <path d="M30 16 Q32 14 30 12 Q32 10 30 8" stroke="#fca5a5" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
-      <path d="M33 18 Q35 16 33 14 Q35 12 33 10" stroke="#fca5a5" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
-    </svg>
-  );
-}
-
-function IllustrationVomit() {
-  return (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      {/* stomach */}
-      <ellipse cx="20" cy="18" rx="10" ry="9" fill="#ffe4e6" stroke="#f43f5e" strokeWidth="1.8"/>
-      {/* X eyes */}
-      <line x1="15" y1="13" x2="17" y2="15" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round"/>
-      <line x1="17" y1="13" x2="15" y2="15" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round"/>
-      <line x1="23" y1="13" x2="25" y2="15" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round"/>
-      <line x1="25" y1="13" x2="23" y2="15" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round"/>
-      {/* wavy mouth */}
-      <path d="M15 20 Q17 22 20 20 Q23 18 25 20" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-      {/* drip */}
-      <path d="M18 27 Q18 32 20 34 Q22 32 22 27" fill="#bbf7d0" stroke="#22c55e" strokeWidth="1.2"/>
-    </svg>
-  );
-}
-
 function IllustrationOther() {
   return (
     <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
@@ -135,39 +103,29 @@ function IllustrationOther() {
   );
 }
 
-const AREA_ILLUSTRATIONS: Record<BodyArea, React.ElementType> = {
-  'skin-fur': IllustrationSkinFur,
+const AREA_ILLUSTRATIONS: Partial<Record<BodyArea, React.ElementType>> = {
+  'skin-fur': IllustrationSkinBody,
   eyes: IllustrationEye,
   ears: IllustrationEar,
   paws: IllustrationPaws,
   'mouth-teeth': IllustrationMouth,
-  wound: IllustrationWound,
-  stool: IllustrationStool,
-  vomit: IllustrationVomit,
   other: IllustrationOther,
 };
-
-/* ─── Area definitions (icons kept for steps 2-5 banners) ──────────────── */
 
 interface AreaDef {
   id: BodyArea;
   label: string;
   sublabel: string;
-  Icon: React.ElementType;
   bg: string;
-  iconColor: string;
 }
 
 const BODY_AREAS: AreaDef[] = [
-  { id: 'skin-fur', label: 'Skin / Fur', sublabel: 'Itching, rash, hair loss', Icon: Layers, bg: 'bg-teal-50', iconColor: 'text-teal-500' },
-  { id: 'eyes', label: 'Eyes', sublabel: 'Redness, discharge', Icon: Eye, bg: 'bg-sky-50', iconColor: 'text-sky-500' },
-  { id: 'ears', label: 'Ears', sublabel: 'Scratching, bad smell', Icon: Volume2, bg: 'bg-violet-50', iconColor: 'text-violet-500' },
-  { id: 'paws', label: 'Paws', sublabel: 'Licking, limping', Icon: Dog, bg: 'bg-amber-50', iconColor: 'text-amber-500' },
-  { id: 'mouth-teeth', label: 'Teeth / Mouth', sublabel: 'Bad breath, gums', Icon: Smile, bg: 'bg-emerald-50', iconColor: 'text-emerald-500' },
-  { id: 'wound', label: 'Wound', sublabel: 'Cuts, bites', Icon: Shield, bg: 'bg-red-50', iconColor: 'text-red-500' },
-  { id: 'stool', label: 'Stool', sublabel: 'Diarrhea, blood', Icon: Droplets, bg: 'bg-slate-100', iconColor: 'text-slate-500' },
-  { id: 'vomit', label: 'Vomit', sublabel: 'Vomiting, nausea', Icon: Wind, bg: 'bg-rose-50', iconColor: 'text-rose-500' },
-  { id: 'other', label: 'Other', sublabel: 'Something else', Icon: HelpCircle, bg: 'bg-slate-50', iconColor: 'text-slate-400' },
+  { id: 'skin-fur',    label: 'Skin / Body',   sublabel: 'Itching, rash, lumps, hair loss', bg: 'bg-teal-50' },
+  { id: 'eyes',        label: 'Eyes',          sublabel: 'Redness, discharge',              bg: 'bg-sky-50' },
+  { id: 'ears',        label: 'Ears',          sublabel: 'Scratching, bad smell',           bg: 'bg-violet-50' },
+  { id: 'paws',        label: 'Paws',          sublabel: 'Licking, limping',                bg: 'bg-amber-50' },
+  { id: 'mouth-teeth', label: 'Teeth / Mouth', sublabel: 'Bad breath, gums',               bg: 'bg-emerald-50' },
+  { id: 'other',       label: 'Other',         sublabel: 'Vomiting, stool, wound, other',  bg: 'bg-slate-50' },
 ];
 
 type MockResult = Omit<DiagnosticResult, 'id' | 'petId' | 'date' | 'bodyArea' | 'symptoms'>;
@@ -437,24 +395,83 @@ export default function AIDiagnosticsPage() {
           <>
             <PetContextBanner pet={pet} />
             <p className="text-sm font-bold text-slate-800 px-1">Where is the problem?</p>
-            <div className="grid grid-cols-3 gap-2.5">
-              {BODY_AREAS.map((area) => {
-                const Illustration = AREA_ILLUSTRATIONS[area.id];
+
+            {/* Skin / Body — hero card */}
+            {(() => {
+              const skinArea = BODY_AREAS[0];
+              const SkinIllustration = AREA_ILLUSTRATIONS[skinArea.id]!;
+              return (
+                <button
+                  onClick={() => { setSelectedArea(skinArea.id); setStep(2); }}
+                  className="w-full bg-white rounded-2xl shadow-card overflow-hidden border border-transparent hover:border-teal-200 active:scale-[0.98] transition-all text-left"
+                >
+                  <div className="h-40 bg-teal-50 flex items-center justify-center">
+                    <div className="w-56 h-32">
+                      <SkinIllustration />
+                    </div>
+                  </div>
+                  <div className="px-4 py-3 flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-bold text-slate-800">{skinArea.label}</p>
+                      <p className="text-[11px] text-slate-400 mt-0.5">{skinArea.sublabel}</p>
+                    </div>
+                    <ChevronRight size={16} className="text-slate-300 flex-shrink-0" />
+                  </div>
+                </button>
+              );
+            })()}
+
+            {/* Eyes · Ears · Paws · Teeth — 2-column grid */}
+            <div className="grid grid-cols-2 gap-2.5">
+              {BODY_AREAS.slice(1, 5).map((area) => {
+                const Illustration = AREA_ILLUSTRATIONS[area.id]!;
                 return (
                   <button
                     key={area.id}
                     onClick={() => { setSelectedArea(area.id); setStep(2); }}
-                    className="bg-white rounded-2xl shadow-card p-3 flex flex-col items-center gap-2 hover:shadow-card-md active:scale-[0.97] transition-all border border-transparent hover:border-sky-200"
+                    className={`bg-white rounded-2xl shadow-card overflow-hidden border border-transparent active:scale-[0.97] transition-all text-left ${
+                      area.id === 'eyes' ? 'hover:border-sky-200' :
+                      area.id === 'ears' ? 'hover:border-violet-200' :
+                      area.id === 'paws' ? 'hover:border-amber-200' :
+                      'hover:border-emerald-200'
+                    }`}
                   >
-                    <div className="w-14 h-14">
-                      <Illustration />
+                    <div className={`h-28 ${area.bg} flex items-center justify-center`}>
+                      <div className="w-20 h-20">
+                        <Illustration />
+                      </div>
                     </div>
-                    <p className="text-[11px] font-semibold text-slate-700 text-center leading-tight">{area.label}</p>
-                    <p className="text-[10px] text-slate-400 text-center leading-tight">{area.sublabel}</p>
+                    <div className="px-3 pt-2 pb-3">
+                      <p className="text-sm font-semibold text-slate-800">{area.label}</p>
+                      <p className="text-[11px] text-slate-400 mt-0.5 leading-tight">{area.sublabel}</p>
+                    </div>
                   </button>
                 );
               })}
             </div>
+
+            {/* Other — flat row */}
+            {(() => {
+              const otherArea = BODY_AREAS[5];
+              const OtherIllustration = AREA_ILLUSTRATIONS[otherArea.id]!;
+              return (
+                <button
+                  onClick={() => { setSelectedArea(otherArea.id); setStep(2); }}
+                  className="w-full bg-white rounded-2xl shadow-card border border-transparent hover:border-slate-200 active:scale-[0.99] transition-all flex items-center gap-4 px-4 py-3 text-left"
+                >
+                  <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 text-slate-400">
+                      <OtherIllustration />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-slate-700">{otherArea.label}</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">{otherArea.sublabel}</p>
+                  </div>
+                  <ChevronRight size={16} className="text-slate-300 flex-shrink-0" />
+                </button>
+              );
+            })()}
           </>
         )}
 
