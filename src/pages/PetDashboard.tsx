@@ -80,8 +80,6 @@ export default function PetDashboard() {
     getPetReminders,
     getPetVaccines,
     getPetDiagnostics,
-    getPetTherapies,
-    getPetNutrition,
   } = useApp();
   const pet = getSelectedPet();
 
@@ -90,8 +88,6 @@ export default function PetDashboard() {
   const reminders = getPetReminders(pet.id).filter((r) => !r.done).slice(0, 2);
   const vaccines = getPetVaccines(pet.id);
   const diagnostics = getPetDiagnostics(pet.id);
-  const activeTherapies = getPetTherapies(pet.id).filter((t) => t.status === 'active');
-  const nutrition = getPetNutrition(pet.id);
   const SpeciesIcon = pet.species === 'dog' ? Dog : Cat;
 
   const vaccineStatuses = vaccines.map((v) => getVaccineStatus(v.nextDue));
@@ -232,45 +228,6 @@ export default function PetDashboard() {
               {reminders.map((r) => (
                 <ReminderCard key={r.id} reminder={r} />
               ))}
-            </div>
-          </section>
-        )}
-
-        {/* Health snapshot strip */}
-        {(diagnostics.length > 0 || activeTherapies.length > 0 || nutrition) && (
-          <section>
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1 mb-3">Health Snapshot</p>
-            <div className="grid grid-cols-3 gap-3">
-              <div
-                className="bg-white rounded-2xl shadow-card p-3 flex flex-col gap-1 cursor-pointer hover:shadow-card-md transition-shadow"
-                onClick={() => navigateToHealthHistory()}
-              >
-                <div className="w-7 h-7 rounded-lg bg-sky-50 flex items-center justify-center">
-                  <Scan size={14} className="text-sky-500" strokeWidth={2} />
-                </div>
-                <p className="text-lg font-bold text-slate-800 mt-1">{diagnostics.length}</p>
-                <p className="text-[11px] text-slate-500 leading-tight">AI diagnoses</p>
-              </div>
-              <div
-                className="bg-white rounded-2xl shadow-card p-3 flex flex-col gap-1 cursor-pointer hover:shadow-card-md transition-shadow"
-                onClick={() => navigateToFeature('therapies')}
-              >
-                <div className="w-7 h-7 rounded-lg bg-rose-50 flex items-center justify-center">
-                  <HeartPulse size={14} className="text-rose-500" strokeWidth={2} />
-                </div>
-                <p className="text-lg font-bold text-slate-800 mt-1">{activeTherapies.length}</p>
-                <p className="text-[11px] text-slate-500 leading-tight">active therapies</p>
-              </div>
-              <div
-                className="bg-white rounded-2xl shadow-card p-3 flex flex-col gap-1 cursor-pointer hover:shadow-card-md transition-shadow"
-                onClick={() => navigateToFeature('nutrition')}
-              >
-                <div className="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center">
-                  <Utensils size={14} className="text-amber-500" strokeWidth={2} />
-                </div>
-                <p className="text-lg font-bold text-slate-800 mt-1">{nutrition ? nutrition.mealsPerDay : '—'}</p>
-                <p className="text-[11px] text-slate-500 leading-tight">meals/day</p>
-              </div>
             </div>
           </section>
         )}
