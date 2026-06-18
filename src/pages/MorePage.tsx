@@ -1,4 +1,4 @@
-import { Bell, Shield, Info, ChevronRight, UtensilsCrossed, Bot, Stethoscope, Download, FileText, Syringe } from 'lucide-react';
+import { Bell, Shield, Info, ChevronRight, UtensilsCrossed, Bot, Stethoscope, Syringe } from 'lucide-react';
 import { useState } from 'react';
 import TopBar from '../components/TopBar';
 import { useAuth } from '../context/AuthContext';
@@ -176,30 +176,6 @@ export default function MorePage() {
               sublabel="View and manage your data"
               iconBg="bg-slate-100"
               iconColor="text-slate-500"
-              onClick={() => {}}
-            />
-            <Row
-              Icon={Download}
-              label="Export Health History"
-              sublabel="Download full health records"
-              iconBg="bg-teal-50"
-              iconColor="text-teal-500"
-              onClick={() => {}}
-            />
-            <Row
-              Icon={FileText}
-              label="Export AI Diagnostics"
-              sublabel="Download diagnostics report"
-              iconBg="bg-sky-50"
-              iconColor="text-sky-500"
-              onClick={() => {}}
-            />
-            <Row
-              Icon={Syringe}
-              label="Export Vaccines"
-              sublabel="Download vaccination records"
-              iconBg="bg-emerald-50"
-              iconColor="text-emerald-500"
               onClick={() => {}}
             />
           </SectionCard>
