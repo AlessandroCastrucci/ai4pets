@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import slide1Img from '../../assets/onboarding/01.png';
+import slide2Img from '../../assets/onboarding/02.png';
 import { TTCareLogoIcon, TTCareWordmark, BrandGradientBg, LoadingDots } from '../../components/brand';
 
 // ─── localStorage helpers ────────────────────────────────────────────────────
@@ -51,98 +52,12 @@ function Illustration1() {
 // ─── Illustration 2 — Health timeline / record cards ─────────────────────────
 function Illustration2() {
   return (
-    <svg viewBox="0 0 360 300" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true">
-      {/* Background */}
-      <rect width="360" height="300" fill="#F0F6FF" rx="24" />
-
-      {/* Decorative leaf left */}
-      <ellipse cx="38" cy="180" rx="14" ry="24" fill="#A8D8A8" transform="rotate(-20 38 180)" opacity="0.7" />
-      <ellipse cx="26" cy="200" rx="11" ry="20" fill="#88C888" transform="rotate(-35 26 200)" opacity="0.5" />
-      {/* Decorative leaf right */}
-      <ellipse cx="322" cy="170" rx="14" ry="24" fill="#A8D8A8" transform="rotate(20 322 170)" opacity="0.7" />
-      <ellipse cx="334" cy="190" rx="11" ry="20" fill="#88C888" transform="rotate(35 334 190)" opacity="0.5" />
-
-      {/* Phone frame */}
-      <rect x="86" y="20" width="188" height="268" rx="26" fill="white" stroke="#D8E4F8" strokeWidth="2.5" />
-      {/* Phone notch */}
-      <rect x="152" y="26" width="56" height="10" rx="5" fill="#D8E4F8" />
-
-      {/* Pet avatars row */}
-      {/* Dog avatar */}
-      <circle cx="148" cy="70" r="22" fill="#FFF0D8" stroke="#FFD8A8" strokeWidth="2" />
-      {/* Mini golden dog face */}
-      <circle cx="148" cy="68" r="13" fill="#E8B45A" />
-      <ellipse cx="141" cy="62" rx="5" ry="8" fill="#D4A045" transform="rotate(-12 141 62)" />
-      <ellipse cx="155" cy="62" rx="5" ry="8" fill="#D4A045" transform="rotate(12 155 62)" />
-      <ellipse cx="150" cy="72" rx="6" ry="5" fill="#D4A045" />
-      <circle cx="145" cy="67" r="2" fill="white" />
-      <circle cx="151" cy="67" r="2" fill="white" />
-      <circle cx="145" cy="67" r="1.2" fill="#3D2208" />
-      <circle cx="151" cy="67" r="1.2" fill="#3D2208" />
-      <ellipse cx="148" cy="71" rx="2.5" ry="2" fill="#3D2208" />
-      <text x="148" y="102" textAnchor="middle" fill="#4A5568" fontSize="11" fontWeight="600">Buddy</text>
-
-      {/* Cat avatar */}
-      <circle cx="212" cy="70" r="22" fill="#EEF2FF" stroke="#C8D4F8" strokeWidth="2" />
-      {/* Mini grey cat face */}
-      <circle cx="212" cy="68" r="13" fill="#B0B8C8" />
-      <polygon points="204,62 207,52 213,62" fill="#9AA4B4" />
-      <polygon points="211,62 217,52 220,62" fill="#9AA4B4" />
-      <circle cx="208" cy="66" r="2" fill="white" />
-      <circle cx="216" cy="66" r="2" fill="white" />
-      <circle cx="208" cy="66" r="1.2" fill="#2D3A4A" />
-      <circle cx="216" cy="66" r="1.2" fill="#2D3A4A" />
-      <polygon points="212,70 210,73 214,73" fill="#E87878" />
-      <text x="212" y="102" textAnchor="middle" fill="#4A5568" fontSize="11" fontWeight="600">Luna</text>
-
-      {/* Timeline vertical line */}
-      <line x1="118" y1="124" x2="118" y2="272" stroke="#D8E4F8" strokeWidth="2.5" />
-
-      {/* Row 1 — Checkup */}
-      <circle cx="118" cy="138" r="12" fill="#1A3A8F" />
-      {/* Stethoscope icon */}
-      <circle cx="118" cy="135" r="4" fill="none" stroke="white" strokeWidth="1.5" />
-      <path d="M122 135 Q126 135 126 139 Q126 143 122 143" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      <circle cx="122" cy="143" r="1.5" fill="white" />
-      <rect x="135" y="126" width="120" height="24" rx="8" fill="white" stroke="#EDF2FF" strokeWidth="1.5" />
-      <text x="145" y="138" fill="#1E3A8F" fontSize="12" fontWeight="700">Checkup</text>
-      <text x="145" y="149" fill="#8898AA" fontSize="10">12 May 2024</text>
-      <line x1="240" y1="132" x2="250" y2="132" stroke="#C8D8F8" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="240" y1="136" x2="246" y2="136" stroke="#C8D8F8" strokeWidth="1.5" strokeLinecap="round" />
-
-      {/* Row 2 — Vaccine */}
-      <circle cx="118" cy="176" r="12" fill="#1CB87E" />
-      {/* Syringe icon */}
-      <rect x="114" y="171" width="8" height="10" rx="2" fill="white" />
-      <rect x="115.5" y="169" width="5" height="4" rx="1" fill="white" />
-      <line x1="118" y1="181" x2="118" y2="184" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-      <rect x="135" y="164" width="120" height="24" rx="8" fill="white" stroke="#EDF2FF" strokeWidth="1.5" />
-      <text x="145" y="176" fill="#1E3A8F" fontSize="12" fontWeight="700">Vaccine</text>
-      <text x="145" y="187" fill="#8898AA" fontSize="10">25 Apr 2024</text>
-
-      {/* Row 3 — Therapy */}
-      <circle cx="118" cy="214" r="12" fill="#9B5DE5" />
-      {/* Pill icon */}
-      <rect x="113" y="209" width="10" height="10" rx="5" fill="white" />
-      <line x1="113" y1="214" x2="123" y2="214" stroke="#9B5DE5" strokeWidth="1.5" />
-      <rect x="135" y="202" width="120" height="24" rx="8" fill="white" stroke="#EDF2FF" strokeWidth="1.5" />
-      <text x="145" y="214" fill="#1E3A8F" fontSize="12" fontWeight="700">Therapy</text>
-      <text x="145" y="225" fill="#8898AA" fontSize="10">18 Mar 2024</text>
-
-      {/* Row 4 — Note */}
-      <circle cx="118" cy="252" r="12" fill="#FF6B6B" />
-      {/* Heart icon */}
-      <path d="M118 255 C118 255 112 249 112 246 C112 244 113.5 242 115.5 242 C116.8 242 118 244 118 244 C118 244 119.2 242 120.5 242 C122.5 242 124 244 124 246 C124 249 118 255 118 255Z" fill="white" />
-      <rect x="135" y="240" width="120" height="24" rx="8" fill="white" stroke="#EDF2FF" strokeWidth="1.5" />
-      <text x="145" y="252" fill="#1E3A8F" fontSize="12" fontWeight="700">Note</text>
-      <text x="145" y="263" fill="#8898AA" fontSize="10">10 Feb 2024</text>
-
-      {/* Small dot accents */}
-      <circle cx="58" cy="90" r="5" fill="#C8D8F8" opacity="0.8" />
-      <circle cx="44" cy="118" r="3.5" fill="#A8D8A8" opacity="0.8" />
-      <circle cx="302" cy="100" r="5" fill="#C8D8F8" opacity="0.8" />
-      <circle cx="316" cy="130" r="3.5" fill="#A8D8A8" opacity="0.8" />
-    </svg>
+    <img
+      src={slide2Img}
+      alt="Pet health timeline"
+      className="w-full h-full object-contain"
+      draggable={false}
+    />
   );
 }
 
