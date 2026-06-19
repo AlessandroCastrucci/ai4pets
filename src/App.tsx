@@ -4,6 +4,10 @@ import { AppProvider } from './context/AppContext';
 import { useApp } from './context/AppContext';
 import OnboardingPage, { hasSeenOnboarding } from './pages/onboarding/OnboardingPage';
 import BottomNav from './components/BottomNav';
+
+// DEV FLAG — set to true to always show onboarding on every reload (for design review).
+// Set to false to restore normal localStorage-gated behaviour before shipping.
+const FORCE_SHOW_ONBOARDING = true;
 import MyPetsPage from './pages/MyPetsPage';
 import PetDashboard from './pages/PetDashboard';
 import RemindersPage from './pages/RemindersPage';
@@ -72,7 +76,9 @@ function AuthScreens() {
 
 export default function App() {
   const { isAuthenticated } = useAuth();
-  const [onboardingDone, setOnboardingDone] = useState(() => hasSeenOnboarding());
+  const [onboardingDone, setOnboardingDone] = useState(
+    () => !FORCE_SHOW_ONBOARDING && hasSeenOnboarding()
+  );
 
   if (!isAuthenticated && !onboardingDone) {
     return <OnboardingPage onComplete={() => setOnboardingDone(true)} />;
