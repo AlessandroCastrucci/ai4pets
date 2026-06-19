@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import slide1Img from '../../assets/onboarding/01_cura_pet_family.png';
+import { TTCareLogoIcon, TTCareWordmark, BrandGradientBg, LoadingDots } from '../../components/brand';
 
 // ─── localStorage helpers ────────────────────────────────────────────────────
 const ONBOARDING_KEY = 'ttcare_onboarding_done';
@@ -12,63 +13,26 @@ export function hasSeenOnboarding(): boolean {
   return localStorage.getItem(ONBOARDING_KEY) !== null;
 }
 
-// ─── Shared paw SVG ──────────────────────────────────────────────────────────
-function PawIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 64 64" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="32" cy="43" rx="15" ry="12" />
-      <ellipse cx="14" cy="32" rx="7" ry="6" />
-      <ellipse cx="25" cy="22" rx="7" ry="6" />
-      <ellipse cx="39" cy="22" rx="7" ry="6" />
-      <ellipse cx="50" cy="32" rx="7" ry="6" />
-    </svg>
-  );
-}
-
 // ─── Screen 1 — Animated Splash ─────────────────────────────────────────────
 function SplashScreen() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#1A3A8F] relative overflow-hidden">
-      {/* Background soft circles */}
-      <div className="absolute w-80 h-80 rounded-full bg-white/5 -top-20 -right-20" />
-      <div className="absolute w-60 h-60 rounded-full bg-white/5 -bottom-16 -left-16" />
-      <div className="absolute w-40 h-40 rounded-full bg-blue-400/10 top-1/3 right-4" />
-
-      {/* Pulse ring */}
-      <div
-        className="ob-pulse-ring absolute w-48 h-48 rounded-full border-2 border-white/30"
-        style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
-      />
-
+    <BrandGradientBg className="items-center justify-center">
       {/* Logo container */}
-      <div className="ob-logo-in flex flex-col items-center gap-4 relative z-10">
-        {/* Paw icon badge */}
-        <div className="w-24 h-24 rounded-3xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-2xl">
-          <PawIcon className="w-12 h-12 text-white" />
-        </div>
-
-        {/* Wordmark */}
+      <div className="ob-logo-in flex flex-col items-center gap-5 relative z-10">
+        <TTCareLogoIcon size={100} />
         <div className="flex flex-col items-center gap-1">
-          <span className="text-white text-3xl font-extrabold tracking-wide" style={{ letterSpacing: '0.06em' }}>
-            TTCARE VET
-          </span>
-          <span className="text-white/60 text-sm font-medium tracking-widest uppercase">
+          <TTCareWordmark variant="on-gradient" />
+          <span className="text-white/65 text-xs font-medium tracking-widest uppercase mt-1">
             Your pet's health. Our priority.
           </span>
         </div>
       </div>
 
-      {/* Loading dots */}
-      <div className="ob-fade-in absolute bottom-16 flex gap-2" style={{ animationDelay: '0.9s' }}>
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="w-1.5 h-1.5 rounded-full bg-white/50"
-            style={{ animation: `ob-pulse-ring 1.4s ease infinite`, animationDelay: `${i * 0.2}s` }}
-          />
-        ))}
+      {/* Loader */}
+      <div className="ob-fade-in absolute bottom-16 z-10" style={{ animationDelay: '0.9s' }}>
+        <LoadingDots variant="on-gradient" />
       </div>
-    </div>
+    </BrandGradientBg>
   );
 }
 
@@ -201,7 +165,6 @@ function Illustration3() {
       {/* Shield (top center — protection) */}
       <path d="M180 30 L214 46 L214 78 Q214 104 180 118 Q146 104 146 78 L146 46 Z" fill="#1A3A8F" />
       <path d="M180 38 L208 52 L208 78 Q208 100 180 112 Q152 100 152 78 L152 52 Z" fill="#2550B8" />
-      <PawIcon className="text-white" />
       {/* Paw inside shield (inline, centered) */}
       <g transform="translate(163, 60)">
         <ellipse cx="17" cy="24" rx="9" ry="7" fill="white" />

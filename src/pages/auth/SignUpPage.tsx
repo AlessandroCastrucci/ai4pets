@@ -1,6 +1,10 @@
 import { useState, type FormEvent } from 'react';
 import { Eye, EyeOff, ChevronLeft, Loader } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { TTCareLogoIcon, TTCareWordmark, BrandLightBg, BrandButton } from '../../components/brand';
+
+const inputClass =
+  'w-full bg-[#F5F9FF] border border-[#D8E3F0] rounded-2xl px-4 py-3 text-sm text-[#172033] placeholder:text-[#6B7A90] outline-none focus:border-[#2F8CFF] focus:ring-2 focus:ring-[#2F8CFF]/15 transition-all';
 
 export default function SignUpPage() {
   const { signup, navigateToAuth } = useAuth();
@@ -25,36 +29,42 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-sky-50 via-blue-50 to-slate-100">
+    <BrandLightBg>
       {/* Back button */}
-      <div className="px-4 pt-4" style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
+      <div className="px-4" style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
         <button
           onClick={() => navigateToAuth('welcome')}
-          className="flex items-center gap-1 text-slate-500 hover:text-slate-700 transition-colors py-2"
+          className="flex items-center gap-1 text-[#2F8CFF] hover:opacity-80 transition-opacity py-2"
         >
           <ChevronLeft size={18} strokeWidth={2} />
           <span className="text-sm font-medium">Back</span>
         </button>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center px-5 py-6">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-slate-900">Create account</h1>
-          <p className="text-slate-500 text-sm mt-1">Start managing your pets' health for free</p>
+      <div className="flex-1 flex flex-col justify-center px-6 py-6">
+        {/* Logo header */}
+        <div className="flex flex-col items-center gap-2 mb-8">
+          <TTCareLogoIcon size={64} />
+          <TTCareWordmark variant="on-light" />
+        </div>
+
+        {/* Title */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-[#172033]">Create account</h1>
+          <p className="text-[#6B7A90] text-sm mt-1">Start managing your pets' health for free</p>
         </div>
 
         {/* Card */}
         <div className="bg-white rounded-3xl shadow-card-md p-6 space-y-4">
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+            <div className="bg-red-50 border border-red-200 rounded-2xl px-4 py-3">
               <p className="text-sm text-red-700">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-xs font-semibold text-slate-600 block mb-1.5">Full name</label>
+              <label className="text-xs font-semibold text-[#6B7A90] block mb-1.5">Full name</label>
               <input
                 type="text"
                 value={name}
@@ -62,12 +72,12 @@ export default function SignUpPage() {
                 placeholder="Your name"
                 required
                 autoComplete="name"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 transition-all"
+                className={inputClass}
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-600 block mb-1.5">Email address</label>
+              <label className="text-xs font-semibold text-[#6B7A90] block mb-1.5">Email address</label>
               <input
                 type="email"
                 value={email}
@@ -75,12 +85,12 @@ export default function SignUpPage() {
                 placeholder="you@example.com"
                 required
                 autoComplete="email"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 transition-all"
+                className={inputClass}
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-600 block mb-1.5">Password</label>
+              <label className="text-xs font-semibold text-[#6B7A90] block mb-1.5">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -89,12 +99,12 @@ export default function SignUpPage() {
                   placeholder="Min. 6 characters"
                   required
                   autoComplete="new-password"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-11 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 transition-all"
+                  className={`${inputClass} pr-11`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B7A90] hover:text-[#172033] transition-colors"
                 >
                   {showPassword ? <EyeOff size={18} strokeWidth={1.8} /> : <Eye size={18} strokeWidth={1.8} />}
                 </button>
@@ -107,7 +117,7 @@ export default function SignUpPage() {
                       className={`flex-1 h-1 rounded-full transition-colors ${
                         password.length >= n * 4
                           ? n === 1 ? 'bg-red-400' : n === 2 ? 'bg-amber-400' : 'bg-emerald-400'
-                          : 'bg-slate-200'
+                          : 'bg-[#D8E3F0]'
                       }`}
                     />
                   ))}
@@ -115,10 +125,11 @@ export default function SignUpPage() {
               )}
             </div>
 
-            <button
+            <BrandButton
               type="submit"
-              disabled={loading}
-              className="w-full bg-sky-500 text-white font-bold text-sm py-3.5 rounded-xl hover:bg-sky-600 active:bg-sky-700 disabled:opacity-60 transition-all flex items-center justify-center gap-2 mt-2"
+              variant="primary-on-light"
+              loading={loading}
+              className="mt-2"
             >
               {loading ? (
                 <>
@@ -128,21 +139,21 @@ export default function SignUpPage() {
               ) : (
                 'Create Account'
               )}
-            </button>
+            </BrandButton>
           </form>
         </div>
 
         {/* Sign in link */}
-        <p className="text-center text-sm text-slate-500 mt-6">
+        <p className="text-center text-sm text-[#6B7A90] mt-6">
           Already have an account?{' '}
           <button
             onClick={() => navigateToAuth('login')}
-            className="text-sky-500 font-semibold hover:text-sky-600"
+            className="text-[#2F8CFF] font-semibold hover:opacity-80"
           >
             Sign in
           </button>
         </p>
       </div>
-    </div>
+    </BrandLightBg>
   );
 }
