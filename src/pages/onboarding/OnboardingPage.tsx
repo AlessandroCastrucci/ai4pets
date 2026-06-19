@@ -392,7 +392,7 @@ export default function OnboardingPage({ onComplete }: Props) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white max-w-md mx-auto relative overflow-hidden select-none">
+    <div className="h-screen flex flex-col bg-white max-w-md mx-auto relative overflow-hidden select-none">
       {/* Skip */}
       <div className="flex justify-end px-6 pt-12 pb-0 relative z-10">
         <button
@@ -410,7 +410,7 @@ export default function OnboardingPage({ onComplete }: Props) {
           transform: visible ? 'translateY(0)' : 'translateY(12px)',
           transition: 'opacity 0.22s ease, transform 0.22s ease',
           ...(slide === 0
-            ? { width: '100%', height: '55vh', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', overflow: 'visible' }
+            ? { width: '100%', height: 'calc(100vh - 280px)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', overflow: 'hidden' }
             : { flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: '0 16px' }),
         }}
       >
