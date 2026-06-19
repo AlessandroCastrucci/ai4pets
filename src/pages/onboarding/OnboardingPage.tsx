@@ -405,22 +405,34 @@ export default function OnboardingPage({ onComplete }: Props) {
 
       {/* Illustration */}
       <div
-        className="flex-1 flex items-end justify-center px-4 pb-0"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? 'translateY(0)' : 'translateY(12px)',
           transition: 'opacity 0.22s ease, transform 0.22s ease',
+          ...(slide === 0
+            ? { width: '100%', height: '55vh', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', overflow: 'visible' }
+            : { flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: '0 16px' }),
         }}
       >
-        <div className="w-full max-w-sm" style={{ aspectRatio: '6/5' }}>
-          <Illustration />
-        </div>
+        {slide === 0 ? (
+          <img
+            src={slide1Img}
+            alt="Person sitting with a golden dog and a grey cat"
+            style={{ width: '100%', maxWidth: 'none', height: '100%', objectFit: 'cover', objectPosition: 'center bottom', display: 'block' }}
+            draggable={false}
+          />
+        ) : (
+          <div className="w-full max-w-sm" style={{ aspectRatio: '6/5' }}>
+            <Illustration />
+          </div>
+        )}
       </div>
 
       {/* Text block */}
       <div
-        className="px-8 pt-4 pb-2 text-center"
+        className="px-8 pb-2 text-center"
         style={{
+          paddingTop: slide === 0 ? 8 : 16,
           opacity: visible ? 1 : 0,
           transform: visible ? 'translateY(0)' : 'translateY(10px)',
           transition: 'opacity 0.28s ease 0.06s, transform 0.28s ease 0.06s',
