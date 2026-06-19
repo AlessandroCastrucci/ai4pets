@@ -55,7 +55,7 @@ function Illustration2() {
     <img
       src={slide2Img}
       alt="Pet health timeline"
-      className="w-full h-full object-contain"
+      style={{ width: '100%', maxWidth: 'none', height: '100%', objectFit: 'contain', objectPosition: 'top center', display: 'block' }}
       draggable={false}
     />
   );
@@ -64,7 +64,7 @@ function Illustration2() {
 // ─── Illustration 3 — AI robot with dog and cat ───────────────────────────────
 function Illustration3() {
   return (
-    <svg viewBox="0 0 360 300" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true">
+    <svg viewBox="0 0 360 300" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', maxWidth: 'none', height: '100%', display: 'block' }} aria-hidden="true">
       {/* Background */}
       <rect width="360" height="300" fill="#F0F6FF" rx="24" />
 
@@ -287,9 +287,12 @@ export default function OnboardingPage({ onComplete }: Props) {
           opacity: visible ? 1 : 0,
           transform: visible ? 'translateY(0)' : 'translateY(12px)',
           transition: 'opacity 0.22s ease, transform 0.22s ease',
-          ...(slide === 0
-            ? { width: '100%', height: 'calc(100vh - 280px)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', overflow: 'hidden' }
-            : { flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: '0 16px' }),
+          width: '100%',
+          height: 'calc(100vh - 280px)',
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          overflow: 'hidden',
         }}
       >
         {slide === 0 ? (
@@ -300,9 +303,7 @@ export default function OnboardingPage({ onComplete }: Props) {
             draggable={false}
           />
         ) : (
-          <div className="w-full max-w-sm" style={{ aspectRatio: '6/5' }}>
-            <Illustration />
-          </div>
+          <Illustration />
         )}
       </div>
 
