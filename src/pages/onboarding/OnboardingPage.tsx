@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import slide1Img from '../../assets/onboarding/01_cura_pet_family.png';
+import slide1Img from '../../assets/onboarding/01.png';
 import { TTCareLogoIcon, TTCareWordmark, BrandGradientBg, LoadingDots } from '../../components/brand';
 
 // ─── localStorage helpers ────────────────────────────────────────────────────
