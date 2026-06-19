@@ -251,8 +251,8 @@ export default function OnboardingPage({ onComplete }: Props) {
         {isLast ? (
           <button
             onClick={handleGetStarted}
-            className="w-full bg-[#1A3A8F] text-white font-bold text-base py-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-[#153080] active:bg-[#102870] active:scale-[0.98] transition-all shadow-lg"
-            style={{ boxShadow: '0 8px 24px rgba(26,58,143,0.28)' }}
+            className="w-full bg-[#2779F5] text-white font-bold text-base py-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-[#1a6ae0] active:bg-[#155dcc] active:scale-[0.98] transition-all shadow-lg"
+            style={{ boxShadow: '0 8px 24px rgba(39,121,245,0.28)' }}
           >
             Get Started
             <svg viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
@@ -262,8 +262,8 @@ export default function OnboardingPage({ onComplete }: Props) {
         ) : (
           <button
             onClick={handleNext}
-            className="w-full bg-[#1A3A8F] text-white font-bold text-base py-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-[#153080] active:bg-[#102870] active:scale-[0.98] transition-all shadow-lg"
-            style={{ boxShadow: '0 8px 24px rgba(26,58,143,0.28)' }}
+            className="w-full bg-[#2779F5] text-white font-bold text-base py-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-[#1a6ae0] active:bg-[#155dcc] active:scale-[0.98] transition-all shadow-lg"
+            style={{ boxShadow: '0 8px 24px rgba(39,121,245,0.28)' }}
           >
             Next
             <svg viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
