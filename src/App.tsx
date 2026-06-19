@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useAuth } from './context/AuthContext';
 import { AppProvider } from './context/AppContext';
 import { useApp } from './context/AppContext';
+import OnboardingPage, { hasSeenOnboarding } from './pages/onboarding/OnboardingPage';
 import BottomNav from './components/BottomNav';
 import MyPetsPage from './pages/MyPetsPage';
 import PetDashboard from './pages/PetDashboard';
@@ -70,6 +72,11 @@ function AuthScreens() {
 
 export default function App() {
   const { isAuthenticated } = useAuth();
+  const [onboardingDone, setOnboardingDone] = useState(() => hasSeenOnboarding());
+
+  if (!isAuthenticated && !onboardingDone) {
+    return <OnboardingPage onComplete={() => setOnboardingDone(true)} />;
+  }
 
   if (!isAuthenticated) {
     return (
