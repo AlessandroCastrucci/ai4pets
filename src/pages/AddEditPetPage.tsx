@@ -101,6 +101,7 @@ export default function AddEditPetPage() {
 
   const [form, setForm] = useState<FormState>(() => initForm(existing));
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
@@ -397,14 +398,44 @@ export default function AddEditPetPage() {
         {isEdit && (
           <button
             type="button"
-            onClick={handleDelete}
+            onClick={() => setShowDeleteModal(true)}
             className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl border border-red-200 text-red-500 text-sm font-semibold hover:bg-red-50 transition-colors"
           >
             <Trash2 size={16} strokeWidth={2} />
-            Remove Pet
+            Remove Pet Profile
           </button>
         )}
       </main>
+
+      {/* Delete confirmation modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 px-4 pb-6">
+          <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-6">
+            <h2 className="text-lg font-bold text-slate-900 text-center">
+              Remove {existing?.name}'s profile?
+            </h2>
+            <p className="text-sm text-slate-500 text-center mt-2 leading-relaxed">
+              This will remove {existing?.name} from your account and delete their health data.
+            </p>
+            <div className="flex flex-col gap-3 mt-6">
+              <button
+                type="button"
+                onClick={() => setShowDeleteModal(false)}
+                className="w-full py-3.5 rounded-2xl bg-slate-100 text-slate-700 text-sm font-semibold hover:bg-slate-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="w-full py-3.5 rounded-2xl bg-red-500 text-white text-sm font-semibold hover:bg-red-600 active:bg-red-700 transition-colors"
+              >
+                Remove Profile
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Sticky Save button */}
       <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto px-4 py-4 bg-slate-50/95 backdrop-blur-sm border-t border-slate-200">
