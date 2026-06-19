@@ -111,12 +111,6 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
-          {/* Demo hint */}
-          <div className="bg-blue-50 rounded-xl px-4 py-3 border border-blue-100">
-            <p className="text-xs text-blue-600 font-medium">Demo</p>
-            <p className="text-xs text-blue-500 mt-0.5">Any valid email address and a password of 6+ characters.</p>
-          </div>
         </div>
 
         {/* Sign up link */}
