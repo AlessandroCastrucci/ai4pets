@@ -238,7 +238,7 @@ export default function OnboardingPage({ onComplete }: Props) {
                 width: i === slide ? 24 : 8,
                 height: 8,
                 borderRadius: 4,
-                backgroundColor: i === slide ? '#1A3A8F' : '#D1D5DB',
+                backgroundColor: i === slide ? '#2779F5' : '#D1D5DB',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
             />
