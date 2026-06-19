@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import slide1Img from '../../assets/onboarding/01_cura_pet_family.png';
 
 // ─── localStorage helpers ────────────────────────────────────────────────────
 const ONBOARDING_KEY = 'ttcare_onboarding_done';
@@ -74,118 +75,12 @@ function SplashScreen() {
 // ─── Illustration 1 — Owner with dog and cat (warm cozy scene) ───────────────
 function Illustration1() {
   return (
-    <svg viewBox="0 0 360 300" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true">
-      {/* Room background */}
-      <rect width="360" height="300" fill="#FFF8F0" rx="24" />
-      {/* Floor */}
-      <ellipse cx="180" cy="272" rx="160" ry="22" fill="#F0E6D8" />
-      {/* Rug */}
-      <ellipse cx="180" cy="270" rx="120" ry="14" fill="#F5DEB3" opacity="0.5" />
-      {/* Wall art — heart frame */}
-      <rect x="264" y="40" width="52" height="52" rx="10" fill="white" stroke="#F0D8C8" strokeWidth="2" />
-      <path d="M290 77 C290 77 272 65 272 54 C272 47 276 43 281 43 C285 43 290 47 290 47 C290 47 295 43 299 43 C304 43 308 47 308 54 C308 65 290 77 290 77Z" fill="#FFB3B3" />
-      {/* Plant pot */}
-      <rect x="44" y="178" width="28" height="24" rx="6" fill="#C8A882" />
-      <ellipse cx="58" cy="178" rx="16" ry="6" fill="#A07850" />
-      {/* Plant leaves */}
-      <ellipse cx="58" cy="155" rx="10" ry="16" fill="#6BBF6B" transform="rotate(-15 58 155)" />
-      <ellipse cx="66" cy="148" rx="9" ry="15" fill="#5BAF5B" transform="rotate(12 66 148)" />
-      <ellipse cx="50" cy="152" rx="8" ry="13" fill="#7BC97B" transform="rotate(-25 50 152)" />
-      {/* Sofa hint */}
-      <rect x="30" y="200" width="200" height="60" rx="18" fill="#D4C4B0" />
-      <rect x="30" y="200" width="200" height="20" rx="10" fill="#BCA896" />
-      <rect x="30" y="200" width="16" height="60" rx="8" fill="#BCA896" />
-      <rect x="214" y="200" width="16" height="60" rx="8" fill="#BCA896" />
-
-      {/* Human figure — sitting on floor in front of sofa */}
-      {/* Legs/lap */}
-      <ellipse cx="180" cy="252" rx="48" ry="18" fill="#C8A882" />
-      {/* Torso */}
-      <rect x="152" y="182" width="56" height="72" rx="20" fill="#3B6FD4" />
-      {/* Neck */}
-      <rect x="170" y="176" width="20" height="18" rx="8" fill="#E8C8A8" />
-      {/* Head */}
-      <circle cx="180" cy="162" r="26" fill="#E8C8A8" />
-      {/* Hair bun */}
-      <ellipse cx="180" cy="138" rx="22" ry="16" fill="#4A3320" />
-      <circle cx="180" cy="128" r="10" fill="#5A4330" />
-      {/* Eyes — closed, peaceful */}
-      <path d="M170 160 Q173 157 176 160" stroke="#6B4C30" strokeWidth="2" fill="none" strokeLinecap="round" />
-      <path d="M184 160 Q187 157 190 160" stroke="#6B4C30" strokeWidth="2" fill="none" strokeLinecap="round" />
-      {/* Smile */}
-      <path d="M173 167 Q180 172 187 167" stroke="#C8886A" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-      {/* Left arm wrapping dog */}
-      <path d="M152 210 Q112 220 110 248" stroke="#3B6FD4" strokeWidth="20" strokeLinecap="round" fill="none" />
-      {/* Right arm wrapping cat */}
-      <path d="M208 210 Q248 220 252 246" stroke="#3B6FD4" strokeWidth="20" strokeLinecap="round" fill="none" />
-
-      {/* Dog — golden, sitting left */}
-      {/* Dog body */}
-      <ellipse cx="108" cy="248" rx="28" ry="20" fill="#E8B45A" />
-      {/* Dog head */}
-      <circle cx="114" cy="224" r="20" fill="#E8B45A" />
-      {/* Dog snout */}
-      <ellipse cx="120" cy="230" rx="10" ry="8" fill="#D4A045" />
-      {/* Dog ears */}
-      <ellipse cx="97" cy="214" rx="8" ry="13" fill="#D4A045" transform="rotate(-18 97 214)" />
-      <ellipse cx="130" cy="212" rx="7" ry="11" fill="#D4A045" transform="rotate(14 130 212)" />
-      {/* Dog eyes */}
-      <circle cx="111" cy="221" r="3.5" fill="white" />
-      <circle cx="121" cy="221" r="3.5" fill="white" />
-      <circle cx="111" cy="222" r="2" fill="#2D1A08" />
-      <circle cx="121" cy="222" r="2" fill="#2D1A08" />
-      <circle cx="112" cy="221" r="0.8" fill="white" />
-      <circle cx="122" cy="221" r="0.8" fill="white" />
-      {/* Dog nose */}
-      <ellipse cx="118" cy="228" rx="4" ry="3" fill="#3D2208" />
-      {/* Dog smile */}
-      <path d="M115 232 Q118 235 122 232" stroke="#3D2208" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      {/* Dog tongue */}
-      <ellipse cx="118" cy="235" rx="4" ry="3" fill="#FF8A80" />
-      {/* Dog collar */}
-      <rect x="102" y="238" width="24" height="6" rx="3" fill="#1A3A8F" />
-      <circle cx="114" cy="241" r="2.5" fill="#C0C0C0" />
-
-      {/* Cat — grey, sitting right */}
-      {/* Cat body */}
-      <ellipse cx="252" cy="248" rx="26" ry="19" fill="#B0B8C8" />
-      {/* Cat head */}
-      <circle cx="248" cy="225" r="19" fill="#B0B8C8" />
-      {/* Cat ears */}
-      <polygon points="232,218 237,200 244,218" fill="#9AA4B4" />
-      <polygon points="252,218 259,200 264,218" fill="#9AA4B4" />
-      <polygon points="234,217 237,205 242,217" fill="#D8C8C8" />
-      <polygon points="253,217 259,205 262,217" fill="#D8C8C8" />
-      {/* Cat face */}
-      <circle cx="243" cy="223" r="3" fill="white" />
-      <circle cx="253" cy="223" r="3" fill="white" />
-      <circle cx="243" cy="224" r="1.8" fill="#2D3A4A" />
-      <circle cx="253" cy="224" r="1.8" fill="#2D3A4A" />
-      <circle cx="243.6" cy="223.2" r="0.7" fill="white" />
-      <circle cx="253.6" cy="223.2" r="0.7" fill="white" />
-      {/* Cat nose */}
-      <polygon points="248,228 245,231 251,231" fill="#E87878" />
-      {/* Cat whiskers */}
-      <line x1="240" y1="230" x2="224" y2="227" stroke="#8890A0" strokeWidth="1.2" strokeLinecap="round" />
-      <line x1="240" y1="232" x2="224" y2="232" stroke="#8890A0" strokeWidth="1.2" strokeLinecap="round" />
-      <line x1="256" y1="230" x2="272" y2="227" stroke="#8890A0" strokeWidth="1.2" strokeLinecap="round" />
-      <line x1="256" y1="232" x2="272" y2="232" stroke="#8890A0" strokeWidth="1.2" strokeLinecap="round" />
-      {/* Cat collar */}
-      <rect x="236" y="240" width="22" height="5" rx="2.5" fill="#E87878" />
-      <circle cx="247" cy="242.5" r="2" fill="#C0C0C0" />
-
-      {/* Small hearts floating */}
-      <path d="M308 120 C308 120 302 114 302 110 C302 107 304 105 306 105 C307.5 105 308 106.5 308 106.5 C308 106.5 308.5 105 310 105 C312 105 314 107 314 110 C314 114 308 120 308 120Z" fill="#FFB3B3" />
-      <path d="M68 108 C68 108 63 103 63 99 C63 97 64.5 95 66 95 C67 95 68 96.5 68 96.5 C68 96.5 69 95 70 95 C71.5 95 73 97 73 99 C73 103 68 108 68 108Z" fill="#FFB3B3" opacity="0.7" />
-      <path d="M328 176 C328 176 324 172 324 169 C324 167 325.5 165 327 165 C328 165 328 167 328 167 C328 167 329 165 330 165 C331.5 165 333 167 333 169 C333 172 328 176 328 176Z" fill="#FFB0C8" opacity="0.8" />
-
-      {/* Mug */}
-      <rect x="72" y="243" width="22" height="20" rx="5" fill="#5B8FD4" />
-      <path d="M94 249 Q102 249 102 253 Q102 257 94 257" stroke="#5B8FD4" strokeWidth="3" fill="none" />
-      {/* Steam */}
-      <path d="M78 238 Q80 233 78 228" stroke="#C8D8F0" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-      <path d="M83 238 Q85 233 83 228" stroke="#C8D8F0" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-    </svg>
+    <img
+      src={slide1Img}
+      alt="Person sitting with a golden dog and a grey cat"
+      className="w-full h-full object-contain"
+      draggable={false}
+    />
   );
 }
 
