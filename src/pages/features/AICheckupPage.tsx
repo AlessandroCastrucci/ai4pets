@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Camera, FileText, TrendingUp, Syringe, RefreshCw } from 'lucide-react';
+import { Camera, FileText, TrendingUp, Syringe, RefreshCw, Bell, CalendarPlus } from 'lucide-react';
 import TopBar from '../../components/TopBar';
 import PetSwitchBar from '../../components/PetSwitchBar';
 import StatusBadge from '../../components/StatusBadge';
@@ -57,8 +57,91 @@ function PhotoUploadSlot({ label, captured, onCapture }: { label: string; captur
   );
 }
 
+function ManageCheckups({ petId, petName, addReminder }: { petId: string; petName: string; addReminder: (r: any) => void }) {
+  const [open, setOpen] = useState(false);
+  const [monthlyDate, setMonthlyDate] = useState('');
+  const [annualDate, setAnnualDate] = useState('');
+  const [saved, setSaved] = useState(false);
+
+  function handleSchedule() {
+    if (monthlyDate) {
+      addReminder({
+        id: `chk-m-${Date.now()}`,
+        petId,
+        type: 'checkup' as const,
+        title: `Monthly checkup for ${petName}`,
+        datetime: monthlyDate,
+        done: false,
+      });
+    }
+    if (annualDate) {
+      addReminder({
+        id: `chk-a-${Date.now()}`,
+        petId,
+        type: 'checkup' as const,
+        title: `Annual checkup for ${petName}`,
+        datetime: annualDate,
+        done: false,
+      });
+    }
+    setSaved(true);
+    setTimeout(() => { setSaved(false); setOpen(false); }, 1500);
+  }
+
+  if (!open) {
+    return (
+      <button
+        onClick={() => setOpen(true)}
+        className="w-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold text-sm py-3.5 rounded-2xl hover:bg-emerald-100 transition-colors flex items-center justify-center gap-2"
+      >
+        <Bell size={16} strokeWidth={2} />
+        Manage Checkups
+      </button>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-2xl shadow-card p-4 space-y-4">
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide">Schedule Checkup Reminders</p>
+        <button onClick={() => setOpen(false)} className="text-xs text-sky-500">Close</button>
+      </div>
+      <div>
+        <label className="text-xs font-medium text-slate-600 block mb-1.5">Next Monthly Checkup</label>
+        <input
+          type="date"
+          value={monthlyDate}
+          onChange={(e) => setMonthlyDate(e.target.value)}
+          className="w-full bg-slate-50 rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-sky-400"
+        />
+      </div>
+      <div>
+        <label className="text-xs font-medium text-slate-600 block mb-1.5">Next Annual Checkup</label>
+        <input
+          type="date"
+          value={annualDate}
+          onChange={(e) => setAnnualDate(e.target.value)}
+          className="w-full bg-slate-50 rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-sky-400"
+        />
+      </div>
+      {saved ? (
+        <p className="text-sm text-emerald-600 font-medium text-center py-2">Reminders saved!</p>
+      ) : (
+        <button
+          onClick={handleSchedule}
+          disabled={!monthlyDate && !annualDate}
+          className="w-full bg-emerald-500 text-white font-semibold text-sm py-3 rounded-2xl hover:bg-emerald-600 transition-colors disabled:opacity-40 flex items-center justify-center gap-2"
+        >
+          <CalendarPlus size={16} strokeWidth={2} />
+          Schedule Reminders
+        </button>
+      )}
+    </div>
+  );
+}
+
 export default function AICheckupPage() {
-  const { getSelectedPet, addMonthlyCheckup, getPetCheckups, getPetVaccines } = useApp();
+  const { getSelectedPet, addMonthlyCheckup, getPetCheckups, getPetVaccines, addReminder } = useApp();
   const pet = getSelectedPet();
   const [mode, setMode] = useState<Mode>('select');
 
@@ -161,6 +244,8 @@ export default function AICheckupPage() {
                 </div>
               </div>
             )}
+
+            <ManageCheckups petId={pet.id} petName={pet.name} addReminder={addReminder} />
           </div>
         )}
 

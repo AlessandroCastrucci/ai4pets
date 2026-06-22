@@ -60,6 +60,13 @@ interface AppContextType {
   updatePet: (pet: Pet) => void;
   deletePet: (petId: string) => void;
   addReminder: (reminder: Reminder) => void;
+  removeReminder: (id: string) => void;
+  addVaccine: (vaccine: Vaccine) => void;
+  updateVaccine: (vaccine: Vaccine) => void;
+  removeVaccine: (id: string) => void;
+  addTherapy: (therapy: Therapy) => void;
+  updateTherapy: (therapy: Therapy) => void;
+  removeTherapy: (id: string) => void;
   addDiagnosticResult: (result: DiagnosticResult) => void;
   addDiagnosticFollowUp: (followUp: DiagnosticFollowUp) => void;
   addMonthlyCheckup: (checkup: MonthlyCheckup) => void;
@@ -89,8 +96,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const [pets, setPets] = useState<Pet[]>(PETS);
   const [reminders, setReminders] = useState<Reminder[]>(REMINDERS);
-  const [vaccines] = useState<Vaccine[]>(VACCINES);
-  const [therapies] = useState<Therapy[]>(THERAPIES);
+  const [vaccines, setVaccines] = useState<Vaccine[]>(VACCINES);
+  const [therapies, setTherapies] = useState<Therapy[]>(THERAPIES);
   const [nutritionPlans, setNutritionPlans] = useState<NutritionPlan[]>(NUTRITION_PLANS);
   const [diagnosticResults, setDiagnosticResults] = useState<DiagnosticResult[]>(DIAGNOSTIC_RESULTS);
   const [diagnosticFollowUps, setDiagnosticFollowUps] = useState<DiagnosticFollowUp[]>(DIAGNOSTIC_FOLLOW_UPS);
@@ -186,6 +193,34 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setReminders((prev) => [...prev, reminder]);
   }, []);
 
+  const removeReminder = useCallback((id: string) => {
+    setReminders((prev) => prev.filter((r) => r.id !== id));
+  }, []);
+
+  const addVaccine = useCallback((vaccine: Vaccine) => {
+    setVaccines((prev) => [...prev, vaccine]);
+  }, []);
+
+  const updateVaccine = useCallback((vaccine: Vaccine) => {
+    setVaccines((prev) => prev.map((v) => (v.id === vaccine.id ? vaccine : v)));
+  }, []);
+
+  const removeVaccine = useCallback((id: string) => {
+    setVaccines((prev) => prev.filter((v) => v.id !== id));
+  }, []);
+
+  const addTherapy = useCallback((therapy: Therapy) => {
+    setTherapies((prev) => [...prev, therapy]);
+  }, []);
+
+  const updateTherapy = useCallback((therapy: Therapy) => {
+    setTherapies((prev) => prev.map((t) => (t.id === therapy.id ? therapy : t)));
+  }, []);
+
+  const removeTherapy = useCallback((id: string) => {
+    setTherapies((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
   const addDiagnosticResult = useCallback((result: DiagnosticResult) => {
     setDiagnosticResults((prev) => [result, ...prev]);
   }, []);
@@ -258,6 +293,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
         updatePet,
         deletePet,
         addReminder,
+        removeReminder,
+        addVaccine,
+        updateVaccine,
+        removeVaccine,
+        addTherapy,
+        updateTherapy,
+        removeTherapy,
         addDiagnosticResult,
         addDiagnosticFollowUp,
         addMonthlyCheckup,
