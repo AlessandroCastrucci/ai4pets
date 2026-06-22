@@ -2,14 +2,6 @@ import { Dog, Cat, ChevronRight } from 'lucide-react';
 import type { Pet } from '../types';
 import { useApp } from '../context/AppContext';
 
-const ACCENT_CLASSES: Record<Pet['accentColor'], { text: string; bg: string }> = {
-  sky: { text: 'text-sky-500', bg: 'bg-sky-50' },
-  amber: { text: 'text-amber-500', bg: 'bg-amber-50' },
-  emerald: { text: 'text-emerald-500', bg: 'bg-emerald-50' },
-  violet: { text: 'text-violet-500', bg: 'bg-violet-50' },
-  rose: { text: 'text-rose-500', bg: 'bg-rose-50' },
-};
-
 interface PetCardProps {
   pet: Pet;
   badge?: string;
@@ -18,7 +10,6 @@ interface PetCardProps {
 
 export default function PetCard({ pet, badge, badgeColor = 'amber' }: PetCardProps) {
   const { navigateToPet } = useApp();
-  const accent = ACCENT_CLASSES[pet.accentColor];
   const SpeciesIcon = pet.species === 'dog' ? Dog : Cat;
 
   const badgeStyles: Record<string, string> = {
@@ -39,8 +30,8 @@ export default function PetCard({ pet, badge, badgeColor = 'amber' }: PetCardPro
           alt={pet.name}
           className="w-20 h-20 rounded-2xl object-cover shadow-sm"
         />
-        <div className={`absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full ${accent.bg} flex items-center justify-center shadow-sm`}>
-          <SpeciesIcon size={13} className={accent.text} strokeWidth={2} />
+        <div className={`absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full ${pet.species === 'dog' ? 'bg-sky-50' : 'bg-amber-50'} flex items-center justify-center shadow-sm`}>
+          <SpeciesIcon size={13} className={pet.species === 'dog' ? 'text-sky-500' : 'text-amber-500'} strokeWidth={2} />
         </div>
       </div>
       <div className="flex-1 min-w-0">
