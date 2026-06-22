@@ -174,23 +174,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Pet silhouettes at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none z-0 opacity-20">
-        <svg viewBox="0 0 400 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" preserveAspectRatio="xMidYMax meet">
-          {/* Dog silhouette */}
-          <path d="M40 95 C40 75 45 65 55 60 C60 57 62 50 60 45 C58 40 55 38 55 33 C55 28 58 25 62 25 C65 25 67 28 67 32 C67 35 68 38 72 40 C78 43 85 48 88 55 C90 60 92 70 92 80 C92 90 88 95 80 95 Z" fill="white"/>
-          {/* Cat silhouette */}
-          <path d="M320 95 C320 80 325 70 332 65 C336 62 338 58 338 52 C338 48 336 44 335 40 C334 36 335 30 338 28 C340 26 342 28 342 32 C342 35 344 38 346 36 C348 34 350 28 352 26 C354 24 356 26 355 30 C354 34 354 38 356 42 C358 46 360 50 360 55 C362 62 368 68 372 72 C378 78 380 85 378 95 Z" fill="white"/>
-          {/* Leaves */}
-          <path d="M130 95 C130 80 135 70 138 65 C140 62 139 58 136 55 C133 52 132 48 134 45 C136 42 140 44 142 48 C144 52 146 58 148 62 C150 66 152 75 152 85 C152 90 148 95 140 95 Z" fill="white"/>
-          <path d="M250 95 C250 82 252 72 256 68 C258 65 260 60 258 56 C256 52 254 50 256 47 C258 44 262 46 263 50 C264 54 266 60 268 64 C270 68 272 78 270 88 C268 93 262 95 258 95 Z" fill="white"/>
-          {/* Paw */}
-          <circle cx="190" cy="88" r="4" fill="white"/>
-          <circle cx="183" cy="82" r="2.5" fill="white"/>
-          <circle cx="190" cy="79" r="2.5" fill="white"/>
-          <circle cx="197" cy="82" r="2.5" fill="white"/>
-        </svg>
-      </div>
     </div>
   );
 }
