@@ -1,3 +1,4 @@
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock, Pencil, ClipboardList, ShieldCheck, ChevronRight, ChevronLeft } from 'lucide-react';
 import ReminderCard from '../components/ReminderCard';
 import StatusBadge from '../components/StatusBadge';
@@ -106,44 +107,85 @@ export default function PetDashboard() {
     }
   }
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  const handleScroll = useCallback(() => {
+    if (scrollRef.current) {
+      setScrolled(scrollRef.current.scrollTop > 60);
+    }
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', handleScroll, { passive: true });
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
   return (
-    <div className="flex flex-col h-full bg-slate-50">
-      {/* Identity header */}
-      <header className="flex-shrink-0 z-40 bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50 overflow-hidden">
-        <div className="flex items-center px-4 pt-3 gap-3" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
-          <button
-            onClick={navigateBack}
-            className="flex items-center justify-center w-9 h-9 -ml-1 rounded-full bg-white/60 hover:bg-white active:bg-slate-100 transition-colors flex-shrink-0"
-            aria-label="Go back"
-          >
-            <ChevronLeft size={22} className="text-slate-700" strokeWidth={2} />
-          </button>
-          <div className="flex-1" />
-          <button
-            onClick={navigateToEditPet}
-            className="flex items-center gap-1.5 text-sky-600 text-sm font-medium py-1.5 px-3 rounded-full bg-white/60 hover:bg-white transition-colors flex-shrink-0"
-          >
-            <Pencil size={14} strokeWidth={2} />
-            Edit
-          </button>
-        </div>
-        <div className="flex items-end px-5 pb-5 pt-3">
-          <div className="flex-1 min-w-0">
-            <h1 className="text-2xl font-bold text-slate-900 leading-tight">{pet.name}</h1>
-            <p className="text-sm text-slate-500 mt-0.5">{pet.breed}</p>
-            <div className={`mt-2 inline-flex items-center gap-1.5 border rounded-full px-2.5 py-1 ${pet.species === 'dog' ? 'bg-sky-50 border-sky-200' : 'bg-amber-50 border-amber-200'}`}>
-              <SpeciesIcon size={14} className={pet.species === 'dog' ? 'text-sky-500' : 'text-amber-500'} strokeWidth={2} />
-              <span className={`text-xs font-medium capitalize ${pet.species === 'dog' ? 'text-sky-700' : 'text-amber-700'}`}>{pet.species}</span>
-            </div>
+    <div className="flex flex-col h-full bg-slate-50 relative">
+      {/* Sticky compact header */}
+      <div
+        className={`absolute top-0 left-0 right-0 z-50 flex items-center px-4 py-2.5 gap-3 bg-white/95 backdrop-blur-md border-b transition-all duration-300 ${
+          scrolled ? 'opacity-100 translate-y-0 border-slate-200' : 'opacity-0 -translate-y-full border-transparent pointer-events-none'
+        }`}
+        style={{ paddingTop: 'max(10px, env(safe-area-inset-top))' }}
+      >
+        <button
+          onClick={navigateBack}
+          className="flex items-center justify-center w-8 h-8 -ml-1 rounded-full hover:bg-slate-100 active:bg-slate-200 transition-colors flex-shrink-0"
+          aria-label="Go back"
+        >
+          <ChevronLeft size={20} className="text-slate-700" strokeWidth={2.5} />
+        </button>
+        <span className="text-base font-semibold text-slate-900 truncate flex-1">{pet.name}</span>
+        <button
+          onClick={navigateToEditPet}
+          className="flex items-center gap-1 text-sky-600 text-xs font-medium py-1 px-2.5 rounded-full bg-sky-50 hover:bg-sky-100 transition-colors flex-shrink-0"
+        >
+          <Pencil size={12} strokeWidth={2} />
+          Edit
+        </button>
+      </div>
+
+      <div ref={scrollRef} className="flex-1 overflow-y-auto">
+        {/* Identity header */}
+        <header className="flex-shrink-0 z-40 bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50 overflow-hidden">
+          <div className="flex items-center px-4 pt-3 gap-3" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
+            <button
+              onClick={navigateBack}
+              className="flex items-center justify-center w-9 h-9 -ml-1 rounded-full bg-white/60 hover:bg-white active:bg-slate-100 transition-colors flex-shrink-0"
+              aria-label="Go back"
+            >
+              <ChevronLeft size={22} className="text-slate-700" strokeWidth={2} />
+            </button>
+            <div className="flex-1" />
+            <button
+              onClick={navigateToEditPet}
+              className="flex items-center gap-1.5 text-sky-600 text-sm font-medium py-1.5 px-3 rounded-full bg-white/60 hover:bg-white transition-colors flex-shrink-0"
+            >
+              <Pencil size={14} strokeWidth={2} />
+              Edit
+            </button>
           </div>
-          <img
-            src={pet.photo}
-            alt={pet.name}
-            className="w-28 h-28 rounded-2xl object-cover shadow-lg ring-3 ring-white/80 flex-shrink-0"
-          />
-        </div>
-      </header>
-      <main className="flex-1 overflow-y-auto px-4 py-4 pb-24 space-y-5">
+          <div className="flex items-end px-5 pb-5 pt-3">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl font-bold text-slate-900 leading-tight">{pet.name}</h1>
+              <p className="text-sm text-slate-500 mt-0.5">{pet.breed}</p>
+              <div className={`mt-2 inline-flex items-center gap-1.5 border rounded-full px-2.5 py-1 ${pet.species === 'dog' ? 'bg-sky-50 border-sky-200' : 'bg-amber-50 border-amber-200'}`}>
+                <SpeciesIcon size={14} className={pet.species === 'dog' ? 'text-sky-500' : 'text-amber-500'} strokeWidth={2} />
+                <span className={`text-xs font-medium capitalize ${pet.species === 'dog' ? 'text-sky-700' : 'text-amber-700'}`}>{pet.species}</span>
+              </div>
+            </div>
+            <img
+              src={pet.photo}
+              alt={pet.name}
+              className="w-28 h-28 rounded-2xl object-cover shadow-lg ring-3 ring-white/80 flex-shrink-0"
+            />
+          </div>
+        </header>
+        <main className="px-4 py-4 pb-24 space-y-5">
         {/* Health summary card */}
         <div className="bg-white rounded-2xl shadow-card overflow-hidden">
           <div className="px-4 py-4">
@@ -295,6 +337,7 @@ export default function PetDashboard() {
           </section>
         )}
       </main>
+      </div>
     </div>
   );
 }
