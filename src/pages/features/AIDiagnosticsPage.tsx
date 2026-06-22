@@ -540,23 +540,29 @@ export default function AIDiagnosticsPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={() => cameraInputRef.current?.click()}
-                    className="bg-white rounded-2xl border-2 border-dashed border-sky-300 py-10 flex flex-col items-center gap-2.5 hover:bg-sky-50 active:bg-sky-100 transition-colors"
+                    className="bg-white rounded-2xl border-2 border-dashed border-sky-300 py-8 flex flex-col items-center gap-2 hover:bg-sky-50 active:bg-sky-100 transition-colors"
                   >
                     <div className="w-11 h-11 rounded-2xl bg-sky-50 flex items-center justify-center">
                       <Camera size={22} className="text-sky-500" strokeWidth={1.5} />
                     </div>
                     <p className="text-xs font-semibold text-sky-600">Take Photo</p>
+                    <p className="text-[10px] text-slate-400 leading-tight">Opens camera on mobile devices</p>
                   </button>
                   <button
                     onClick={() => galleryInputRef.current?.click()}
-                    className="bg-white rounded-2xl border-2 border-dashed border-slate-200 py-10 flex flex-col items-center gap-2.5 hover:bg-slate-50 active:bg-slate-100 transition-colors"
+                    className="bg-white rounded-2xl border-2 border-dashed border-slate-200 py-8 flex flex-col items-center gap-2 hover:bg-slate-50 active:bg-slate-100 transition-colors"
                   >
                     <div className="w-11 h-11 rounded-2xl bg-slate-50 flex items-center justify-center">
                       <Upload size={22} className="text-slate-400" strokeWidth={1.5} />
                     </div>
                     <p className="text-xs font-semibold text-slate-500">From Gallery</p>
+                    <p className="text-[10px] text-slate-400 leading-tight">Choose from your photos</p>
                   </button>
                 </div>
+
+                <p className="text-[10px] text-slate-400 text-center leading-relaxed px-2">
+                  Camera capture is available on mobile. On desktop, choose an image to simulate the photo.
+                </p>
 
                 {/* Photo tips */}
                 <div className="bg-white rounded-2xl shadow-card overflow-hidden">
