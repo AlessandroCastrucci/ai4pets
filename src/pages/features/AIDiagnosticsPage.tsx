@@ -617,9 +617,7 @@ export default function AIDiagnosticsPage() {
                   )}
                 </div>
 
-                <button onClick={() => setStep(3)} className="w-full text-sm text-slate-400 hover:text-slate-600 py-2 transition-colors">
-                  Skip — continue without photo
-                </button>
+
               </div>
             ) : (
               <div className="space-y-3">
