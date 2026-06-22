@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Camera, Upload, ChevronRight, AlertTriangle, CheckCircle, XCircle,
-  BookOpen, Save, MessageSquare, Zap, Lightbulb, ArrowRight,
+  BookOpen, Save, MessageSquare, Zap, Lightbulb, ArrowRight, Loader, X, RefreshCw, Image,
 } from 'lucide-react';
 import TopBar from '../../components/TopBar';
 import { useApp } from '../../context/AppContext';
@@ -330,6 +330,12 @@ export default function AIDiagnosticsPage() {
   const [step, setStep] = useState<Step>(1);
   const [selectedArea, setSelectedArea] = useState<BodyArea | null>(null);
   const [photoSimulated, setPhotoSimulated] = useState(false);
+  const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
+  const [photoSource, setPhotoSource] = useState<'camera' | 'gallery' | null>(null);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [analysisStep, setAnalysisStep] = useState(0);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
   const [tipsOpen, setTipsOpen] = useState(false);
   const [description, setDescription] = useState('');
   const [duration, setDuration] = useState('');
@@ -358,30 +364,65 @@ export default function AIDiagnosticsPage() {
     });
   }
 
+  function handleFileSelect(file: File, source: 'camera' | 'gallery') {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setPhotoPreviewUrl(e.target?.result as string);
+      setPhotoSource(source);
+      setPhotoSimulated(true);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleRemovePhoto() {
+    setPhotoPreviewUrl(null);
+    setPhotoSource(null);
+    setPhotoSimulated(false);
+    if (cameraInputRef.current) cameraInputRef.current.value = '';
+    if (galleryInputRef.current) galleryInputRef.current.value = '';
+  }
+
   function handleAnalyze() {
     if (!selectedArea) return;
-    const mock = MOCK_RESULTS[selectedArea];
-    const symptomsText = [
-      description,
-      duration ? `Duration: ${duration}` : '',
-      checkedSymptoms.size > 0 ? `Symptoms: ${[...checkedSymptoms].join(', ')}` : '',
-      eating ? `Eating: ${eating}` : '',
-      drinking ? `Drinking: ${drinking}` : '',
-      activity ? `Activity: ${activity}` : '',
-    ].filter(Boolean).join(' | ');
-
-    const newResult: DiagnosticResult = {
-      id: Date.now().toString(),
-      petId: safePet.id,
-      date: '2026-06-18',
-      bodyArea: selectedArea,
-      symptoms: symptomsText,
-      photoUrl: photoSimulated ? 'simulated' : undefined,
-      ...mock,
-    };
-    setResult(newResult);
-    setStep(4);
+    setAnalyzing(true);
+    setAnalysisStep(0);
   }
+
+  useEffect(() => {
+    if (!analyzing) return;
+    if (analysisStep >= 3) {
+      const timeout = setTimeout(() => {
+        const mock = MOCK_RESULTS[selectedArea!];
+        const symptomsText = [
+          description,
+          duration ? `Duration: ${duration}` : '',
+          checkedSymptoms.size > 0 ? `Symptoms: ${[...checkedSymptoms].join(', ')}` : '',
+          eating ? `Eating: ${eating}` : '',
+          drinking ? `Drinking: ${drinking}` : '',
+          activity ? `Activity: ${activity}` : '',
+        ].filter(Boolean).join(' | ');
+
+        const newResult: DiagnosticResult = {
+          id: Date.now().toString(),
+          petId: safePet.id,
+          date: '2026-06-18',
+          bodyArea: selectedArea!,
+          symptoms: symptomsText,
+          photoUrl: photoSimulated ? 'simulated' : undefined,
+          ...mock,
+        };
+        setResult(newResult);
+        setAnalyzing(false);
+        setAnalysisStep(0);
+        setStep(4);
+      }, 700);
+      return () => clearTimeout(timeout);
+    }
+    const timeout = setTimeout(() => {
+      setAnalysisStep((s) => s + 1);
+    }, 800);
+    return () => clearTimeout(timeout);
+  }, [analyzing, analysisStep]);
 
   function handleSave() {
     if (result) {
@@ -471,11 +512,34 @@ export default function AIDiagnosticsPage() {
               <p className="text-xs text-slate-400 mt-0.5">A close-up photo helps the AI produce a more accurate result.</p>
             </div>
 
+            {/* Hidden file inputs */}
+            <input
+              ref={cameraInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) handleFileSelect(file, 'camera');
+              }}
+            />
+            <input
+              ref={galleryInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) handleFileSelect(file, 'gallery');
+              }}
+            />
+
             {!photoSimulated ? (
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <button
-                    onClick={() => setPhotoSimulated(true)}
+                    onClick={() => cameraInputRef.current?.click()}
                     className="bg-white rounded-2xl border-2 border-dashed border-sky-300 py-10 flex flex-col items-center gap-2.5 hover:bg-sky-50 active:bg-sky-100 transition-colors"
                   >
                     <div className="w-11 h-11 rounded-2xl bg-sky-50 flex items-center justify-center">
@@ -484,7 +548,7 @@ export default function AIDiagnosticsPage() {
                     <p className="text-xs font-semibold text-sky-600">Take Photo</p>
                   </button>
                   <button
-                    onClick={() => setPhotoSimulated(true)}
+                    onClick={() => galleryInputRef.current?.click()}
                     className="bg-white rounded-2xl border-2 border-dashed border-slate-200 py-10 flex flex-col items-center gap-2.5 hover:bg-slate-50 active:bg-slate-100 transition-colors"
                   >
                     <div className="w-11 h-11 rounded-2xl bg-slate-50 flex items-center justify-center">
@@ -530,13 +594,41 @@ export default function AIDiagnosticsPage() {
             ) : (
               <div className="space-y-3">
                 <div className="bg-white rounded-2xl overflow-hidden shadow-card">
-                  <div className="bg-gradient-to-br from-slate-100 to-slate-200 h-48 flex flex-col items-center justify-center gap-2">
-                    <Camera size={32} className="text-slate-400" strokeWidth={1.5} />
-                    <p className="text-xs text-slate-400">Photo captured</p>
-                  </div>
+                  {photoPreviewUrl ? (
+                    <img
+                      src={photoPreviewUrl}
+                      alt="Photo preview"
+                      className="w-full h-52 object-cover"
+                    />
+                  ) : (
+                    <div className="bg-gradient-to-br from-slate-100 to-slate-200 h-52 flex flex-col items-center justify-center gap-2">
+                      <Camera size={32} className="text-slate-400" strokeWidth={1.5} />
+                      <p className="text-xs text-slate-400">Photo captured</p>
+                    </div>
+                  )}
                   <div className="px-4 py-3 flex items-center justify-between">
-                    <span className="text-xs text-slate-500">photo_{areaLabel.toLowerCase().replace(/[\s/]+/g, '_')}_2026.jpg</span>
-                    <button onClick={() => setPhotoSimulated(false)} className="text-xs text-sky-500 font-semibold">Retake</button>
+                    <button
+                      onClick={() => {
+                        if (photoSource === 'camera') {
+                          cameraInputRef.current?.click();
+                        } else {
+                          galleryInputRef.current?.click();
+                        }
+                      }}
+                      className="flex items-center gap-1.5 text-xs text-sky-500 font-semibold hover:opacity-80 transition-opacity"
+                    >
+                      {photoSource === 'camera' ? (
+                        <><RefreshCw size={13} strokeWidth={2} /> Retake Photo</>
+                      ) : (
+                        <><Image size={13} strokeWidth={2} /> Choose Another Photo</>
+                      )}
+                    </button>
+                    <button
+                      onClick={handleRemovePhoto}
+                      className="flex items-center gap-1.5 text-xs text-red-500 font-semibold hover:opacity-80 transition-opacity"
+                    >
+                      <X size={13} strokeWidth={2} /> Remove Photo
+                    </button>
                   </div>
                 </div>
                 <button
@@ -624,18 +716,61 @@ export default function AIDiagnosticsPage() {
             <div className="flex gap-3">
               <button
                 onClick={() => setStep(2)}
-                className="flex-1 bg-white border border-slate-200 text-slate-600 font-semibold text-sm py-3.5 rounded-2xl hover:bg-slate-50 transition-colors"
+                disabled={analyzing}
+                className="flex-1 bg-white border border-slate-200 text-slate-600 font-semibold text-sm py-3.5 rounded-2xl hover:bg-slate-50 transition-colors disabled:opacity-40"
               >
                 Back
               </button>
               <button
                 onClick={handleAnalyze}
-                disabled={description.trim().length < 5}
+                disabled={description.trim().length < 5 || analyzing}
                 className="flex-1 bg-sky-500 text-white font-semibold text-sm py-3.5 rounded-2xl hover:bg-sky-600 active:bg-sky-700 transition-colors disabled:opacity-40"
               >
                 Analyze
               </button>
             </div>
+
+            {analyzing && (
+              <div className="bg-white rounded-2xl shadow-card p-6 space-y-4">
+                <div className="text-center mb-2">
+                  <div className="w-12 h-12 rounded-full bg-sky-50 flex items-center justify-center mx-auto mb-3">
+                    <Loader size={24} className="text-sky-500 animate-spin" strokeWidth={2} />
+                  </div>
+                  <p className="text-sm font-bold text-slate-800">Analyzing image...</p>
+                  <p className="text-xs text-slate-400 mt-0.5">Please wait while our AI processes the data</p>
+                </div>
+                <div className="space-y-3">
+                  {[
+                    'Checking image quality',
+                    'Detecting visible signs',
+                    'Generating AI insights',
+                  ].map((label, i) => {
+                    const done = analysisStep > i;
+                    const active = analysisStep === i;
+                    return (
+                      <div key={i} className="flex items-center gap-3">
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
+                          done ? 'bg-emerald-100' : active ? 'bg-sky-100' : 'bg-slate-50'
+                        }`}>
+                          {done ? (
+                            <CheckCircle size={14} className="text-emerald-500" strokeWidth={2.5} />
+                          ) : active ? (
+                            <Loader size={14} className="text-sky-500 animate-spin" strokeWidth={2.5} />
+                          ) : (
+                            <div className="w-2 h-2 rounded-full bg-slate-200" />
+                          )}
+                        </div>
+                        <span className={`text-sm transition-colors ${
+                          done ? 'text-emerald-700 font-medium' : active ? 'text-sky-700 font-medium' : 'text-slate-400'
+                        }`}>
+                          {label}{active ? '...' : ''}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </>
         )}
 
