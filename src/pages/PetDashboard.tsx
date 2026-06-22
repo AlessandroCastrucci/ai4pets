@@ -88,9 +88,11 @@ export default function PetDashboard() {
   useEffect(() => {
     const el = profileCardRef.current;
     if (!el) return;
+    const scrollParent = el.closest('.overflow-y-auto') || el.closest('[style*="overflow"]');
+    if (!scrollParent) return;
     const observer = new IntersectionObserver(
       ([entry]) => setScrolledPast(!entry.isIntersecting),
-      { threshold: 0 },
+      { root: scrollParent, threshold: 0 },
     );
     observer.observe(el);
     return () => observer.disconnect();
