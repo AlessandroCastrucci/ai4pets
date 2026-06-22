@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import slide1Img from '../../assets/onboarding/01_2.png';
-import slide2Img from '../../assets/onboarding/02_2.png';
+import slide2Img from '../../assets/onboarding/ChatGPT_Image_Jun_22,_2026_at_10_00_19_AM.png';
 import slide3Img from '../../assets/onboarding/03_2.png';
 import { TTCareLogoIcon, TTCareWordmark, BrandGradientBg, LoadingDots } from '../../components/brand';
 
