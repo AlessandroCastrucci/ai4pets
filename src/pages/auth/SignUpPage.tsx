@@ -33,7 +33,7 @@ export default function SignUpPage() {
       {/* Back button */}
       <div className="px-4" style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
         <button
-          onClick={() => navigateToAuth('welcome')}
+          onClick={() => navigateToAuth('login')}
           className="flex items-center gap-1 text-[#2F8CFF] hover:opacity-80 transition-opacity py-2"
         >
           <ChevronLeft size={18} strokeWidth={2} />

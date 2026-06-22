@@ -23,7 +23,6 @@ import VaccinesPage from './pages/features/VaccinesPage';
 import TherapiesPage from './pages/features/TherapiesPage';
 import AccountPage from './pages/AccountPage';
 import EditProfilePage from './pages/EditProfilePage';
-import WelcomePage from './pages/auth/WelcomePage';
 import LoginPage from './pages/auth/LoginPage';
 import SignUpPage from './pages/auth/SignUpPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
@@ -68,10 +67,9 @@ function AuthenticatedApp() {
 
 function AuthScreens() {
   const { authScreen } = useAuth();
-  if (authScreen === 'login') return <LoginPage />;
   if (authScreen === 'signup') return <SignUpPage />;
   if (authScreen === 'forgot-password') return <ForgotPasswordPage />;
-  return <WelcomePage />;
+  return <LoginPage />;
 }
 
 export default function App() {

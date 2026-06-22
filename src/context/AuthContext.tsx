@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(restored?.isAuthenticated ?? false);
   const [user, setUser] = useState<User | null>(restored?.user ?? null);
-  const [authScreen, setAuthScreen] = useState<AuthScreen>('welcome');
+  const [authScreen, setAuthScreen] = useState<AuthScreen>('login');
 
   const navigateToAuth = useCallback((screen: AuthScreen) => {
     setAuthScreen(screen);
@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     saveSession(name, email);
     setUser({ name, email });
     setIsAuthenticated(true);
-    setAuthScreen('welcome');
+    setAuthScreen('login');
   }, []);
 
   const signup = useCallback(async (name: string, email: string, password: string) => {
@@ -83,14 +83,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     saveSession(trimmedName, email);
     setUser({ name: trimmedName, email });
     setIsAuthenticated(true);
-    setAuthScreen('welcome');
+    setAuthScreen('login');
   }, []);
 
   const logout = useCallback(() => {
     clearSession();
     setIsAuthenticated(false);
     setUser(null);
-    setAuthScreen('welcome');
+    setAuthScreen('login');
   }, []);
 
   const resetPassword = useCallback(async (email: string) => {
