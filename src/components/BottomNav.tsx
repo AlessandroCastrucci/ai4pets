@@ -65,7 +65,7 @@ export default function BottomNav() {
           className="absolute left-1/2 -translate-x-1/2 -top-7 flex flex-col items-center"
         >
           <div className="relative">
-            <div className="absolute inset-[-6px] rounded-full bg-white" />
+            <div className="absolute inset-[-6px] rounded-full bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.04)]" />
             <div
               className="relative w-[60px] h-[60px] rounded-full flex items-center justify-center"
               style={{ background: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 40%, #0369a1 100%)' }}
