@@ -53,12 +53,14 @@ function Illustration1() {
 // ─── Illustration 2 — Health timeline / record cards ─────────────────────────
 function Illustration2() {
   return (
-    <img
-      src={slide2Img}
-      alt="Pet health timeline"
-      style={{ width: '100%', maxWidth: 'none', height: 'auto', display: 'block', marginTop: '60px' }}
-      draggable={false}
-    />
+    <div style={{ width: '100%', height: '100%', paddingTop: '10%' }}>
+      <img
+        src={slide2Img}
+        alt="Pet health timeline"
+        style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center center', display: 'block' }}
+        draggable={false}
+      />
+    </div>
   );
 }
 
@@ -68,7 +70,7 @@ function Illustration3() {
     <img
       src={slide3Img}
       alt="AI assistant with a golden dog and a grey cat"
-      style={{ width: '110%', maxWidth: 'none', height: '110%', objectFit: 'contain', objectPosition: 'top center', display: 'block' }}
+      style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'top center', display: 'block' }}
       draggable={false}
     />
   );
