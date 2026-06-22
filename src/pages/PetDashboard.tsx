@@ -107,8 +107,8 @@ export default function PetDashboard() {
   }
 
   return (
-    <div className="flex flex-col min-h-full bg-slate-50">
-      <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
+    <div className="flex flex-col h-full bg-slate-50">
+      <header className="flex-shrink-0 z-40 bg-white border-b border-slate-200 shadow-sm">
         <div className="flex items-center px-4 py-3 gap-3 min-h-[56px]" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
           <button
             onClick={navigateBack}
@@ -130,7 +130,7 @@ export default function PetDashboard() {
           </button>
         </div>
       </header>
-      <main className="flex-1 px-4 py-4 pb-24 space-y-5">
+      <main className="flex-1 overflow-y-auto px-4 py-4 pb-24 space-y-5">
         {/* Pet profile card */}
         <div className="bg-white rounded-2xl shadow-card overflow-hidden">
           <div className="h-28 bg-gradient-to-br from-sky-50 via-blue-50 to-violet-50 relative">
