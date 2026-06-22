@@ -40,7 +40,7 @@ export default function WelcomePage() {
         style={{ paddingBottom: 'max(48px, env(safe-area-inset-bottom))' }}
       >
         <BrandButton variant="primary-on-gradient" onClick={() => navigateToAuth('signup')}>
-          Get Started
+          Create Account
         </BrandButton>
         <BrandButton variant="secondary-on-gradient" onClick={() => navigateToAuth('login')}>
           Sign In
