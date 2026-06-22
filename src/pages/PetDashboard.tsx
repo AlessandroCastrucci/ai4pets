@@ -1,19 +1,10 @@
-import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock, Pencil, ClipboardList } from 'lucide-react';
+import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock, Pencil, ClipboardList, ShieldCheck, ChevronRight } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import ReminderCard from '../components/ReminderCard';
 import StatusBadge from '../components/StatusBadge';
 import { useApp } from '../context/AppContext';
 
 const GRID_FEATURES = [
-  {
-    id: 'ai-diagnostics' as const,
-    label: 'AI Diagnostics',
-    sublabel: 'Photo-based analysis',
-    Icon: Scan,
-    bg: 'bg-sky-50',
-    iconColor: 'text-sky-500',
-    border: 'border-sky-200',
-  },
   {
     id: 'ai-checkup' as const,
     label: 'AI Checkup',
@@ -59,6 +50,15 @@ const GRID_FEATURES = [
     iconColor: 'text-rose-500',
     border: 'border-rose-100',
   },
+  {
+    id: 'parasite-protection' as const,
+    label: 'Parasite Protection',
+    sublabel: 'Flea, tick & worm reminders',
+    Icon: ShieldCheck,
+    bg: 'bg-lime-50',
+    iconColor: 'text-lime-600',
+    border: 'border-lime-100',
+  },
 ];
 
 function getVaccineStatus(nextDue: string): 'Overdue' | 'Due Soon' | 'Up to Date' {
@@ -101,6 +101,8 @@ export default function PetDashboard() {
   function handleFeatureClick(id: string) {
     if (id === 'health-history') {
       navigateToHealthHistory();
+    } else if (id === 'parasite-protection') {
+      navigateToFeature('vaccines');
     } else {
       navigateToFeature(id as Parameters<typeof navigateToFeature>[0]);
     }
@@ -209,6 +211,26 @@ export default function PetDashboard() {
           </div>
         </div>
 
+        {/* Featured AI Diagnostics card */}
+        <button
+          onClick={() => navigateToFeature('ai-diagnostics')}
+          className="w-full bg-gradient-to-br from-sky-500 to-blue-600 rounded-2xl p-5 flex items-center gap-4 shadow-card hover:shadow-card-md active:scale-[0.99] transition-all text-left"
+        >
+          <div className="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+            <Scan size={28} className="text-white" strokeWidth={1.8} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-base font-bold text-white">AI Diagnostics</p>
+            <p className="text-[13px] text-white/75 mt-0.5 leading-snug">
+              Take a photo and get AI-powered health insights for {pet.name}.
+            </p>
+          </div>
+          <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
+            <ChevronRight size={18} className="text-white/60" />
+            <span className="text-[10px] font-semibold text-white/60 uppercase tracking-wide">Start</span>
+          </div>
+        </button>
+
         {/* Upcoming reminders */}
         {reminders.length > 0 && (
           <section>
@@ -228,13 +250,11 @@ export default function PetDashboard() {
         <section>
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1 mb-3">Health Features</p>
           <div className="grid grid-cols-2 gap-3">
-            {GRID_FEATURES.map((feature, idx) => (
+            {GRID_FEATURES.map((feature) => (
               <button
                 key={feature.id}
                 onClick={() => handleFeatureClick(feature.id)}
-                className={`bg-white rounded-2xl shadow-card p-4 flex flex-col gap-2 border ${feature.border} hover:shadow-card-md active:scale-[0.98] transition-all text-left ${
-                  idx === 0 ? 'ring-1 ring-sky-200' : ''
-                }`}
+                className={`bg-white rounded-2xl shadow-card p-4 flex flex-col gap-2 border ${feature.border} hover:shadow-card-md active:scale-[0.98] transition-all text-left`}
               >
                 <div className={`w-10 h-10 rounded-xl ${feature.bg} flex items-center justify-center`}>
                   <feature.Icon size={20} className={feature.iconColor} strokeWidth={2} />
