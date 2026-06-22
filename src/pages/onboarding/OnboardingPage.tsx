@@ -161,7 +161,7 @@ export default function OnboardingPage({ onComplete }: Props) {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-white max-w-md mx-auto relative overflow-hidden select-none">
+    <div className="min-h-screen flex flex-col bg-white max-w-md mx-auto relative overflow-hidden select-none">
       {/* Skip */}
       <div className="flex justify-end px-6 pt-12 pb-0 relative z-10">
         <button
@@ -179,18 +179,17 @@ export default function OnboardingPage({ onComplete }: Props) {
           transform: visible ? 'translateY(0)' : 'translateY(12px)',
           transition: 'opacity 0.22s ease, transform 0.22s ease',
           width: '100%',
-          height: 'calc(100vh - 280px)',
           display: 'flex',
-          alignItems: 'flex-start',
           justifyContent: 'center',
-          overflow: 'hidden',
+          paddingTop: 8,
+          paddingBottom: 8,
         }}
       >
         {slide === 0 ? (
           <img
             src={slide1Img}
             alt="Person sitting with a golden dog and a grey cat"
-            style={{ width: '100%', maxWidth: 'none', height: '100%', objectFit: 'cover', objectPosition: 'center bottom', display: 'block' }}
+            style={{ width: '100%', height: 'auto', display: 'block' }}
             draggable={false}
           />
         ) : (
@@ -200,9 +199,8 @@ export default function OnboardingPage({ onComplete }: Props) {
 
       {/* Text block */}
       <div
-        className="px-8 pb-2 text-center"
+        className="px-8 pb-2 pt-4 text-center"
         style={{
-          paddingTop: slide === 0 ? 8 : 16,
           opacity: visible ? 1 : 0,
           transform: visible ? 'translateY(0)' : 'translateY(10px)',
           transition: 'opacity 0.28s ease 0.06s, transform 0.28s ease 0.06s',
@@ -247,7 +245,7 @@ export default function OnboardingPage({ onComplete }: Props) {
       </div>
 
       {/* CTA button */}
-      <div className="px-6 pb-12">
+      <div className="px-6 pb-12 mt-auto">
         {isLast ? (
           <button
             onClick={handleGetStarted}
