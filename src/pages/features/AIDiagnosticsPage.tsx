@@ -142,14 +142,22 @@ interface AreaDef {
   bg: string;
 }
 
-const BODY_AREAS: AreaDef[] = [
+const BODY_AREAS_DOG: AreaDef[] = [
   { id: 'skin-fur',    label: 'Skin / Fur',    sublabel: 'Itching, rash, hair loss', bg: 'bg-teal-50' },
   { id: 'eyes',        label: 'Eyes',          sublabel: 'Redness, discharge',       bg: 'bg-sky-50' },
   { id: 'ears',        label: 'Ears',          sublabel: 'Scratching, bad smell',    bg: 'bg-violet-50' },
   { id: 'paws',        label: 'Paws',          sublabel: 'Licking, limping',         bg: 'bg-amber-50' },
   { id: 'mouth-teeth', label: 'Teeth / Mouth', sublabel: 'Bad breath, gums',        bg: 'bg-emerald-50' },
-  { id: 'other',       label: 'Other',         sublabel: 'Something else',          bg: 'bg-slate-50' },
 ];
+
+const BODY_AREAS_CAT: AreaDef[] = [
+  { id: 'eyes',        label: 'Eyes',          sublabel: 'Redness, discharge',       bg: 'bg-sky-50' },
+  { id: 'mouth-teeth', label: 'Teeth / Mouth', sublabel: 'Bad breath, gums',        bg: 'bg-emerald-50' },
+];
+
+const ALL_BODY_AREAS: AreaDef[] = [...BODY_AREAS_DOG, ...BODY_AREAS_CAT].filter(
+  (area, idx, arr) => arr.findIndex((a) => a.id === area.id) === idx,
+);
 
 type MockResult = Omit<DiagnosticResult, 'id' | 'petId' | 'date' | 'bodyArea' | 'symptoms'>;
 
@@ -354,7 +362,7 @@ export default function AIDiagnosticsPage() {
   if (!pet) return null;
 
   const safePet = pet;
-  const areaLabel = BODY_AREAS.find((a) => a.id === selectedArea)?.label ?? '';
+  const areaLabel = ALL_BODY_AREAS.find((a) => a.id === selectedArea)?.label ?? '';
 
   function toggleSymptom(s: string) {
     setCheckedSymptoms((prev) => {
@@ -505,9 +513,9 @@ export default function AIDiagnosticsPage() {
         {step === 1 && (
           <>
             <PetContextBanner pet={pet} />
-            <p className="text-sm font-bold text-slate-800 px-1">Where is the problem?</p>
+            <p className="text-sm font-bold text-slate-800 px-1">Where is {pet.name}'s problem?</p>
             <div className="grid grid-cols-3 gap-2.5">
-              {BODY_AREAS.map((area) => {
+              {(pet.species === 'dog' ? BODY_AREAS_DOG : BODY_AREAS_CAT).map((area) => {
                 const Illustration = AREA_ILLUSTRATIONS[area.id];
                 return (
                   <button
