@@ -10,6 +10,7 @@ import type {
   DiagnosticFollowUp,
   MonthlyCheckup,
   CalendarEvent,
+  ParasiteProtectionPlan,
   TabName,
   ScreenName,
 } from '../types';
@@ -24,6 +25,7 @@ import {
   MONTHLY_CHECKUPS,
   CALENDAR_EVENTS,
   PET_DOCUMENTS,
+  PARASITE_PROTECTION_PLANS,
 } from '../data/mockData';
 
 interface AppContextType {
@@ -54,6 +56,7 @@ interface AppContextType {
   monthlyCheckups: MonthlyCheckup[];
   calendarEvents: CalendarEvent[];
   petDocuments: PetDocument[];
+  parasiteProtectionPlans: ParasiteProtectionPlan[];
 
   // Data — write
   addPet: (pet: Pet) => void;
@@ -73,6 +76,7 @@ interface AppContextType {
   updateNutritionPlan: (plan: NutritionPlan) => void;
   toggleReminderDone: (id: string) => void;
   addPetDocument: (doc: PetDocument) => void;
+  updateParasiteProtectionPlan: (plan: ParasiteProtectionPlan) => void;
 
   // Helpers
   getPet: (id: string) => Pet | undefined;
@@ -85,6 +89,7 @@ interface AppContextType {
   getPetFollowUps: (petId: string) => DiagnosticFollowUp[];
   getPetCheckups: (petId: string) => MonthlyCheckup[];
   getPetDocuments: (petId: string) => PetDocument[];
+  getPetParasiteProtection: (petId: string) => ParasiteProtectionPlan | undefined;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -104,6 +109,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [monthlyCheckups, setMonthlyCheckups] = useState<MonthlyCheckup[]>(MONTHLY_CHECKUPS);
   const [calendarEvents] = useState<CalendarEvent[]>(CALENDAR_EVENTS);
   const [petDocuments, setPetDocuments] = useState<PetDocument[]>(PET_DOCUMENTS);
+  const [parasiteProtectionPlans, setParasiteProtectionPlans] = useState<ParasiteProtectionPlan[]>(PARASITE_PROTECTION_PLANS);
 
   const navigateToPet = useCallback((petId: string) => {
     setSelectedPetId(petId);
@@ -251,6 +257,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setPetDocuments((prev) => [doc, ...prev]);
   }, []);
 
+  const updateParasiteProtectionPlan = useCallback((plan: ParasiteProtectionPlan) => {
+    setParasiteProtectionPlans((prev) => {
+      const exists = prev.some((p) => p.petId === plan.petId);
+      if (exists) return prev.map((p) => (p.petId === plan.petId ? plan : p));
+      return [...prev, plan];
+    });
+  }, []);
+
   const getPet = useCallback((id: string) => pets.find((p) => p.id === id), [pets]);
   const getSelectedPet = useCallback(() => (selectedPetId ? pets.find((p) => p.id === selectedPetId) : undefined), [pets, selectedPetId]);
   const getPetReminders = useCallback((petId: string) => reminders.filter((r) => r.petId === petId), [reminders]);
@@ -261,6 +275,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const getPetFollowUps = useCallback((petId: string) => diagnosticFollowUps.filter((f) => f.petId === petId), [diagnosticFollowUps]);
   const getPetCheckups = useCallback((petId: string) => monthlyCheckups.filter((c) => c.petId === petId), [monthlyCheckups]);
   const getPetDocuments = useCallback((petId: string) => petDocuments.filter((d) => d.petId === petId), [petDocuments]);
+  const getPetParasiteProtection = useCallback((petId: string) => parasiteProtectionPlans.find((p) => p.petId === petId), [parasiteProtectionPlans]);
 
   return (
     <AppContext.Provider
@@ -289,6 +304,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         monthlyCheckups,
         calendarEvents,
         petDocuments,
+        parasiteProtectionPlans,
         addPet,
         updatePet,
         deletePet,
@@ -306,6 +322,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         updateNutritionPlan,
         toggleReminderDone,
         addPetDocument,
+        updateParasiteProtectionPlan,
         getPet,
         getSelectedPet,
         getPetReminders,
@@ -316,6 +333,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         getPetFollowUps,
         getPetCheckups,
         getPetDocuments,
+        getPetParasiteProtection,
       }}
     >
       {children}

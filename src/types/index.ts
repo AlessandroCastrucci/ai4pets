@@ -29,7 +29,7 @@ export interface Pet {
 export interface Reminder {
   id: string;
   petId: string;
-  type: 'therapy' | 'vaccine' | 'medication' | 'checkup' | 'appointment';
+  type: 'therapy' | 'vaccine' | 'medication' | 'checkup' | 'appointment' | 'parasite';
   title: string;
   datetime: string;
   notes?: string;
@@ -133,7 +133,7 @@ export interface CalendarEvent {
   title: string;
   date: string;
   time?: string;
-  type: 'vaccine' | 'therapy' | 'checkup' | 'medication' | 'appointment';
+  type: 'vaccine' | 'therapy' | 'checkup' | 'medication' | 'appointment' | 'parasite';
 }
 
 export type TabName = 'pets' | 'reminders' | 'diagnostics' | 'calendar' | 'more';
@@ -148,5 +148,26 @@ export type ScreenName =
   | 'nutrition'
   | 'vaccines'
   | 'therapies'
+  | 'parasite-protection'
   | 'account'
   | 'edit-profile';
+
+export type ParasiteTreatmentFrequency = 'Every month' | 'Every 3 months' | 'Every 6 months' | 'Custom';
+
+export interface ParasiteTreatment {
+  productName: string;
+  lastDate: string;
+  nextDate: string;
+  frequency: ParasiteTreatmentFrequency;
+  reminderEnabled: boolean;
+  reminderTime: string;
+  notes: string;
+}
+
+export interface ParasiteProtectionPlan {
+  id: string;
+  petId: string;
+  fleaTreatment: ParasiteTreatment;
+  tickTreatment: ParasiteTreatment;
+  wormTreatment: ParasiteTreatment;
+}

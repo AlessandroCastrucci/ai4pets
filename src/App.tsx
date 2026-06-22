@@ -21,6 +21,7 @@ import AICheckupPage from './pages/features/AICheckupPage';
 import NutritionPage from './pages/features/NutritionPage';
 import VaccinesPage from './pages/features/VaccinesPage';
 import TherapiesPage from './pages/features/TherapiesPage';
+import ParasiteProtectionPage from './pages/features/ParasiteProtectionPage';
 import AccountPage from './pages/AccountPage';
 import EditProfilePage from './pages/EditProfilePage';
 import LoginPage from './pages/auth/LoginPage';
@@ -38,6 +39,7 @@ function AppScreen() {
   if (currentScreen === 'nutrition') return <NutritionPage />;
   if (currentScreen === 'vaccines') return <VaccinesPage />;
   if (currentScreen === 'therapies') return <TherapiesPage />;
+  if (currentScreen === 'parasite-protection') return <ParasiteProtectionPage />;
   if (currentScreen === 'pet-dashboard') return <PetDashboard />;
   if (currentScreen === 'account') return <AccountPage />;
   if (currentScreen === 'edit-profile') return <EditProfilePage />;

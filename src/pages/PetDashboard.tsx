@@ -101,8 +101,6 @@ export default function PetDashboard() {
   function handleFeatureClick(id: string) {
     if (id === 'health-history') {
       navigateToHealthHistory();
-    } else if (id === 'parasite-protection') {
-      navigateToFeature('vaccines');
     } else {
       navigateToFeature(id as Parameters<typeof navigateToFeature>[0]);
     }

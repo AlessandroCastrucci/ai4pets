@@ -1,4 +1,4 @@
-import { Syringe, Pill, Stethoscope, Calendar } from 'lucide-react';
+import { Syringe, Pill, Stethoscope, Calendar, ShieldCheck } from 'lucide-react';
 import type { Reminder, Pet } from '../types';
 import { useApp } from '../context/AppContext';
 
@@ -8,6 +8,7 @@ const TYPE_CONFIG = {
   medication: { Icon: Pill, color: 'text-emerald-500', bg: 'bg-emerald-50', label: 'Medication' },
   checkup: { Icon: Stethoscope, color: 'text-blue-500', bg: 'bg-blue-50', label: 'Checkup' },
   appointment: { Icon: Calendar, color: 'text-amber-500', bg: 'bg-amber-50', label: 'Appointment' },
+  parasite: { Icon: ShieldCheck, color: 'text-lime-600', bg: 'bg-lime-50', label: 'Parasite Protection' },
 };
 
 interface ReminderCardProps {
