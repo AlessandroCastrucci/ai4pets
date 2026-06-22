@@ -62,13 +62,16 @@ export default function BottomNav() {
         {/* Floating AI Diagnostics center button */}
         <button
           onClick={() => setActiveTab('diagnostics')}
-          className="absolute left-1/2 -translate-x-1/2 -top-6 flex flex-col items-center"
+          className="absolute left-1/2 -translate-x-1/2 -top-7 flex flex-col items-center"
         >
-          <div
-            className="w-[60px] h-[60px] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(14,131,232,0.35)] ring-4 ring-white"
-            style={{ background: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 40%, #0369a1 100%)' }}
-          >
-            <Scan size={26} className="text-white" strokeWidth={2.2} />
+          <div className="relative">
+            <div className="absolute inset-[-6px] rounded-full bg-white" />
+            <div
+              className="relative w-[60px] h-[60px] rounded-full flex items-center justify-center"
+              style={{ background: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 40%, #0369a1 100%)' }}
+            >
+              <Scan size={26} className="text-white" strokeWidth={2.2} />
+            </div>
           </div>
           <span className="text-[10px] font-semibold text-sky-500 mt-1">AI Diagnostics</span>
         </button>
