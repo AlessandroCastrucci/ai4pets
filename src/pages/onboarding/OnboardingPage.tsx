@@ -56,7 +56,7 @@ function Illustration2() {
     <img
       src={slide2Img}
       alt="Pet health timeline"
-      style={{ width: '100%', maxWidth: 'none', height: 'auto', display: 'block' }}
+      style={{ width: '100%', maxWidth: 'none', height: 'auto', display: 'block', marginTop: '80px' }}
       draggable={false}
     />
   );
