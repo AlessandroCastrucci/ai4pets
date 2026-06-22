@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import slide1Img from '../../assets/onboarding/01.png';
 import slide2Img from '../../assets/onboarding/02_(1).png';
-import slide3Img from '../../assets/onboarding/03.png';
+import slide3Img from '../../assets/onboarding/03_2.png';
 import { TTCareLogoIcon, TTCareWordmark, BrandGradientBg, LoadingDots } from '../../components/brand';
 
 // ─── localStorage helpers ────────────────────────────────────────────────────
