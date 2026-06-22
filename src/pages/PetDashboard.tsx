@@ -131,9 +131,9 @@ export default function PetDashboard() {
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-bold text-slate-900 leading-tight">{pet.name}</h1>
             <p className="text-sm text-slate-500 mt-0.5">{pet.breed}</p>
-            <div className="mt-2 inline-flex items-center gap-1.5 bg-white/80 border border-slate-200 rounded-full px-2.5 py-1">
-              <SpeciesIcon size={14} className="text-sky-500" strokeWidth={2} />
-              <span className="text-xs font-medium text-slate-600 capitalize">{pet.species}</span>
+            <div className={`mt-2 inline-flex items-center gap-1.5 border rounded-full px-2.5 py-1 ${pet.species === 'dog' ? 'bg-sky-50 border-sky-200' : 'bg-amber-50 border-amber-200'}`}>
+              <SpeciesIcon size={14} className={pet.species === 'dog' ? 'text-sky-500' : 'text-amber-500'} strokeWidth={2} />
+              <span className={`text-xs font-medium capitalize ${pet.species === 'dog' ? 'text-sky-700' : 'text-amber-700'}`}>{pet.species}</span>
             </div>
           </div>
           <img
