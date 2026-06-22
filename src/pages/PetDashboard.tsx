@@ -6,15 +6,6 @@ import { useApp } from '../context/AppContext';
 
 const GRID_FEATURES = [
   {
-    id: 'ai-checkup' as const,
-    label: 'AI Checkup',
-    sublabel: 'Monthly & annual',
-    Icon: Stethoscope,
-    bg: 'bg-emerald-50',
-    iconColor: 'text-emerald-500',
-    border: 'border-emerald-100',
-  },
-  {
     id: 'health-history' as const,
     label: 'Health History',
     sublabel: 'Medical records & docs',
@@ -22,6 +13,15 @@ const GRID_FEATURES = [
     bg: 'bg-teal-50',
     iconColor: 'text-teal-500',
     border: 'border-teal-100',
+  },
+  {
+    id: 'ai-checkup' as const,
+    label: 'AI Checkup',
+    sublabel: 'Monthly & annual',
+    Icon: Stethoscope,
+    bg: 'bg-emerald-50',
+    iconColor: 'text-emerald-500',
+    border: 'border-emerald-100',
   },
   {
     id: 'nutrition' as const,
