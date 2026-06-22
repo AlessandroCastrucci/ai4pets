@@ -27,7 +27,6 @@ export default function RemindersPage() {
   });
 
   const pending = filtered.filter((r) => !r.done);
-  const today = pending.filter((r) => r.datetime.startsWith('2026-06-22'));
   const done = filtered.filter((r) => r.done);
 
   return (
@@ -84,12 +83,12 @@ export default function RemindersPage() {
           </div>
         </div>
 
-        {today.length > 0 && (
+        {pending.length > 0 && (
           <section className="space-y-3">
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1">
-              Today · {today.length}
+              Upcoming · {pending.length}
             </p>
-            {today.map((r) => (
+            {pending.map((r) => (
               <ReminderCard key={r.id} reminder={r} pet={getPet(r.petId)} showPet />
             ))}
           </section>
