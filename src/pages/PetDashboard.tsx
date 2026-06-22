@@ -1,5 +1,5 @@
-import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock, Pencil, ClipboardList, ShieldCheck, ChevronRight } from 'lucide-react';
-import TopBar from '../components/TopBar';
+import { useState, useRef, useEffect } from 'react';
+import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock, Pencil, ClipboardList, ShieldCheck, ChevronRight, ChevronLeft } from 'lucide-react';
 import ReminderCard from '../components/ReminderCard';
 import StatusBadge from '../components/StatusBadge';
 import { useApp } from '../context/AppContext';
@@ -76,11 +76,25 @@ export default function PetDashboard() {
     navigateToFeature,
     navigateToEditPet,
     navigateToHealthHistory,
+    navigateBack,
     getPetReminders,
     getPetVaccines,
     getPetDiagnostics,
   } = useApp();
   const pet = getSelectedPet();
+  const profileCardRef = useRef<HTMLDivElement>(null);
+  const [scrolledPast, setScrolledPast] = useState(false);
+
+  useEffect(() => {
+    const el = profileCardRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setScrolledPast(!entry.isIntersecting),
+      { threshold: 0 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   if (!pet) return null;
 
@@ -108,23 +122,42 @@ export default function PetDashboard() {
 
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
-      <TopBar
-        title={pet.name}
-        showBack
-        subtitle={pet.breed}
-        rightSlot={
+      <header
+        className={`sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b transition-shadow duration-200 ${
+          scrolledPast ? 'border-slate-200 shadow-sm' : 'border-slate-100'
+        }`}
+      >
+        <div className="flex items-center px-4 py-3 gap-3 min-h-[56px]" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
+          <button
+            onClick={navigateBack}
+            className="flex items-center justify-center w-9 h-9 -ml-1 rounded-full hover:bg-slate-100 active:bg-slate-200 transition-colors flex-shrink-0"
+            aria-label="Go back"
+          >
+            <ChevronLeft size={22} className="text-slate-700" strokeWidth={2} />
+          </button>
+          {scrolledPast && (
+            <img
+              src={pet.photo}
+              alt={pet.name}
+              className="w-8 h-8 rounded-full object-cover ring-1 ring-slate-100 flex-shrink-0 animate-fadeIn"
+            />
+          )}
+          <div className="flex-1 min-w-0">
+            <h1 className="text-base font-semibold text-slate-900 truncate leading-tight">{pet.name}</h1>
+            <p className="text-xs text-slate-500 truncate leading-tight mt-0.5">{pet.breed}</p>
+          </div>
           <button
             onClick={navigateToEditPet}
-            className="flex items-center gap-1.5 text-sky-500 text-sm font-medium py-1 px-2 rounded-lg hover:bg-sky-50"
+            className="flex items-center gap-1.5 text-sky-500 text-sm font-medium py-1 px-2 rounded-lg hover:bg-sky-50 flex-shrink-0"
           >
             <Pencil size={15} strokeWidth={2} />
             Edit
           </button>
-        }
-      />
+        </div>
+      </header>
       <main className="flex-1 px-4 py-4 pb-24 space-y-5">
         {/* Pet profile card */}
-        <div className="bg-white rounded-2xl shadow-card overflow-hidden">
+        <div ref={profileCardRef} className="bg-white rounded-2xl shadow-card overflow-hidden">
           <div className="h-28 bg-gradient-to-br from-sky-50 via-blue-50 to-violet-50 relative">
             <img
               src={pet.photo}
