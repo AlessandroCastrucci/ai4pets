@@ -108,50 +108,46 @@ export default function PetDashboard() {
 
   return (
     <div className="flex flex-col h-full bg-slate-50">
-      <header className="flex-shrink-0 z-40 bg-white border-b border-slate-200 shadow-sm">
-        <div className="flex items-center px-4 py-3 gap-3 min-h-[56px]" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
+      {/* Identity header */}
+      <header className="flex-shrink-0 z-40 bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50 overflow-hidden">
+        <div className="flex items-center px-4 pt-3 gap-3" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
           <button
             onClick={navigateBack}
-            className="flex items-center justify-center w-9 h-9 -ml-1 rounded-full hover:bg-slate-100 active:bg-slate-200 transition-colors flex-shrink-0"
+            className="flex items-center justify-center w-9 h-9 -ml-1 rounded-full bg-white/60 hover:bg-white active:bg-slate-100 transition-colors flex-shrink-0"
             aria-label="Go back"
           >
             <ChevronLeft size={22} className="text-slate-700" strokeWidth={2} />
           </button>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-base font-semibold text-slate-900 truncate leading-tight">{pet.name}</h1>
-            <p className="text-xs text-slate-500 truncate leading-tight mt-0.5">{pet.breed}</p>
-          </div>
+          <div className="flex-1" />
           <button
             onClick={navigateToEditPet}
-            className="flex items-center gap-1.5 text-sky-500 text-sm font-medium py-1 px-2 rounded-lg hover:bg-sky-50 flex-shrink-0"
+            className="flex items-center gap-1.5 text-sky-600 text-sm font-medium py-1.5 px-3 rounded-full bg-white/60 hover:bg-white transition-colors flex-shrink-0"
           >
-            <Pencil size={15} strokeWidth={2} />
+            <Pencil size={14} strokeWidth={2} />
             Edit
           </button>
         </div>
+        <div className="flex items-end px-5 pb-5 pt-3">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl font-bold text-slate-900 leading-tight">{pet.name}</h1>
+            <p className="text-sm text-slate-500 mt-0.5">{pet.breed}</p>
+            <div className="mt-2 inline-flex items-center gap-1.5 bg-white/80 border border-slate-200 rounded-full px-2.5 py-1">
+              <SpeciesIcon size={14} className="text-sky-500" strokeWidth={2} />
+              <span className="text-xs font-medium text-slate-600 capitalize">{pet.species}</span>
+            </div>
+          </div>
+          <img
+            src={pet.photo}
+            alt={pet.name}
+            className="w-28 h-28 rounded-2xl object-cover shadow-lg ring-3 ring-white/80 flex-shrink-0"
+          />
+        </div>
       </header>
       <main className="flex-1 overflow-y-auto px-4 py-4 pb-24 space-y-5">
-        {/* Pet profile card */}
+        {/* Health summary card */}
         <div className="bg-white rounded-2xl shadow-card overflow-hidden">
-          <div className="h-28 bg-gradient-to-br from-sky-50 via-blue-50 to-violet-50 relative">
-            <img
-              src={pet.photo}
-              alt={pet.name}
-              className="absolute right-4 -bottom-8 w-28 h-28 rounded-2xl object-cover shadow-card-md ring-2 ring-white"
-            />
-          </div>
-          <div className="px-4 pb-4 pt-10">
-            <div className="flex items-start justify-between">
-              <div>
-                <h2 className="text-xl font-bold text-slate-900">{pet.name}</h2>
-                <p className="text-sm text-slate-500">{pet.breed}</p>
-              </div>
-              <div className="flex items-center gap-1.5 mt-1">
-                <SpeciesIcon size={14} className="text-slate-400" strokeWidth={2} />
-                <span className="text-xs text-slate-500 capitalize">{pet.species}</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 mt-3 pt-3 border-t border-slate-100 overflow-x-auto no-scrollbar">
+          <div className="px-4 py-4">
+            <div className="flex items-center gap-3 overflow-x-auto no-scrollbar">
               <div className="text-center flex-shrink-0">
                 <p className="text-lg font-bold text-slate-800">{pet.age}</p>
                 <p className="text-[11px] text-slate-500">years</p>
