@@ -225,9 +225,8 @@ export default function PetDashboard() {
               Take a photo and get AI-powered health insights for {pet.name}.
             </p>
           </div>
-          <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
+          <div className="flex items-center flex-shrink-0">
             <ChevronRight size={18} className="text-white/60" />
-            <span className="text-[10px] font-semibold text-white/60 uppercase tracking-wide">Start</span>
           </div>
         </button>
 
