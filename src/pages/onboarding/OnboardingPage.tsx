@@ -97,7 +97,7 @@ const SLIDES = [
         <line x1="7" y1="17" x2="13" y2="17" stroke="#1A3A8F" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
     ),
-    title: 'Keep every health\nmoment together',
+    title: 'Start with a photo',
     subtitle: 'Track diagnostics, therapies,\nvaccines and checkups in one place.',
   },
   {
