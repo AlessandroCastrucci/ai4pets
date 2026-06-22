@@ -68,7 +68,7 @@ function Illustration3() {
     <img
       src={slide3Img}
       alt="AI assistant with a golden dog and a grey cat"
-      style={{ width: '100%', maxWidth: 'none', height: '100%', objectFit: 'contain', objectPosition: 'top center', display: 'block' }}
+      style={{ width: '110%', maxWidth: 'none', height: '110%', objectFit: 'contain', objectPosition: 'top center', display: 'block' }}
       draggable={false}
     />
   );
