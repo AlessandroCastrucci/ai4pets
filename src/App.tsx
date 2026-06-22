@@ -57,9 +57,14 @@ function AuthenticatedApp() {
   const { currentScreen } = useApp();
   const showBottomNav = currentScreen === null;
 
+  const needsOwnScroll = currentScreen === 'pet-dashboard';
+
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col max-w-md mx-auto relative">
-      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: showBottomNav ? '72px' : '0' }}>
+    <div className="h-screen bg-slate-50 flex flex-col max-w-md mx-auto relative">
+      <div
+        className={`flex-1 min-h-0 ${needsOwnScroll ? 'overflow-hidden' : 'overflow-y-auto'}`}
+        style={{ paddingBottom: showBottomNav ? '72px' : '0' }}
+      >
         <AppScreen />
       </div>
       {showBottomNav && <BottomNav />}
