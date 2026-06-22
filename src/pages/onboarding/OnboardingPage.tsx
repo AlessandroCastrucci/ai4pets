@@ -181,8 +181,8 @@ export default function OnboardingPage({ onComplete }: Props) {
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
-          paddingTop: 8,
-          paddingBottom: 8,
+          paddingTop: 32,
+          paddingBottom: 4,
         }}
       >
         {slide === 0 ? (
@@ -245,7 +245,7 @@ export default function OnboardingPage({ onComplete }: Props) {
       </div>
 
       {/* CTA button */}
-      <div className="px-6 pb-12 mt-auto">
+      <div className="px-6 pb-12">
         {isLast ? (
           <button
             onClick={handleGetStarted}
