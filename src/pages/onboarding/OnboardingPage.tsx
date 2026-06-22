@@ -98,7 +98,7 @@ const SLIDES = [
       </svg>
     ),
     title: 'Start with a photo',
-    subtitle: 'Track diagnostics, therapies,\nvaccines and checkups in one place.',
+    subtitle: 'Upload a photo and get AI-powered insights about your pet\'s health.',
   },
   {
     Illustration: Illustration3,
