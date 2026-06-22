@@ -118,12 +118,12 @@ export default function AccountPage() {
           </SectionCard>
           <button
             onClick={logout}
-            className="w-full mt-3 bg-white rounded-2xl shadow-card px-4 py-3.5 flex items-center gap-3 hover:bg-red-50 active:bg-red-100 transition-colors"
+            className="w-full mt-3 bg-white rounded-2xl shadow-card px-4 py-3.5 flex items-center gap-3 hover:bg-slate-50 active:bg-slate-100 transition-colors"
           >
-            <div className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
-              <LogOut size={16} className="text-red-500" strokeWidth={2} />
+            <div className="w-8 h-8 rounded-xl bg-sky-50 flex items-center justify-center flex-shrink-0">
+              <LogOut size={16} className="text-sky-500" strokeWidth={2} />
             </div>
-            <span className="text-sm font-semibold text-red-500">Sign Out</span>
+            <span className="text-sm font-semibold text-slate-700">Sign Out</span>
           </button>
         </div>
 
