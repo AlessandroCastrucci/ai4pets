@@ -324,7 +324,7 @@ function StepIndicator({ step }: { step: Step }) {
 }
 
 export default function AIDiagnosticsPage() {
-  const { getSelectedPet, addDiagnosticResult, addDiagnosticFollowUp, addReminder, setActiveTab } = useApp();
+  const { getSelectedPet, addDiagnosticResult, addDiagnosticFollowUp, addReminder } = useApp();
   const pet = getSelectedPet();
 
   const [step, setStep] = useState<Step>(1);
@@ -362,6 +362,30 @@ export default function AIDiagnosticsPage() {
       if (next.has(s)) next.delete(s); else next.add(s);
       return next;
     });
+  }
+
+  function resetDiagnostic() {
+    setStep(1);
+    setSelectedArea(null);
+    setPhotoSimulated(false);
+    setPhotoPreviewUrl(null);
+    setPhotoSource(null);
+    setAnalyzing(false);
+    setAnalysisStep(0);
+    setTipsOpen(false);
+    setDescription('');
+    setDuration('');
+    setCheckedSymptoms(new Set());
+    setEating('');
+    setDrinking('');
+    setActivity('');
+    setResult(null);
+    setFollowUpOpen(false);
+    setFollowUpStatus(null);
+    setFollowUpReply('');
+    setFollowUpQuestion('');
+    setFollowUpQuestionReply('');
+    setFollowUpNewPhoto(false);
   }
 
   function handleFileSelect(file: File, source: 'camera' | 'gallery') {
@@ -861,11 +885,11 @@ export default function AIDiagnosticsPage() {
                   Start Follow-up
                 </button>
                 <button
-                  onClick={() => setActiveTab('assistant')}
+                  onClick={resetDiagnostic}
                   className="w-full text-sky-500 font-semibold text-sm py-2.5 rounded-2xl hover:bg-sky-50 transition-colors flex items-center justify-center gap-2"
                 >
                   <ArrowRight size={15} strokeWidth={2} />
-                  Ask AI Assistant
+                  Start New Analysis
                 </button>
               </div>
             )}
@@ -920,11 +944,11 @@ export default function AIDiagnosticsPage() {
                       The AI will use this alongside the original {areaLabel.toLowerCase()} diagnosis to track {pet.name}'s progression.
                     </p>
                     <button
-                      onClick={() => setActiveTab('assistant')}
+                      onClick={resetDiagnostic}
                       className="w-full text-sky-500 font-semibold text-sm py-2.5 rounded-xl hover:bg-sky-50 transition-colors flex items-center justify-center gap-2"
                     >
                       <ArrowRight size={15} strokeWidth={2} />
-                      Ask AI Assistant for full analysis
+                      Start New Analysis
                     </button>
                   </div>
                 )}
@@ -971,11 +995,11 @@ export default function AIDiagnosticsPage() {
                     </div>
 
                     <button
-                      onClick={() => setActiveTab('assistant')}
+                      onClick={resetDiagnostic}
                       className="w-full text-sky-500 font-semibold text-sm py-2.5 rounded-xl hover:bg-sky-50 transition-colors flex items-center justify-center gap-2"
                     >
                       <ArrowRight size={15} strokeWidth={2} />
-                      Ask AI Assistant
+                      Start New Analysis
                     </button>
                   </div>
                 )}

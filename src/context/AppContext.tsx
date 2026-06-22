@@ -41,9 +41,7 @@ interface AppContextType {
   navigateBack: () => void;
   setActiveTab: (tab: TabName) => void;
   switchPet: (petId: string) => void;
-  assistantInitPetId: string | null;
-  navigateToAssistant: (petId?: string) => void;
-  clearAssistantInitPet: () => void;
+  startDiagnosticsForPet: (petId: string) => void;
 
   // Data — read
   pets: Pet[];
@@ -88,7 +86,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [activeTab, setActiveTabState] = useState<TabName>('pets');
   const [currentScreen, setCurrentScreen] = useState<ScreenName>(null);
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null);
-  const [assistantInitPetId, setAssistantInitPetId] = useState<string | null>(null);
 
   const [pets, setPets] = useState<Pet[]>(PETS);
   const [reminders, setReminders] = useState<Reminder[]>(REMINDERS);
@@ -148,13 +145,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     } else if (currentScreen === 'account') {
       setCurrentScreen(null);
       setActiveTabState('more');
+    } else if (currentScreen === 'ai-diagnostics' && activeTab === 'diagnostics') {
+      setCurrentScreen(null);
     } else if (currentScreen !== null && currentScreen !== 'pet-dashboard') {
       setCurrentScreen('pet-dashboard');
     } else {
       setCurrentScreen(null);
       setSelectedPetId(null);
     }
-  }, [currentScreen]);
+  }, [currentScreen, activeTab]);
 
   const setActiveTab = useCallback((tab: TabName) => {
     setActiveTabState(tab);
@@ -166,15 +165,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setSelectedPetId(petId);
   }, []);
 
-  const navigateToAssistant = useCallback((petId?: string) => {
-    setActiveTabState('assistant');
-    setCurrentScreen(null);
-    setSelectedPetId(null);
-    if (petId) setAssistantInitPetId(petId);
-  }, []);
-
-  const clearAssistantInitPet = useCallback(() => {
-    setAssistantInitPetId(null);
+  const startDiagnosticsForPet = useCallback((petId: string) => {
+    setSelectedPetId(petId);
+    setCurrentScreen('ai-diagnostics');
   }, []);
 
   const addPet = useCallback((pet: Pet) => {
@@ -250,9 +243,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         navigateBack,
         setActiveTab,
         switchPet,
-        assistantInitPetId,
-        navigateToAssistant,
-        clearAssistantInitPet,
+        startDiagnosticsForPet,
         pets,
         reminders,
         vaccines,

@@ -136,7 +136,7 @@ export interface CalendarEvent {
   type: 'vaccine' | 'therapy' | 'checkup' | 'medication' | 'appointment';
 }
 
-export type TabName = 'pets' | 'reminders' | 'assistant' | 'calendar' | 'more';
+export type TabName = 'pets' | 'reminders' | 'diagnostics' | 'calendar' | 'more';
 export type ScreenName =
   | null
   | 'pet-dashboard'

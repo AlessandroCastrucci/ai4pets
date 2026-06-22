@@ -1,4 +1,4 @@
-import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock, Pencil, ClipboardList, Bot, ChevronRight } from 'lucide-react';
+import { Dog, Cat, Scan, Stethoscope, Utensils, Syringe, HeartPulse, Bell, Clock, Pencil, ClipboardList } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import ReminderCard from '../components/ReminderCard';
 import StatusBadge from '../components/StatusBadge';
@@ -6,22 +6,13 @@ import { useApp } from '../context/AppContext';
 
 const GRID_FEATURES = [
   {
-    id: 'health-history' as const,
-    label: 'Health History',
-    sublabel: 'Medical records & docs',
-    Icon: ClipboardList,
-    bg: 'bg-teal-50',
-    iconColor: 'text-teal-500',
-    border: 'border-teal-100',
-  },
-  {
     id: 'ai-diagnostics' as const,
     label: 'AI Diagnostics',
     sublabel: 'Photo-based analysis',
     Icon: Scan,
     bg: 'bg-sky-50',
     iconColor: 'text-sky-500',
-    border: 'border-sky-100',
+    border: 'border-sky-200',
   },
   {
     id: 'ai-checkup' as const,
@@ -31,6 +22,15 @@ const GRID_FEATURES = [
     bg: 'bg-emerald-50',
     iconColor: 'text-emerald-500',
     border: 'border-emerald-100',
+  },
+  {
+    id: 'health-history' as const,
+    label: 'Health History',
+    sublabel: 'Medical records & docs',
+    Icon: ClipboardList,
+    bg: 'bg-teal-50',
+    iconColor: 'text-teal-500',
+    border: 'border-teal-100',
   },
   {
     id: 'nutrition' as const,
@@ -76,7 +76,6 @@ export default function PetDashboard() {
     navigateToFeature,
     navigateToEditPet,
     navigateToHealthHistory,
-    navigateToAssistant,
     getPetReminders,
     getPetVaccines,
     getPetDiagnostics,
@@ -97,7 +96,7 @@ export default function PetDashboard() {
     ? 'Due Soon'
     : vaccines.length > 0
     ? 'Up to Date'
-    : '—';
+    : '\u2014';
 
   function handleFeatureClick(id: string) {
     if (id === 'health-history') {
@@ -207,8 +206,6 @@ export default function PetDashboard() {
                 )}
               </div>
             )}
-
-
           </div>
         </div>
 
@@ -231,11 +228,13 @@ export default function PetDashboard() {
         <section>
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1 mb-3">Health Features</p>
           <div className="grid grid-cols-2 gap-3">
-            {GRID_FEATURES.map((feature) => (
+            {GRID_FEATURES.map((feature, idx) => (
               <button
                 key={feature.id}
                 onClick={() => handleFeatureClick(feature.id)}
-                className={`bg-white rounded-2xl shadow-card p-4 flex flex-col gap-2 border ${feature.border} hover:shadow-card-md active:scale-[0.98] transition-all text-left`}
+                className={`bg-white rounded-2xl shadow-card p-4 flex flex-col gap-2 border ${feature.border} hover:shadow-card-md active:scale-[0.98] transition-all text-left ${
+                  idx === 0 ? 'ring-1 ring-sky-200' : ''
+                }`}
               >
                 <div className={`w-10 h-10 rounded-xl ${feature.bg} flex items-center justify-center`}>
                   <feature.Icon size={20} className={feature.iconColor} strokeWidth={2} />
@@ -247,23 +246,6 @@ export default function PetDashboard() {
               </button>
             ))}
           </div>
-        </section>
-
-        {/* AI Assistant CTA */}
-        <section>
-          <button
-            onClick={() => navigateToAssistant(pet.id)}
-            className="w-full bg-sky-500 rounded-2xl p-4 flex items-center gap-3 hover:bg-sky-600 active:scale-[0.99] transition-all shadow-card"
-          >
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
-              <Bot size={20} className="text-white" />
-            </div>
-            <div className="flex-1 text-left">
-              <p className="text-sm font-semibold text-white">Chat with AI Assistant</p>
-              <p className="text-xs text-white/70">Ask anything about {pet.name}'s health</p>
-            </div>
-            <ChevronRight size={16} className="text-white/70 flex-shrink-0" />
-          </button>
         </section>
 
         {/* Recent AI diagnostics */}

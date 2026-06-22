@@ -1,11 +1,11 @@
-import { Home, Bell, Bot, Calendar, MoreHorizontal } from 'lucide-react';
+import { Home, Bell, Scan, Calendar, MoreHorizontal } from 'lucide-react';
 import type { TabName } from '../types';
 import { useApp } from '../context/AppContext';
 
 const TABS: { id: TabName; label: string; Icon: typeof Home }[] = [
   { id: 'pets', label: 'My Pets', Icon: Home },
   { id: 'reminders', label: 'Reminders', Icon: Bell },
-  { id: 'assistant', label: 'AI Assistant', Icon: Bot },
+  { id: 'diagnostics', label: 'AI Diagnostics', Icon: Scan },
   { id: 'calendar', label: 'Calendar', Icon: Calendar },
   { id: 'more', label: 'More', Icon: MoreHorizontal },
 ];

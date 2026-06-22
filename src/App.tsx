@@ -11,7 +11,7 @@ const FORCE_SHOW_ONBOARDING = true;
 import MyPetsPage from './pages/MyPetsPage';
 import PetDashboard from './pages/PetDashboard';
 import RemindersPage from './pages/RemindersPage';
-import AIAssistantPage from './pages/AIAssistantPage';
+import DiagnosticsTabPage from './pages/DiagnosticsTabPage';
 import CalendarPage from './pages/CalendarPage';
 import MorePage from './pages/MorePage';
 import AddEditPetPage from './pages/AddEditPetPage';
@@ -45,7 +45,7 @@ function AppScreen() {
   switch (activeTab) {
     case 'pets': return <MyPetsPage />;
     case 'reminders': return <RemindersPage />;
-    case 'assistant': return <AIAssistantPage />;
+    case 'diagnostics': return <DiagnosticsTabPage />;
     case 'calendar': return <CalendarPage />;
     case 'more': return <MorePage />;
   }
