@@ -107,23 +107,23 @@ export default function AccountPage() {
           <SectionLabel>Session</SectionLabel>
           <SectionCard>
             <ActionRow
-              Icon={Trash2}
-              label="Delete Account"
-              sublabel="Permanently remove your account"
-              iconBg="bg-red-50"
-              iconColor="text-red-400"
-              destructive
-              onClick={() => {}}
+              Icon={LogOut}
+              label="Sign Out"
+              iconBg="bg-sky-50"
+              iconColor="text-sky-500"
+              onClick={logout}
             />
           </SectionCard>
+        </div>
+
+        {/* Delete Account — secondary destructive action */}
+        <div className="pt-4">
           <button
-            onClick={logout}
-            className="w-full mt-3 bg-white rounded-2xl shadow-card px-4 py-3.5 flex items-center gap-3 hover:bg-slate-50 active:bg-slate-100 transition-colors"
+            onClick={() => {}}
+            className="w-full flex items-center justify-center gap-2 py-3 text-red-400 hover:text-red-500 transition-colors"
           >
-            <div className="w-8 h-8 rounded-xl bg-sky-50 flex items-center justify-center flex-shrink-0">
-              <LogOut size={16} className="text-sky-500" strokeWidth={2} />
-            </div>
-            <span className="text-sm font-semibold text-slate-700">Sign Out</span>
+            <Trash2 size={14} strokeWidth={2} />
+            <span className="text-xs font-medium">Delete Account</span>
           </button>
         </div>
 
