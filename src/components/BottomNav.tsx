@@ -1,10 +1,10 @@
-import { Home, Clock, Scan, Calendar, MoreHorizontal } from 'lucide-react';
+import { Home, ClipboardCheck, Scan, Calendar, MoreHorizontal } from 'lucide-react';
 import type { TabName } from '../types';
 import { useApp } from '../context/AppContext';
 
 const LEFT_TABS: { id: TabName; label: string; Icon: typeof Home }[] = [
   { id: 'pets', label: 'My Pets', Icon: Home },
-  { id: 'history', label: 'History', Icon: Clock },
+  { id: 'history', label: 'History', Icon: ClipboardCheck },
 ];
 
 const RIGHT_TABS: { id: TabName; label: string; Icon: typeof Home }[] = [
