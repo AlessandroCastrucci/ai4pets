@@ -45,7 +45,6 @@ function Illustration1() {
       src={slide1Img}
       alt="Person sitting with a golden dog and a grey cat"
       className="w-full h-full object-contain object-center"
-      style={{ transform: 'scale(0.9)' }}
       draggable={false}
     />
   );
@@ -58,7 +57,7 @@ function Illustration2() {
       src={slide2Img}
       alt="Pet health timeline"
       className="w-full h-full object-contain object-center"
-      style={{ transform: 'scale(0.88)' }}
+      style={{ transform: 'scale(0.95)' }}
       draggable={false}
     />
   );
@@ -71,7 +70,7 @@ function Illustration3() {
       src={slide3Img}
       alt="AI assistant with a golden dog and a grey cat"
       className="w-full h-full object-contain object-center"
-      style={{ transform: 'scale(1.1)' }}
+      style={{ transform: 'scale(1.15)' }}
       draggable={false}
     />
   );
@@ -182,11 +181,13 @@ export default function OnboardingPage({ onComplete }: Props) {
           transform: visible ? 'translateY(0)' : 'translateY(12px)',
           transition: 'opacity 0.22s ease, transform 0.22s ease',
           width: '100%',
-          height: '38vh',
+          flex: '1 1 0%',
+          minHeight: 0,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
+          padding: '0 16px',
         }}
       >
         <Illustration />
