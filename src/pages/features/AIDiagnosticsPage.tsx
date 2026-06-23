@@ -7,79 +7,23 @@ import TopBar from '../../components/TopBar';
 import { useApp } from '../../context/AppContext';
 import type { BodyArea, UrgencyLevel, DiagnosticResult, DiagnosticFollowUp, Reminder } from '../../types';
 
+import skinFurIllustration from '../../assets/illustrations/ai-diagnostics/skin_fur_illustration.png';
+import eyesIllustration from '../../assets/illustrations/ai-diagnostics/eyes_illustration.png';
+import earsIllustration from '../../assets/illustrations/ai-diagnostics/ears_illustration.png';
+import pawsIllustration from '../../assets/illustrations/ai-diagnostics/paws_illustration.png';
+import teethMouthIllustration from '../../assets/illustrations/ai-diagnostics/teeth_mouth_illustration.png';
+
 /* ─── Mock SDK Config ─────────────────────────────────────────────────── */
 const SDK_QUESTIONNAIRE_ENABLED = true;
 
-/* ─── Custom illustrated SVG icons ─────────────────────────────────────── */
+/* ─── Body area illustration assets ───────────────────────────────────── */
 
-function IllustrationEye() {
-  return (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <ellipse cx="20" cy="20" rx="14" ry="8" fill="#e0f2fe" stroke="#38bdf8" strokeWidth="1.8"/>
-      <circle cx="20" cy="20" r="5" fill="#0ea5e9"/>
-      <circle cx="20" cy="20" r="2.5" fill="#0c4a6e"/>
-      <circle cx="22" cy="18" r="1.2" fill="white"/>
-      <path d="M6 20 Q20 8 34 20" stroke="#7dd3fc" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
-    </svg>
-  );
-}
-
-function IllustrationEar() {
-  return (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <path d="M12 8 C8 8 6 14 6 20 C6 28 10 34 16 34 C20 34 22 30 22 28 C22 26 20 24 20 22 C20 18 24 16 24 12 C24 8 20 6 16 6 C14.5 6 13 6.8 12 8Z" fill="#ede9fe" stroke="#8b5cf6" strokeWidth="1.8" strokeLinejoin="round"/>
-      <path d="M14 12 C12 14 12 18 14 22 C15 24 16 26 16 28" stroke="#a78bfa" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-    </svg>
-  );
-}
-
-function IllustrationSkinFur() {
-  return (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <ellipse cx="20" cy="22" rx="13" ry="11" fill="#ccfbf1" stroke="#14b8a6" strokeWidth="1.8"/>
-      <circle cx="14" cy="14" r="5" fill="#ccfbf1" stroke="#14b8a6" strokeWidth="1.8"/>
-      <circle cx="26" cy="14" r="5" fill="#ccfbf1" stroke="#14b8a6" strokeWidth="1.8"/>
-      <line x1="15" y1="18" x2="13" y2="22" stroke="#14b8a6" strokeWidth="1.2" strokeLinecap="round"/>
-      <line x1="20" y1="17" x2="20" y2="22" stroke="#14b8a6" strokeWidth="1.2" strokeLinecap="round"/>
-      <line x1="25" y1="18" x2="27" y2="22" stroke="#14b8a6" strokeWidth="1.2" strokeLinecap="round"/>
-      <circle cx="20" cy="26" r="1.5" fill="#f87171"/>
-      <circle cx="24" cy="24" r="1" fill="#fca5a5"/>
-      <circle cx="16" cy="25" r="1" fill="#fca5a5"/>
-    </svg>
-  );
-}
-
-function IllustrationPaws() {
-  return (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <ellipse cx="20" cy="26" rx="8" ry="7" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1.8"/>
-      <ellipse cx="12" cy="18" rx="3.5" ry="3" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1.6"/>
-      <ellipse cx="28" cy="18" rx="3.5" ry="3" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1.6"/>
-      <ellipse cx="16" cy="14" rx="3.2" ry="2.8" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1.6"/>
-      <ellipse cx="24" cy="14" rx="3.2" ry="2.8" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1.6"/>
-    </svg>
-  );
-}
-
-function IllustrationMouth() {
-  return (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <path d="M8 18 Q8 10 20 10 Q32 10 32 18 L32 24 Q32 34 20 34 Q8 34 8 24 Z" fill="#d1fae5" stroke="#10b981" strokeWidth="1.8"/>
-      <rect x="12" y="18" width="4" height="5" rx="1.5" fill="white" stroke="#10b981" strokeWidth="1"/>
-      <rect x="18" y="17" width="4" height="6" rx="1.5" fill="white" stroke="#10b981" strokeWidth="1"/>
-      <rect x="24" y="18" width="4" height="5" rx="1.5" fill="white" stroke="#10b981" strokeWidth="1"/>
-      <ellipse cx="20" cy="29" rx="6" ry="3.5" fill="#fda4af"/>
-      <line x1="20" y1="25.5" x2="20" y2="32" stroke="#fb7185" strokeWidth="1" strokeLinecap="round"/>
-    </svg>
-  );
-}
-
-const AREA_ILLUSTRATIONS: Partial<Record<BodyArea, React.ElementType>> = {
-  'skin-fur': IllustrationSkinFur,
-  eyes: IllustrationEye,
-  ears: IllustrationEar,
-  paws: IllustrationPaws,
-  'mouth-teeth': IllustrationMouth,
+const AREA_ILLUSTRATIONS: Partial<Record<BodyArea, string>> = {
+  'skin-fur': skinFurIllustration,
+  eyes: eyesIllustration,
+  ears: earsIllustration,
+  paws: pawsIllustration,
+  'mouth-teeth': teethMouthIllustration,
 };
 
 interface AreaDef {
@@ -375,15 +319,19 @@ export default function AIDiagnosticsPage() {
             <p className="text-xs text-slate-400 px-1 -mt-2">Select the body area you want to scan</p>
             <div className="grid grid-cols-3 gap-2.5">
               {areas.map((area) => {
-                const Illustration = AREA_ILLUSTRATIONS[area.id];
+                const illustrationSrc = AREA_ILLUSTRATIONS[area.id];
                 return (
                   <button
                     key={area.id}
                     onClick={() => { setSelectedArea(area.id); setStep('photo'); }}
-                    className="bg-white rounded-2xl shadow-card p-3 flex flex-col items-center gap-2 hover:shadow-card-md active:scale-[0.97] transition-all border border-transparent hover:border-sky-200"
+                    className="bg-white rounded-2xl shadow-card p-3 flex flex-col items-center gap-1.5 hover:shadow-card-md active:scale-[0.97] transition-all border border-transparent hover:border-sky-200"
                   >
-                    <div className="w-14 h-14">
-                      {Illustration ? <Illustration /> : <div className="w-full h-full rounded-full bg-slate-100" />}
+                    <div className="w-16 h-16 flex items-center justify-center">
+                      {illustrationSrc ? (
+                        <img src={illustrationSrc} alt={area.label} className="w-full h-full object-contain" />
+                      ) : (
+                        <div className="w-full h-full rounded-full bg-slate-100" />
+                      )}
                     </div>
                     <p className="text-[11px] font-semibold text-slate-700 text-center leading-tight">{area.label}</p>
                     <p className="text-[10px] text-slate-400 text-center leading-tight">{area.sublabel}</p>
