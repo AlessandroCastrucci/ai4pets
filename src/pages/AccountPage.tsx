@@ -114,13 +114,9 @@ export default function AccountPage() {
               onClick={logout}
             />
           </SectionCard>
-        </div>
-
-        {/* Delete Account — secondary destructive action */}
-        <div className="pt-4">
           <button
             onClick={() => {}}
-            className="w-full flex items-center justify-center gap-2 py-3 text-red-400 hover:text-red-500 transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-3 mt-3 text-red-400 hover:text-red-500 transition-colors"
           >
             <Trash2 size={14} strokeWidth={2} />
             <span className="text-xs font-medium">Delete Account</span>
