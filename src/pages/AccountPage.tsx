@@ -1,4 +1,4 @@
-import { ChevronRight, Trash2, LogOut, Pencil } from 'lucide-react';
+import { ChevronRight, LogOut, Pencil } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import { useAuth } from '../context/AuthContext';
 import { useApp } from '../context/AppContext';
@@ -29,7 +29,7 @@ function ActionRow({
   destructive = false,
   onClick,
 }: {
-  Icon: typeof Trash2;
+  Icon: typeof LogOut;
   label: string;
   sublabel?: string;
   iconBg?: string;
@@ -114,13 +114,6 @@ export default function AccountPage() {
               onClick={logout}
             />
           </SectionCard>
-          <button
-            onClick={() => {}}
-            className="w-full flex items-center justify-center gap-1.5 pt-4 pb-1 text-red-400 hover:text-red-500 transition-colors"
-          >
-            <Trash2 size={12} strokeWidth={2} />
-            <span className="text-[11px] font-medium">Delete Account</span>
-          </button>
         </div>
 
       </main>

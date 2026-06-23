@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import { Camera } from 'lucide-react';
+import { Camera, Trash2 } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import { useAuth } from '../context/AuthContext';
 import { useApp } from '../context/AppContext';
 
 export default function EditProfilePage() {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, logout } = useAuth();
   const { navigateBack } = useApp();
 
   const [name, setName] = useState(user?.name ?? '');
   const [email, setEmail] = useState(user?.email ?? '');
   const [error, setError] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const initials = name
     ? name.split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2)
@@ -27,6 +28,11 @@ export default function EditProfilePage() {
     }
     updateUser(name.trim(), email.trim());
     navigateBack();
+  }
+
+  function handleDeleteAccount() {
+    logout();
+    setShowDeleteModal(false);
   }
 
   return (
@@ -99,7 +105,46 @@ export default function EditProfilePage() {
           </button>
         </div>
 
+        {/* Account Removal */}
+        <div className="mt-10 pt-6 border-t border-slate-200">
+          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide px-1 mb-3">Account Removal</p>
+          <button
+            onClick={() => setShowDeleteModal(true)}
+            className="flex items-center gap-2 px-1 py-2 text-red-500 hover:text-red-600 transition-colors"
+          >
+            <Trash2 size={14} strokeWidth={2} />
+            <span className="text-sm font-medium">Delete Account</span>
+          </button>
+        </div>
+
       </main>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center px-6">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowDeleteModal(false)} />
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
+            <h3 className="text-lg font-bold text-slate-900">Delete your account?</h3>
+            <p className="text-sm text-slate-500 mt-2 leading-relaxed">
+              This will permanently remove your account and all associated pet health data.
+            </p>
+            <div className="mt-6 space-y-2.5">
+              <button
+                onClick={handleDeleteAccount}
+                className="w-full bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold text-sm rounded-xl py-3 transition-colors"
+              >
+                Delete Account
+              </button>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="w-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-semibold text-sm rounded-xl py-3 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
