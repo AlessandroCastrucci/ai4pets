@@ -155,6 +155,16 @@ export type ScreenName =
 
 export type ParasiteTreatmentFrequency = 'Every month' | 'Every 3 months' | 'Every 6 months' | 'Custom';
 
+export interface HealthEvent {
+  id: string;
+  petId: string;
+  title: string;
+  type: 'therapy' | 'vaccine' | 'medication' | 'checkup' | 'appointment' | 'parasite';
+  completedDate: string;
+  scheduledDatetime: string;
+  notes?: string;
+}
+
 export interface ParasiteTreatment {
   productName: string;
   lastDate: string;

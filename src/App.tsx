@@ -56,7 +56,7 @@ function AppScreen() {
 }
 
 function AuthenticatedApp() {
-  const { currentScreen } = useApp();
+  const { currentScreen, toast } = useApp();
   const showBottomNav = currentScreen === null;
 
   const needsOwnScroll = currentScreen === 'pet-dashboard';
@@ -70,6 +70,15 @@ function AuthenticatedApp() {
         <AppScreen />
       </div>
       {showBottomNav && <BottomNav />}
+
+      {/* Toast */}
+      {toast && (
+        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[200] animate-fade-in-up">
+          <div className="bg-slate-800 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg">
+            {toast}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Syringe, Pill, Stethoscope, Calendar, ShieldCheck } from 'lucide-react';
 import type { Reminder, Pet } from '../types';
 import { useApp } from '../context/AppContext';
@@ -15,6 +16,7 @@ interface ReminderCardProps {
   reminder: Reminder;
   pet?: Pet;
   showPet?: boolean;
+  onCompleted?: () => void;
 }
 
 function formatDateTime(datetime: string): { date: string; time: string; isToday: boolean } {
@@ -32,13 +34,25 @@ function formatDateTime(datetime: string): { date: string; time: string; isToday
   return { date, time, isToday };
 }
 
-export default function ReminderCard({ reminder, pet, showPet = false }: ReminderCardProps) {
-  const { toggleReminderDone } = useApp();
+export default function ReminderCard({ reminder, pet, showPet = false, onCompleted }: ReminderCardProps) {
+  const { completeReminder } = useApp();
   const config = TYPE_CONFIG[reminder.type];
   const { date, time, isToday } = formatDateTime(reminder.datetime);
+  const [completing, setCompleting] = useState(false);
+
+  function handleComplete() {
+    if (reminder.done || completing) return;
+    setCompleting(true);
+    setTimeout(() => {
+      completeReminder(reminder.id);
+      onCompleted?.();
+    }, 400);
+  }
 
   return (
-    <div className={`bg-white rounded-2xl shadow-card p-4 flex items-start gap-3 transition-opacity ${reminder.done ? 'opacity-50' : ''}`}>
+    <div className={`bg-white rounded-2xl shadow-card p-4 flex items-start gap-3 transition-all duration-300 ${
+      completing ? 'opacity-0 scale-95' : reminder.done ? 'opacity-50' : ''
+    }`}>
       <div className={`w-10 h-10 rounded-xl ${config.bg} flex items-center justify-center flex-shrink-0`}>
         <config.Icon size={18} className={config.color} strokeWidth={2} />
       </div>
@@ -54,15 +68,15 @@ export default function ReminderCard({ reminder, pet, showPet = false }: Reminde
             )}
           </div>
           <button
-            onClick={() => toggleReminderDone(reminder.id)}
-            className={`flex-shrink-0 w-6 h-6 rounded-full border-2 transition-colors ${
-              reminder.done
-                ? 'bg-emerald-500 border-emerald-500'
+            onClick={handleComplete}
+            className={`flex-shrink-0 w-6 h-6 rounded-full border-2 transition-all duration-200 ${
+              completing || reminder.done
+                ? 'bg-emerald-500 border-emerald-500 scale-110'
                 : 'border-slate-300 hover:border-emerald-400'
             } flex items-center justify-center`}
-            aria-label={reminder.done ? 'Mark as pending' : 'Mark as done'}
+            aria-label={reminder.done ? 'Completed' : 'Mark as done'}
           >
-            {reminder.done && (
+            {(completing || reminder.done) && (
               <svg viewBox="0 0 12 12" className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <polyline points="1,6 4.5,9.5 11,2" />
               </svg>

@@ -11,6 +11,7 @@ import type {
   MonthlyCheckup,
   CalendarEvent,
   ParasiteProtectionPlan,
+  HealthEvent,
   TabName,
   ScreenName,
 } from '../types';
@@ -59,6 +60,7 @@ interface AppContextType {
   calendarEvents: CalendarEvent[];
   petDocuments: PetDocument[];
   parasiteProtectionPlans: ParasiteProtectionPlan[];
+  healthEvents: HealthEvent[];
 
   // Data — write
   addPet: (pet: Pet) => void;
@@ -77,6 +79,7 @@ interface AppContextType {
   addMonthlyCheckup: (checkup: MonthlyCheckup) => void;
   updateNutritionPlan: (plan: NutritionPlan) => void;
   toggleReminderDone: (id: string) => void;
+  completeReminder: (id: string) => void;
   addPetDocument: (doc: PetDocument) => void;
   updateParasiteProtectionPlan: (plan: ParasiteProtectionPlan) => void;
 
@@ -92,6 +95,11 @@ interface AppContextType {
   getPetCheckups: (petId: string) => MonthlyCheckup[];
   getPetDocuments: (petId: string) => PetDocument[];
   getPetParasiteProtection: (petId: string) => ParasiteProtectionPlan | undefined;
+  getPetHealthEvents: (petId: string) => HealthEvent[];
+
+  // Toast
+  toast: string | null;
+  showToast: (message: string) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -113,6 +121,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [calendarEvents] = useState<CalendarEvent[]>(CALENDAR_EVENTS);
   const [petDocuments, setPetDocuments] = useState<PetDocument[]>(PET_DOCUMENTS);
   const [parasiteProtectionPlans, setParasiteProtectionPlans] = useState<ParasiteProtectionPlan[]>(PARASITE_PROTECTION_PLANS);
+  const [healthEvents, setHealthEvents] = useState<HealthEvent[]>([]);
+  const [toast, setToast] = useState<string | null>(null);
 
   const navigateToPet = useCallback((petId: string) => {
     setSelectedPetId(petId);
@@ -265,6 +275,32 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
   }, []);
 
+  const completeReminder = useCallback((id: string) => {
+    setReminders((prev) => {
+      const reminder = prev.find((r) => r.id === id);
+      if (reminder && !reminder.done) {
+        const event: HealthEvent = {
+          id: `he-${Date.now()}-${id}`,
+          petId: reminder.petId,
+          title: reminder.title,
+          type: reminder.type,
+          completedDate: '2026-06-17',
+          scheduledDatetime: reminder.datetime,
+          notes: reminder.notes,
+        };
+        setHealthEvents((events) => [event, ...events]);
+        setTimeout(() => setToast('Saved to Health History'), 400);
+        setTimeout(() => setToast(null), 3000);
+      }
+      return prev.map((r) => (r.id === id ? { ...r, done: true } : r));
+    });
+  }, []);
+
+  const showToast = useCallback((message: string) => {
+    setToast(message);
+    setTimeout(() => setToast(null), 2500);
+  }, []);
+
   const addPetDocument = useCallback((doc: PetDocument) => {
     setPetDocuments((prev) => [doc, ...prev]);
   }, []);
@@ -288,6 +324,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const getPetCheckups = useCallback((petId: string) => monthlyCheckups.filter((c) => c.petId === petId), [monthlyCheckups]);
   const getPetDocuments = useCallback((petId: string) => petDocuments.filter((d) => d.petId === petId), [petDocuments]);
   const getPetParasiteProtection = useCallback((petId: string) => parasiteProtectionPlans.find((p) => p.petId === petId), [parasiteProtectionPlans]);
+  const getPetHealthEvents = useCallback((petId: string) => healthEvents.filter((e) => e.petId === petId), [healthEvents]);
 
   return (
     <AppContext.Provider
@@ -319,6 +356,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         calendarEvents,
         petDocuments,
         parasiteProtectionPlans,
+        healthEvents,
         addPet,
         updatePet,
         deletePet,
@@ -335,6 +373,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         addMonthlyCheckup,
         updateNutritionPlan,
         toggleReminderDone,
+        completeReminder,
         addPetDocument,
         updateParasiteProtectionPlan,
         getPet,
@@ -348,6 +387,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         getPetCheckups,
         getPetDocuments,
         getPetParasiteProtection,
+        getPetHealthEvents,
+        toast,
+        showToast,
       }}
     >
       {children}

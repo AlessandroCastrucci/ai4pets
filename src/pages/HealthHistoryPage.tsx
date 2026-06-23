@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Scan } from 'lucide-react';
+import { Scan, CheckCircle, Syringe, Pill, Stethoscope, ShieldCheck } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import StatusBadge from '../components/StatusBadge';
 import { useApp } from '../context/AppContext';
-import type { BodyArea } from '../types';
+import type { BodyArea, HealthEvent, DiagnosticResult } from '../types';
 
 const BODY_AREA_LABELS: Record<BodyArea, string> = {
   'skin-fur': 'Skin & Fur',
@@ -17,16 +17,35 @@ const BODY_AREA_LABELS: Record<BodyArea, string> = {
   other: 'General Scan',
 };
 
+const EVENT_TYPE_CONFIG: Record<string, { Icon: typeof Pill; color: string; bg: string; label: string }> = {
+  therapy: { Icon: Pill, color: 'text-violet-500', bg: 'bg-violet-50', label: 'Therapy Completed' },
+  vaccine: { Icon: Syringe, color: 'text-sky-500', bg: 'bg-sky-50', label: 'Vaccine Completed' },
+  medication: { Icon: Pill, color: 'text-emerald-500', bg: 'bg-emerald-50', label: 'Medication Completed' },
+  checkup: { Icon: Stethoscope, color: 'text-blue-500', bg: 'bg-blue-50', label: 'Checkup Completed' },
+  parasite: { Icon: ShieldCheck, color: 'text-lime-600', bg: 'bg-lime-50', label: 'Parasite Protection Completed' },
+};
+
 function fmtDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+function fmtTime(iso: string): string {
+  return new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+}
+
+type HistoryItem =
+  | { kind: 'diagnostic'; date: string; data: DiagnosticResult }
+  | { kind: 'event'; date: string; data: HealthEvent };
+
 export default function HealthHistoryPage() {
-  const { pets, diagnosticResults, getPet, navigateToDiagnosticDetail } = useApp();
+  const { pets, diagnosticResults, healthEvents, getPet, navigateToDiagnosticDetail } = useApp();
   const [petFilter, setPetFilter] = useState<string>('all');
 
-  const filtered = diagnosticResults
-    .filter((d) => petFilter === 'all' || d.petId === petFilter)
+  const items: HistoryItem[] = [
+    ...diagnosticResults.map((d): HistoryItem => ({ kind: 'diagnostic', date: d.date, data: d })),
+    ...healthEvents.map((e): HistoryItem => ({ kind: 'event', date: e.completedDate, data: e })),
+  ]
+    .filter((item) => petFilter === 'all' || item.data.petId === petFilter)
     .sort((a, b) => b.date.localeCompare(a.date));
 
   return (
@@ -62,48 +81,89 @@ export default function HealthHistoryPage() {
         </div>
 
         {/* Results feed */}
-        {filtered.length === 0 ? (
+        {items.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-slate-400">
             <Scan size={32} strokeWidth={1.5} className="mb-2" />
-            <p className="text-sm">No diagnostic results yet</p>
-            <p className="text-xs mt-1">Run an AI Diagnostic to see history here</p>
+            <p className="text-sm">No health history yet</p>
+            <p className="text-xs mt-1">Complete reminders or run diagnostics to build history</p>
           </div>
         ) : (
           <div className="space-y-3">
-            {filtered.map((result) => {
-              const pet = getPet(result.petId);
-              return (
-                <button
-                  key={result.id}
-                  onClick={() => navigateToDiagnosticDetail(result.id)}
-                  className="w-full bg-white rounded-2xl shadow-card p-4 flex items-start gap-3 text-left hover:shadow-card-md transition-shadow"
-                >
-                  {/* Pet photo */}
-                  {pet && (
-                    <img
-                      src={pet.photo}
-                      alt={pet.name}
-                      className="w-11 h-11 rounded-full object-cover flex-shrink-0"
-                    />
-                  )}
+            {items.map((item) => {
+              if (item.kind === 'diagnostic') {
+                const result = item.data;
+                const pet = getPet(result.petId);
+                return (
+                  <button
+                    key={`d-${result.id}`}
+                    onClick={() => navigateToDiagnosticDetail(result.id)}
+                    className="w-full bg-white rounded-2xl shadow-card p-4 flex items-start gap-3 text-left hover:shadow-card-md transition-shadow"
+                  >
+                    {pet && (
+                      <img
+                        src={pet.photo}
+                        alt={pet.name}
+                        className="w-11 h-11 rounded-full object-cover flex-shrink-0"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-sm font-bold text-slate-800">{pet?.name}</p>
+                        <span className="text-[11px] text-slate-400 flex-shrink-0">{fmtDate(result.date)}</span>
+                      </div>
+                      <p className="text-xs text-slate-500 mt-0.5">AI Diagnostic &middot; {BODY_AREA_LABELS[result.bodyArea]}</p>
+                      <p className="text-sm font-medium text-slate-700 mt-1 truncate">{result.possibleIssue}</p>
+                      <div className="mt-1.5">
+                        <StatusBadge
+                          label={result.urgency === 'low' ? 'Low' : result.urgency === 'medium' ? 'Medium' : 'High'}
+                          variant="urgency"
+                          urgency={result.urgency}
+                        />
+                      </div>
+                    </div>
+                  </button>
+                );
+              }
 
-                  {/* Content */}
+              const event = item.data;
+              const pet = getPet(event.petId);
+              const typeConfig = EVENT_TYPE_CONFIG[event.type] ?? EVENT_TYPE_CONFIG.checkup;
+              return (
+                <div
+                  key={`e-${event.id}`}
+                  className="w-full bg-white rounded-2xl shadow-card p-4 flex items-start gap-3"
+                >
+                  <div className={`w-11 h-11 rounded-xl ${typeConfig.bg} flex items-center justify-center flex-shrink-0`}>
+                    <typeConfig.Icon size={20} className={typeConfig.color} strokeWidth={2} />
+                  </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-bold text-slate-800">{pet?.name}</p>
-                      <span className="text-[11px] text-slate-400 flex-shrink-0">{fmtDate(result.date)}</span>
+                      <p className="text-sm font-bold text-slate-800">{event.title}</p>
+                      <span className="text-[11px] text-slate-400 flex-shrink-0">{fmtDate(event.completedDate)}</span>
                     </div>
-                    <p className="text-xs text-slate-500 mt-0.5">AI Diagnostic &middot; {BODY_AREA_LABELS[result.bodyArea]}</p>
-                    <p className="text-sm font-medium text-slate-700 mt-1 truncate">{result.possibleIssue}</p>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      {pet && (
+                        <>
+                          <img src={pet.photo} alt={pet.name} className="w-4 h-4 rounded-full object-cover" />
+                          <span className="text-xs text-slate-500">{pet.name}</span>
+                          <span className="text-slate-300 text-xs">&middot;</span>
+                        </>
+                      )}
+                      <span className="text-xs text-slate-400">{fmtTime(event.scheduledDatetime)}</span>
+                      <span className="text-slate-300 text-xs">&middot;</span>
+                      <span className="text-xs text-slate-400">{typeConfig.label.replace(' Completed', '')}</span>
+                    </div>
+                    {event.notes && (
+                      <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">{event.notes}</p>
+                    )}
                     <div className="mt-1.5">
-                      <StatusBadge
-                        label={result.urgency === 'low' ? 'Low' : result.urgency === 'medium' ? 'Medium' : 'High'}
-                        variant="urgency"
-                        urgency={result.urgency}
-                      />
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                        <CheckCircle size={10} strokeWidth={2.5} />
+                        Completed
+                      </span>
                     </div>
                   </div>
-                </button>
+                </div>
               );
             })}
           </div>
