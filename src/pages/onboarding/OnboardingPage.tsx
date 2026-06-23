@@ -44,7 +44,8 @@ function Illustration1() {
     <img
       src={slide1Img}
       alt="Person sitting with a golden dog and a grey cat"
-      className="w-full h-full object-contain"
+      className="w-full h-full object-contain object-center"
+      style={{ transform: 'scale(0.9)' }}
       draggable={false}
     />
   );
@@ -53,14 +54,13 @@ function Illustration1() {
 // ─── Illustration 2 — Health timeline / record cards ─────────────────────────
 function Illustration2() {
   return (
-    <div style={{ width: '100%', height: '100%', paddingTop: '10%' }}>
-      <img
-        src={slide2Img}
-        alt="Pet health timeline"
-        style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center center', display: 'block' }}
-        draggable={false}
-      />
-    </div>
+    <img
+      src={slide2Img}
+      alt="Pet health timeline"
+      className="w-full h-full object-contain object-center"
+      style={{ transform: 'scale(0.88)' }}
+      draggable={false}
+    />
   );
 }
 
@@ -70,7 +70,8 @@ function Illustration3() {
     <img
       src={slide3Img}
       alt="AI assistant with a golden dog and a grey cat"
-      style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'top center', display: 'block' }}
+      className="w-full h-full object-contain object-center"
+      style={{ transform: 'scale(1.1)' }}
       draggable={false}
     />
   );
@@ -181,30 +182,21 @@ export default function OnboardingPage({ onComplete }: Props) {
           transform: visible ? 'translateY(0)' : 'translateY(12px)',
           transition: 'opacity 0.22s ease, transform 0.22s ease',
           width: '100%',
-          height: 'calc(100vh - 280px)',
+          height: '38vh',
           display: 'flex',
-          alignItems: 'flex-start',
+          alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
         }}
       >
-        {slide === 0 ? (
-          <img
-            src={slide1Img}
-            alt="Person sitting with a golden dog and a grey cat"
-            style={{ width: '100%', maxWidth: 'none', height: '100%', objectFit: 'cover', objectPosition: 'center bottom', display: 'block' }}
-            draggable={false}
-          />
-        ) : (
-          <Illustration />
-        )}
+        <Illustration />
       </div>
 
       {/* Text block */}
       <div
         className="px-8 pb-2 text-center"
         style={{
-          paddingTop: slide === 0 ? 8 : 16,
+          paddingTop: 16,
           opacity: visible ? 1 : 0,
           transform: visible ? 'translateY(0)' : 'translateY(10px)',
           transition: 'opacity 0.28s ease 0.06s, transform 0.28s ease 0.06s',
