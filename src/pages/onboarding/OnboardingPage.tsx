@@ -156,8 +156,8 @@ export default function OnboardingPage({ onComplete }: Props) {
           src={illustration.src}
           alt={illustration.alt}
           style={{
-            width: '100%',
-            height: '100%',
+            width: '110%',
+            height: '110%',
             objectFit: 'contain',
             objectPosition: 'center center',
           }}
