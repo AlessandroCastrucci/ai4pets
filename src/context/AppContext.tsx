@@ -33,11 +33,13 @@ interface AppContextType {
   activeTab: TabName;
   currentScreen: ScreenName;
   selectedPetId: string | null;
+  selectedDiagnosticId: string | null;
   navigateToPet: (petId: string) => void;
-  navigateToFeature: (screen: Exclude<ScreenName, null | 'pet-dashboard' | 'add-pet' | 'edit-pet' | 'pet-health-history'>) => void;
+  navigateToFeature: (screen: Exclude<ScreenName, null | 'pet-dashboard' | 'add-pet' | 'edit-pet' | 'pet-health-history' | 'diagnostic-detail'>) => void;
   navigateToAddPet: () => void;
   navigateToEditPet: () => void;
   navigateToHealthHistory: () => void;
+  navigateToDiagnosticDetail: (diagnosticId: string) => void;
   navigateToAccount: () => void;
   navigateToEditProfile: () => void;
   navigateBack: () => void;
@@ -98,6 +100,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [activeTab, setActiveTabState] = useState<TabName>('pets');
   const [currentScreen, setCurrentScreen] = useState<ScreenName>(null);
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null);
+  const [selectedDiagnosticId, setSelectedDiagnosticId] = useState<string | null>(null);
 
   const [pets, setPets] = useState<Pet[]>(PETS);
   const [reminders, setReminders] = useState<Reminder[]>(REMINDERS);
@@ -117,7 +120,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const navigateToFeature = useCallback(
-    (screen: Exclude<ScreenName, null | 'pet-dashboard' | 'add-pet' | 'edit-pet' | 'pet-health-history'>) => {
+    (screen: Exclude<ScreenName, null | 'pet-dashboard' | 'add-pet' | 'edit-pet' | 'pet-health-history' | 'diagnostic-detail'>) => {
       setCurrentScreen(screen);
     },
     [],
@@ -134,6 +137,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const navigateToHealthHistory = useCallback(() => {
     setCurrentScreen('pet-health-history');
+  }, []);
+
+  const navigateToDiagnosticDetail = useCallback((diagnosticId: string) => {
+    setSelectedDiagnosticId(diagnosticId);
+    setCurrentScreen('diagnostic-detail');
   }, []);
 
   const navigateToAccount = useCallback(() => {
@@ -153,6 +161,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setCurrentScreen('pet-dashboard');
     } else if (currentScreen === 'pet-health-history') {
       setCurrentScreen('pet-dashboard');
+    } else if (currentScreen === 'diagnostic-detail') {
+      setCurrentScreen(null);
+      setSelectedDiagnosticId(null);
+      setActiveTabState('history');
     } else if (currentScreen === 'edit-profile') {
       setCurrentScreen('account');
     } else if (currentScreen === 'account') {
@@ -283,11 +295,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
         activeTab,
         currentScreen,
         selectedPetId,
+        selectedDiagnosticId,
         navigateToPet,
         navigateToFeature,
         navigateToAddPet,
         navigateToEditPet,
         navigateToHealthHistory,
+        navigateToDiagnosticDetail,
         navigateToAccount,
         navigateToEditProfile,
         navigateBack,

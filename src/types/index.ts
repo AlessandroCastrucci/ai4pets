@@ -136,7 +136,7 @@ export interface CalendarEvent {
   type: 'vaccine' | 'therapy' | 'checkup' | 'medication' | 'appointment' | 'parasite';
 }
 
-export type TabName = 'pets' | 'reminders' | 'diagnostics' | 'calendar' | 'more';
+export type TabName = 'pets' | 'history' | 'diagnostics' | 'calendar' | 'more';
 export type ScreenName =
   | null
   | 'pet-dashboard'
@@ -150,7 +150,8 @@ export type ScreenName =
   | 'therapies'
   | 'parasite-protection'
   | 'account'
-  | 'edit-profile';
+  | 'edit-profile'
+  | 'diagnostic-detail';
 
 export type ParasiteTreatmentFrequency = 'Every month' | 'Every 3 months' | 'Every 6 months' | 'Custom';
 

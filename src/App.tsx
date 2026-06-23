@@ -10,7 +10,8 @@ import BottomNav from './components/BottomNav';
 const FORCE_SHOW_ONBOARDING = true;
 import MyPetsPage from './pages/MyPetsPage';
 import PetDashboard from './pages/PetDashboard';
-import RemindersPage from './pages/RemindersPage';
+import HealthHistoryPage from './pages/HealthHistoryPage';
+import DiagnosticDetailPage from './pages/DiagnosticDetailPage';
 import DiagnosticsTabPage from './pages/DiagnosticsTabPage';
 import CalendarPage from './pages/CalendarPage';
 import MorePage from './pages/MorePage';
@@ -34,6 +35,7 @@ function AppScreen() {
   if (currentScreen === 'add-pet') return <AddEditPetPage />;
   if (currentScreen === 'edit-pet') return <AddEditPetPage />;
   if (currentScreen === 'pet-health-history') return <PetHealthHistoryPage />;
+  if (currentScreen === 'diagnostic-detail') return <DiagnosticDetailPage />;
   if (currentScreen === 'ai-diagnostics') return <AIDiagnosticsPage />;
   if (currentScreen === 'ai-checkup') return <AICheckupPage />;
   if (currentScreen === 'nutrition') return <NutritionPage />;
@@ -46,7 +48,7 @@ function AppScreen() {
 
   switch (activeTab) {
     case 'pets': return <MyPetsPage />;
-    case 'reminders': return <RemindersPage />;
+    case 'history': return <HealthHistoryPage />;
     case 'diagnostics': return <DiagnosticsTabPage />;
     case 'calendar': return <CalendarPage />;
     case 'more': return <MorePage />;
