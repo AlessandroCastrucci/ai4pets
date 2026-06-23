@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Camera, Trash2, Lock, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { Trash2, Lock, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import { useAuth } from '../context/AuthContext';
 import { useApp } from '../context/AppContext';
@@ -20,10 +20,6 @@ export default function EditProfilePage() {
   const [passwordSuccess, setPasswordSuccess] = useState(false);
   const [showCurrentPw, setShowCurrentPw] = useState(false);
   const [showNewPw, setShowNewPw] = useState(false);
-
-  const initials = name
-    ? name.split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2)
-    : 'U';
 
   function handleSave() {
     if (name.trim().length < 2) {
@@ -75,22 +71,7 @@ export default function EditProfilePage() {
     <div className="flex flex-col min-h-full bg-slate-50">
       <TopBar title="Edit Profile" showBack />
 
-      <main className="flex-1 px-4 pb-10">
-
-        {/* Avatar placeholder */}
-        <div className="flex flex-col items-center pt-8 pb-6">
-          <div className="relative">
-            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-3xl leading-none">{initials}</span>
-            </div>
-            <div className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center">
-              <Camera size={14} className="text-slate-500" strokeWidth={2} />
-            </div>
-          </div>
-          <button className="mt-2 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors">
-            Change Photo
-          </button>
-        </div>
+      <main className="flex-1 px-4 pt-6 pb-10">
 
         {/* Fields */}
         <div className="space-y-4">
@@ -147,9 +128,9 @@ export default function EditProfilePage() {
           </button>
         </div>
 
-        {/* Account Removal */}
+        {/* Account */}
         <div className="mt-6 pt-6 border-t border-slate-200">
-          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide px-1 mb-3">Account Removal</p>
+          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide px-1 mb-3">Account</p>
           <button
             onClick={() => setShowDeleteModal(true)}
             className="flex items-center gap-2 px-1 py-2 text-red-500 hover:text-red-600 transition-colors"
