@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, Clock, CheckCircle, Pill, Pencil, Plus, X, Check, Bell, Trash2 } from 'lucide-react';
+import { Calendar, Clock, CheckCircle, Pill, Pencil, X, Check, Bell, Trash2 } from 'lucide-react';
 import TopBar from '../../components/TopBar';
 import PetSwitchBar from '../../components/PetSwitchBar';
 import { useApp } from '../../context/AppContext';
@@ -209,15 +209,7 @@ export default function TherapiesPage() {
         showBack
         subtitle={pet.name}
         rightSlot={
-          !showForm ? (
-            <button
-              onClick={startAdd}
-              className="flex items-center gap-1.5 text-sky-500 text-sm font-medium py-1 px-2 rounded-lg hover:bg-sky-50"
-            >
-              <Plus size={15} strokeWidth={2} />
-              Add
-            </button>
-          ) : (
+          showForm ? (
             <div className="flex gap-2">
               <button onClick={handleCancel} className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center hover:bg-slate-200">
                 <X size={16} className="text-slate-600" strokeWidth={2} />
@@ -226,7 +218,7 @@ export default function TherapiesPage() {
                 <Check size={16} className="text-white" strokeWidth={2.5} />
               </button>
             </div>
-          )
+          ) : undefined
         }
       />
       <PetSwitchBar />
