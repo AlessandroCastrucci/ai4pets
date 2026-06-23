@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import {
-  Camera, Upload, ChevronRight, AlertTriangle, CheckCircle, XCircle,
-  BookOpen, Save, MessageSquare, Zap, Lightbulb, ArrowRight, Loader, X, RefreshCw, Image,
+  ChevronRight, AlertTriangle, CheckCircle, XCircle,
+  BookOpen, Save, MessageSquare, Zap, ArrowRight, Loader, X, RefreshCw,
 } from 'lucide-react';
 import TopBar from '../../components/TopBar';
 import { useApp } from '../../context/AppContext';
@@ -172,9 +172,7 @@ export default function AIDiagnosticsPage() {
   const [step, setStep] = useState<Step>('area');
   const [selectedArea, setSelectedArea] = useState<BodyArea | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
-  const [photoSource, setPhotoSource] = useState<'camera' | 'gallery' | null>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
-  const galleryInputRef = useRef<HTMLInputElement>(null);
 
   // Questionnaire
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -202,7 +200,6 @@ export default function AIDiagnosticsPage() {
     setStep('area');
     setSelectedArea(null);
     setPhotoPreviewUrl(null);
-    setPhotoSource(null);
     setAnswers({});
     setQuestionnaireSkipped(false);
     setAnalysisStep(0);
@@ -210,22 +207,22 @@ export default function AIDiagnosticsPage() {
     setFollowUpOpen(false);
     setFollowUpStatus(null);
     setFollowUpReply('');
+    if (cameraInputRef.current) cameraInputRef.current.value = '';
   }
 
-  function handleFileSelect(file: File, source: 'camera' | 'gallery') {
+  function handleFileSelect(file: File) {
     const reader = new FileReader();
     reader.onload = (e) => {
       setPhotoPreviewUrl(e.target?.result as string);
-      setPhotoSource(source);
+      setStep('photo');
     };
     reader.readAsDataURL(file);
   }
 
   function handleRemovePhoto() {
     setPhotoPreviewUrl(null);
-    setPhotoSource(null);
     if (cameraInputRef.current) cameraInputRef.current.value = '';
-    if (galleryInputRef.current) galleryInputRef.current.value = '';
+    setStep('area');
   }
 
   function startAnalysis(skipped: boolean) {
@@ -302,14 +299,27 @@ export default function AIDiagnosticsPage() {
   }
 
   const urgencyConf = result ? URGENCY_CONFIG[result.urgency] : null;
-  const stepIndex = step === 'area' ? 0 : step === 'photo' ? 1 : step === 'questionnaire' ? 2 : step === 'analyzing' ? 3 : 4;
+  const stepIndex = step === 'area' ? 0 : step === 'photo' ? 1 : step === 'questionnaire' ? 2 : 3;
 
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
       <TopBar title="AI Diagnostics" showBack subtitle={pet.name} />
-      {step !== 'saved' && <StepDots current={stepIndex} total={5} />}
+      {step !== 'saved' && <StepDots current={stepIndex} total={4} />}
 
       <main className="flex-1 px-4 py-4 pb-28 space-y-4 overflow-y-auto">
+
+        {/* Hidden camera input - always in DOM so body-area cards can trigger it */}
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) handleFileSelect(file);
+          }}
+        />
 
         {/* ─── STEP: Body Part Selection ─── */}
         {step === 'area' && (
@@ -323,7 +333,10 @@ export default function AIDiagnosticsPage() {
                 return (
                   <button
                     key={area.id}
-                    onClick={() => { setSelectedArea(area.id); setStep('photo'); }}
+                    onClick={() => {
+                      setSelectedArea(area.id);
+                      cameraInputRef.current?.click();
+                    }}
                     className="bg-white rounded-2xl shadow-card p-3 flex flex-col items-center gap-1.5 hover:shadow-card-md active:scale-[0.97] transition-all border border-transparent hover:border-sky-200"
                   >
                     <div className="w-16 h-16 flex items-center justify-center">
@@ -342,103 +355,39 @@ export default function AIDiagnosticsPage() {
           </>
         )}
 
-        {/* ─── STEP: Photo Capture ─── */}
-        {step === 'photo' && (
+        {/* ─── STEP: Photo Preview ─── */}
+        {step === 'photo' && photoPreviewUrl && (
           <>
             <PetContextBanner pet={pet} />
             <div>
-              <p className="text-sm font-bold text-slate-800">Take a clear photo of {pet.name}'s {areaLabel.toLowerCase()}</p>
+              <p className="text-sm font-bold text-slate-800">Review photo of {pet.name}'s {areaLabel.toLowerCase()}</p>
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                Good lighting helps the AI analysis. Keep the affected area centered and in focus.
+                Make sure the affected area is clearly visible and in focus.
               </p>
             </div>
 
-            {/* Hidden file inputs */}
-            <input
-              ref={cameraInputRef}
-              type="file"
-              accept="image/*"
-              capture="environment"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) handleFileSelect(file, 'camera');
-              }}
-            />
-            <input
-              ref={galleryInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) handleFileSelect(file, 'gallery');
-              }}
-            />
-
-            {!photoPreviewUrl ? (
-              <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-3">
+              <div className="bg-white rounded-2xl overflow-hidden shadow-card">
+                <img src={photoPreviewUrl} alt="Photo preview" className="w-full h-52 object-cover" />
+                <div className="px-4 py-3 flex items-center justify-between border-t border-slate-50">
                   <button
                     onClick={() => cameraInputRef.current?.click()}
-                    className="bg-white rounded-2xl border-2 border-dashed border-sky-300 py-8 flex flex-col items-center gap-2 hover:bg-sky-50 active:bg-sky-100 transition-colors"
+                    className="flex items-center gap-1.5 text-xs text-sky-500 font-semibold"
                   >
-                    <div className="w-11 h-11 rounded-2xl bg-sky-50 flex items-center justify-center">
-                      <Camera size={22} className="text-sky-500" strokeWidth={1.5} />
-                    </div>
-                    <p className="text-xs font-semibold text-sky-600">Take Photo</p>
+                    <RefreshCw size={13} strokeWidth={2} /> Retake Photo
                   </button>
-                  <button
-                    onClick={() => galleryInputRef.current?.click()}
-                    className="bg-white rounded-2xl border-2 border-dashed border-slate-200 py-8 flex flex-col items-center gap-2 hover:bg-slate-50 active:bg-slate-100 transition-colors"
-                  >
-                    <div className="w-11 h-11 rounded-2xl bg-slate-50 flex items-center justify-center">
-                      <Upload size={22} className="text-slate-400" strokeWidth={1.5} />
-                    </div>
-                    <p className="text-xs font-semibold text-slate-500">Choose from Gallery</p>
+                  <button onClick={handleRemovePhoto} className="flex items-center gap-1.5 text-xs text-red-500 font-semibold">
+                    <X size={13} strokeWidth={2} /> Remove
                   </button>
                 </div>
-
-                {/* Photo tips */}
-                <div className="bg-amber-50 rounded-2xl px-4 py-3 flex items-start gap-2.5 border border-amber-100">
-                  <Lightbulb size={16} className="text-amber-500 mt-0.5 flex-shrink-0" strokeWidth={2} />
-                  <div className="space-y-1">
-                    <p className="text-xs font-semibold text-amber-800">Tips for a better scan</p>
-                    <ul className="text-[11px] text-amber-700 space-y-0.5 leading-relaxed">
-                      <li>Use natural daylight or a bright lamp</li>
-                      <li>Fill the frame with the affected area</li>
-                      <li>Keep steady to avoid blur</li>
-                    </ul>
-                  </div>
-                </div>
               </div>
-            ) : (
-              <div className="space-y-3">
-                <div className="bg-white rounded-2xl overflow-hidden shadow-card">
-                  <img src={photoPreviewUrl} alt="Photo preview" className="w-full h-52 object-cover" />
-                  <div className="px-4 py-3 flex items-center justify-between border-t border-slate-50">
-                    <button
-                      onClick={() => {
-                        if (photoSource === 'camera') cameraInputRef.current?.click();
-                        else galleryInputRef.current?.click();
-                      }}
-                      className="flex items-center gap-1.5 text-xs text-sky-500 font-semibold"
-                    >
-                      {photoSource === 'camera' ? <><RefreshCw size={13} strokeWidth={2} /> Retake Photo</> : <><Image size={13} strokeWidth={2} /> Choose Another</>}
-                    </button>
-                    <button onClick={handleRemovePhoto} className="flex items-center gap-1.5 text-xs text-red-500 font-semibold">
-                      <X size={13} strokeWidth={2} /> Remove
-                    </button>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setStep(SDK_QUESTIONNAIRE_ENABLED ? 'questionnaire' : 'analyzing')}
-                  className="w-full bg-sky-500 text-white font-semibold text-sm py-3.5 rounded-2xl hover:bg-sky-600 active:bg-sky-700 transition-colors"
-                >
-                  Continue
-                </button>
-              </div>
-            )}
+              <button
+                onClick={() => setStep(SDK_QUESTIONNAIRE_ENABLED ? 'questionnaire' : 'analyzing')}
+                className="w-full bg-sky-500 text-white font-semibold text-sm py-3.5 rounded-2xl hover:bg-sky-600 active:bg-sky-700 transition-colors"
+              >
+                Continue
+              </button>
+            </div>
           </>
         )}
 
