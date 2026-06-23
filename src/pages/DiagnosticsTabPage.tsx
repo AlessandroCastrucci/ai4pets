@@ -18,8 +18,8 @@ function DiagnosticsPetCard({ pet, onSelect }: { pet: Pet; onSelect: (petId: str
           alt={pet.name}
           className="w-20 h-20 rounded-2xl object-cover shadow-sm"
         />
-        <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full bg-sky-50 flex items-center justify-center shadow-sm">
-          <SpeciesIcon size={13} className="text-sky-500" strokeWidth={2} />
+        <div className={`absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full ${pet.species === 'dog' ? 'bg-sky-50' : 'bg-amber-50'} flex items-center justify-center shadow-sm`}>
+          <SpeciesIcon size={13} className={pet.species === 'dog' ? 'text-sky-500' : 'text-amber-500'} strokeWidth={2} />
         </div>
       </div>
       <div className="flex-1 min-w-0">
