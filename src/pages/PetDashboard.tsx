@@ -140,13 +140,6 @@ export default function PetDashboard() {
           <ChevronLeft size={20} className="text-slate-700" strokeWidth={2.5} />
         </button>
         <span className="text-base font-semibold text-slate-900 truncate flex-1">{pet.name}</span>
-        <button
-          onClick={navigateToEditPet}
-          className="flex items-center gap-1 text-sky-600 text-xs font-medium py-1 px-2.5 rounded-full bg-sky-50 hover:bg-sky-100 transition-colors flex-shrink-0"
-        >
-          <Pencil size={12} strokeWidth={2} />
-          Edit
-        </button>
       </div>
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
