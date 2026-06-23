@@ -90,18 +90,12 @@ export default function EditProfilePage() {
         </div>
 
         {/* Actions */}
-        <div className="mt-8 space-y-3">
+        <div className="mt-8">
           <button
             onClick={handleSave}
             className="w-full bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-semibold text-sm rounded-xl py-3.5 transition-colors shadow-sm"
           >
             Save Changes
-          </button>
-          <button
-            onClick={navigateBack}
-            className="w-full bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-600 font-semibold text-sm rounded-xl py-3.5 border border-slate-200 transition-colors"
-          >
-            Cancel
           </button>
         </div>
 
