@@ -89,7 +89,16 @@ export default function LoginPage() {
 
             {/* Password */}
             <div>
-              <label className="text-sm font-semibold text-gray-800 block mb-1.5">Password</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-sm font-semibold text-gray-800">Password</label>
+                <button
+                  type="button"
+                  onClick={() => navigateToAuth('forgot-password')}
+                  className="text-xs font-medium text-blue-500 hover:text-blue-600 transition-colors"
+                >
+                  Forgot password?
+                </button>
+              </div>
               <div className="relative">
                 <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" strokeWidth={1.8} />
                 <input
