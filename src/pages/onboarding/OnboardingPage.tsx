@@ -38,48 +38,16 @@ function SplashScreen() {
   );
 }
 
-// ─── Illustration 1 — Owner with dog and cat (warm cozy scene) ───────────────
-function Illustration1() {
-  return (
-    <img
-      src={slide1Img}
-      alt="Person sitting with a golden dog and a grey cat"
-      className="w-full h-full object-contain"
-      draggable={false}
-    />
-  );
-}
-
-// ─── Illustration 2 — Health timeline / record cards ─────────────────────────
-function Illustration2() {
-  return (
-    <div style={{ width: '100%', height: '100%', paddingTop: '10%' }}>
-      <img
-        src={slide2Img}
-        alt="Pet health timeline"
-        style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center center', display: 'block' }}
-        draggable={false}
-      />
-    </div>
-  );
-}
-
-// ─── Illustration 3 — AI robot with dog and cat ───────────────────────────────
-function Illustration3() {
-  return (
-    <img
-      src={slide3Img}
-      alt="AI assistant with a golden dog and a grey cat"
-      style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'top center', display: 'block' }}
-      draggable={false}
-    />
-  );
-}
+// ─── Slide illustrations ─────────────────────────────────────────────────────
+const ILLUSTRATION_DATA = [
+  { src: slide1Img, alt: 'Person sitting with a golden dog and a grey cat' },
+  { src: slide2Img, alt: 'Dog with a phone showing health data' },
+  { src: slide3Img, alt: 'AI assistant with a golden dog and a grey cat' },
+] as const;
 
 // ─── Slides configuration ────────────────────────────────────────────────────
 const SLIDES = [
   {
-    Illustration: Illustration1,
     accent: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 21 C12 21 3 14 3 8 C3 5 5 3 7.5 3 C9 3 12 5.5 12 5.5 C12 5.5 15 3 16.5 3 C19 3 21 5 21 8 C21 14 12 21 12 21Z" fill="#FF8A80" />
@@ -89,7 +57,6 @@ const SLIDES = [
     subtitle: 'Because they are more than pets.\nThey are family.',
   },
   {
-    Illustration: Illustration2,
     accent: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" xmlns="http://www.w3.org/2000/svg">
         <rect x="3" y="4" width="18" height="18" rx="4" stroke="#1A3A8F" strokeWidth="2" />
@@ -103,7 +70,6 @@ const SLIDES = [
     subtitle: 'Upload a photo and get AI-powered insights about your pet\'s health.',
   },
   {
-    Illustration: Illustration3,
     accent: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 21 C12 21 3 14 3 8 C3 5 5 3 7.5 3 C9 3 12 5.5 12 5.5 C12 5.5 15 3 16.5 3 C19 3 21 5 21 8 C21 14 12 21 12 21Z" fill="#3B82F6" />
@@ -156,7 +122,8 @@ export default function OnboardingPage({ onComplete }: Props) {
   }
 
   const isLast = slide === SLIDES.length - 1;
-  const { Illustration, accent, title, subtitle } = SLIDES[slide];
+  const { accent, title, subtitle } = SLIDES[slide];
+  const illustration = ILLUSTRATION_DATA[slide];
 
   if (screen === 'splash') {
     return <SplashScreen />;
@@ -174,37 +141,34 @@ export default function OnboardingPage({ onComplete }: Props) {
         </button>
       </div>
 
-      {/* Illustration */}
+      {/* Illustration — shared frame for all slides */}
       <div
+        className="flex-1 flex items-center justify-center px-6"
         style={{
+          minHeight: 320,
+          maxHeight: 360,
           opacity: visible ? 1 : 0,
           transform: visible ? 'translateY(0)' : 'translateY(12px)',
           transition: 'opacity 0.22s ease, transform 0.22s ease',
-          width: '100%',
-          height: 'calc(100vh - 280px)',
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-          overflow: 'hidden',
         }}
       >
-        {slide === 0 ? (
-          <img
-            src={slide1Img}
-            alt="Person sitting with a golden dog and a grey cat"
-            style={{ width: '100%', maxWidth: 'none', height: '100%', objectFit: 'cover', objectPosition: 'center bottom', display: 'block' }}
-            draggable={false}
-          />
-        ) : (
-          <Illustration />
-        )}
+        <img
+          src={illustration.src}
+          alt={illustration.alt}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            objectPosition: 'center center',
+          }}
+          draggable={false}
+        />
       </div>
 
       {/* Text block */}
       <div
-        className="px-8 pb-2 text-center"
+        className="px-8 pb-2 pt-4 text-center"
         style={{
-          paddingTop: slide === 0 ? 8 : 16,
           opacity: visible ? 1 : 0,
           transform: visible ? 'translateY(0)' : 'translateY(10px)',
           transition: 'opacity 0.28s ease 0.06s, transform 0.28s ease 0.06s',
