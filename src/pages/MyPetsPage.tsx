@@ -7,7 +7,7 @@ const TODAY = '2026-06-17';
 const IN_10_DAYS = '2026-06-27';
 
 // Demo toggle: 'one' = show only first pet, 'three' = show all pets
-const DEMO_PETS_MODE: 'one' | 'three' = 'three';
+const DEMO_PETS_MODE: 'one' | 'three' = 'one';
 
 function getPetBadge(petId: string, reminders: ReturnType<typeof useApp>['reminders'], vaccines: ReturnType<typeof useApp>['vaccines']) {
   const todayReminder = reminders.find(
