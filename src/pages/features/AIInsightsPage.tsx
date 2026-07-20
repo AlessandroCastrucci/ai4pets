@@ -5,13 +5,13 @@ import {
 } from 'lucide-react';
 import TopBar from '../../components/TopBar';
 import { useApp } from '../../context/AppContext';
-import type { BodyArea, UrgencyLevel, DiagnosticResult, DiagnosticFollowUp, Reminder } from '../../types';
+import type { BodyArea, UrgencyLevel, InsightResult, InsightFollowUp, Reminder } from '../../types';
 
-import skinFurIllustration from '../../assets/illustrations/ai-diagnostics/skin_fur_illustration.png';
-import eyesIllustration from '../../assets/illustrations/ai-diagnostics/eyes_illustration.png';
-import earsIllustration from '../../assets/illustrations/ai-diagnostics/ears_illustration.png';
-import pawsIllustration from '../../assets/illustrations/ai-diagnostics/paws_illustration.png';
-import teethMouthIllustration from '../../assets/illustrations/ai-diagnostics/teeth_mouth_illustration.png';
+import skinFurIllustration from '../../assets/illustrations/ai-insights/skin_fur_illustration.png';
+import eyesIllustration from '../../assets/illustrations/ai-insights/eyes_illustration.png';
+import earsIllustration from '../../assets/illustrations/ai-insights/ears_illustration.png';
+import pawsIllustration from '../../assets/illustrations/ai-insights/paws_illustration.png';
+import teethMouthIllustration from '../../assets/illustrations/ai-insights/teeth_mouth_illustration.png';
 
 /* ─── Mock SDK Config ─────────────────────────────────────────────────── */
 const SDK_QUESTIONNAIRE_ENABLED = true;
@@ -45,7 +45,7 @@ const BODY_AREAS_CAT: AreaDef[] = [
   { id: 'mouth-teeth', label: 'Teeth / Mouth',  sublabel: 'Bad breath, gums' },
 ];
 
-type MockResult = Omit<DiagnosticResult, 'id' | 'petId' | 'date' | 'bodyArea' | 'symptoms'>;
+type MockResult = Omit<InsightResult, 'id' | 'petId' | 'date' | 'bodyArea' | 'symptoms'>;
 
 const MOCK_RESULTS: Record<string, MockResult> = {
   'skin-fur': {
@@ -165,8 +165,8 @@ function StepDots({ current, total }: { current: number; total: number }) {
 
 /* ─── Main component ─────────────────────────────────────────────────── */
 
-export default function AIDiagnosticsPage() {
-  const { getSelectedPet, addDiagnosticResult, addDiagnosticFollowUp, addReminder } = useApp();
+export default function AIInsightsPage() {
+  const { getSelectedPet, addInsightResult, addInsightFollowUp, addReminder } = useApp();
   const pet = getSelectedPet();
 
   const [step, setStep] = useState<Step>('area');
@@ -182,7 +182,7 @@ export default function AIDiagnosticsPage() {
   const [analysisStep, setAnalysisStep] = useState(0);
 
   // Result
-  const [result, setResult] = useState<DiagnosticResult | null>(null);
+  const [result, setResult] = useState<InsightResult | null>(null);
 
   // Follow-up
   const [followUpOpen, setFollowUpOpen] = useState(false);
@@ -196,7 +196,7 @@ export default function AIDiagnosticsPage() {
   const areaLabel = areas.find((a) => a.id === selectedArea)?.label ?? '';
   const questions = getQuestions(pet.name);
 
-  function resetDiagnostic() {
+  function resetInsight() {
     setStep('area');
     setSelectedArea(null);
     setPhotoPreviewUrl(null);
@@ -244,7 +244,7 @@ export default function AIDiagnosticsPage() {
     if (analysisStep >= analysisMessages.length) {
       const timeout = setTimeout(() => {
         const mock = MOCK_RESULTS[selectedArea!] ?? MOCK_RESULTS['skin-fur'];
-        const newResult: DiagnosticResult = {
+        const newResult: InsightResult = {
           id: Date.now().toString(),
           petId: safePet.id,
           date: '2026-06-22',
@@ -266,7 +266,7 @@ export default function AIDiagnosticsPage() {
 
   function handleSave() {
     if (!result) return;
-    addDiagnosticResult(result);
+    addInsightResult(result);
     const followUpDate = new Date('2026-06-22');
     followUpDate.setDate(followUpDate.getDate() + 2);
     const followUpReminder: Reminder = {
@@ -275,7 +275,7 @@ export default function AIDiagnosticsPage() {
       type: 'checkup',
       title: `Follow-up: ${result.possibleIssue}`,
       datetime: `${followUpDate.toISOString().slice(0, 10)}T09:00:00`,
-      notes: `2-day follow-up for AI Diagnostic (${areaLabel})`,
+      notes: `2-day follow-up for AI Insight (${areaLabel})`,
       done: false,
     };
     addReminder(followUpReminder);
@@ -287,14 +287,14 @@ export default function AIDiagnosticsPage() {
     const urgency = result?.urgency ?? 'low';
     setFollowUpReply(FOLLOW_UP_REPLIES[status]?.[urgency] ?? '');
     if (result && (status === 'improved' || status === 'same' || status === 'worse')) {
-      const followUp: DiagnosticFollowUp = {
+      const followUp: InsightFollowUp = {
         id: `${Date.now()}`,
         petId: safePet.id,
-        diagnosticId: result.id,
+        insightId: result.id,
         date: '2026-06-22',
         status: status as 'improved' | 'same' | 'worse',
       };
-      addDiagnosticFollowUp(followUp);
+      addInsightFollowUp(followUp);
     }
   }
 
@@ -303,7 +303,7 @@ export default function AIDiagnosticsPage() {
 
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
-      <TopBar title="AI Diagnostics" showBack subtitle={pet.name} />
+      <TopBar title="AI Insights" showBack subtitle={pet.name} />
       {step !== 'saved' && <StepDots current={stepIndex} total={4} />}
 
       <main className="flex-1 px-4 py-4 pb-28 space-y-4 overflow-y-auto">
@@ -586,7 +586,7 @@ export default function AIDiagnosticsPage() {
                   Start Follow-up
                 </button>
                 <button
-                  onClick={resetDiagnostic}
+                  onClick={resetInsight}
                   className="w-full text-sky-500 font-semibold text-sm py-2.5 rounded-2xl hover:bg-sky-50 transition-colors flex items-center justify-center gap-2"
                 >
                   <ArrowRight size={15} strokeWidth={2} />
@@ -640,7 +640,7 @@ export default function AIDiagnosticsPage() {
                       </div>
                     )}
                     <button
-                      onClick={resetDiagnostic}
+                      onClick={resetInsight}
                       className="w-full text-sky-500 font-semibold text-sm py-2.5 rounded-xl hover:bg-sky-50 transition-colors flex items-center justify-center gap-2"
                     >
                       <ArrowRight size={15} strokeWidth={2} />

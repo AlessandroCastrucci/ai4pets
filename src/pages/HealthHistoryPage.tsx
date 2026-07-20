@@ -3,7 +3,7 @@ import { Scan, CheckCircle, Syringe, Pill, Stethoscope, ShieldCheck } from 'luci
 import TopBar from '../components/TopBar';
 import StatusBadge from '../components/StatusBadge';
 import { useApp } from '../context/AppContext';
-import type { BodyArea, HealthEvent, DiagnosticResult } from '../types';
+import type { BodyArea, HealthEvent, InsightResult } from '../types';
 
 const BODY_AREA_LABELS: Record<BodyArea, string> = {
   'skin-fur': 'Skin & Fur',
@@ -34,15 +34,15 @@ function fmtTime(iso: string): string {
 }
 
 type HistoryItem =
-  | { kind: 'diagnostic'; date: string; data: DiagnosticResult }
+  | { kind: 'insight'; date: string; data: InsightResult }
   | { kind: 'event'; date: string; data: HealthEvent };
 
 export default function HealthHistoryPage() {
-  const { pets, diagnosticResults, healthEvents, getPet, navigateToDiagnosticDetail } = useApp();
+  const { pets, insightResults, healthEvents, getPet, navigateToInsightDetail } = useApp();
   const [petFilter, setPetFilter] = useState<string>('all');
 
   const items: HistoryItem[] = [
-    ...diagnosticResults.map((d): HistoryItem => ({ kind: 'diagnostic', date: d.date, data: d })),
+    ...insightResults.map((d): HistoryItem => ({ kind: 'insight', date: d.date, data: d })),
     ...healthEvents.map((e): HistoryItem => ({ kind: 'event', date: e.completedDate, data: e })),
   ]
     .filter((item) => petFilter === 'all' || item.data.petId === petFilter)
@@ -85,18 +85,18 @@ export default function HealthHistoryPage() {
           <div className="flex flex-col items-center justify-center py-16 text-slate-400">
             <Scan size={32} strokeWidth={1.5} className="mb-2" />
             <p className="text-sm">No health history yet</p>
-            <p className="text-xs mt-1">Complete reminders or run diagnostics to build history</p>
+            <p className="text-xs mt-1">Complete reminders or generate AI insights to build your pet&rsquo;s history</p>
           </div>
         ) : (
           <div className="space-y-3">
             {items.map((item) => {
-              if (item.kind === 'diagnostic') {
+              if (item.kind === 'insight') {
                 const result = item.data;
                 const pet = getPet(result.petId);
                 return (
                   <button
                     key={`d-${result.id}`}
-                    onClick={() => navigateToDiagnosticDetail(result.id)}
+                    onClick={() => navigateToInsightDetail(result.id)}
                     className="w-full bg-white rounded-2xl shadow-card p-4 flex items-start gap-3 text-left hover:shadow-card-md transition-shadow"
                   >
                     {pet && (
@@ -111,7 +111,7 @@ export default function HealthHistoryPage() {
                         <p className="text-sm font-bold text-slate-800">{pet?.name}</p>
                         <span className="text-[11px] text-slate-400 flex-shrink-0">{fmtDate(result.date)}</span>
                       </div>
-                      <p className="text-xs text-slate-500 mt-0.5">AI Diagnostic &middot; {BODY_AREA_LABELS[result.bodyArea]}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">AI Insight &middot; {BODY_AREA_LABELS[result.bodyArea]}</p>
                       <p className="text-sm font-medium text-slate-700 mt-1 truncate">{result.possibleIssue}</p>
                       <div className="mt-1.5">
                         <StatusBadge

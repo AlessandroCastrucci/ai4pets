@@ -95,7 +95,7 @@ function SectionHeader({ title, count }: { title: string; count?: number }) {
 export default function PetHealthHistoryPage() {
   const {
     getSelectedPet,
-    getPetDiagnostics,
+    getPetInsights,
     getPetFollowUps,
     getPetCheckups,
     getPetVaccines,
@@ -107,7 +107,7 @@ export default function PetHealthHistoryPage() {
 
   if (!pet) return null;
 
-  const diagnostics = [...getPetDiagnostics(pet.id)].sort((a, b) => b.date.localeCompare(a.date));
+  const insights = [...getPetInsights(pet.id)].sort((a, b) => b.date.localeCompare(a.date));
   const followUps = getPetFollowUps(pet.id);
   const checkups = [...getPetCheckups(pet.id)].sort((a, b) => b.date.localeCompare(a.date));
   const vaccines = [...getPetVaccines(pet.id)].sort((a, b) => b.dateAdministered.localeCompare(a.dateAdministered));
@@ -116,7 +116,7 @@ export default function PetHealthHistoryPage() {
   const documents = [...getPetDocuments(pet.id)].sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt));
 
   const timelineEntries: TimelineEntry[] = [
-    ...diagnostics.map((d) => ({
+    ...insights.map((d) => ({
       date: d.date,
       type: 'diagnosis' as const,
       title: d.possibleIssue,
@@ -127,7 +127,7 @@ export default function PetHealthHistoryPage() {
       type: 'followup' as const,
       title: 'Follow-up check',
       sub: f.notes,
-      parentId: f.diagnosticId,
+      parentId: f.insightId,
       followUpStatus: f.status,
     })),
     ...checkups.map((c) => ({
@@ -171,19 +171,19 @@ export default function PetHealthHistoryPage() {
 
         {/* A. Diagnosis History */}
         <div className="bg-white rounded-2xl shadow-card overflow-hidden">
-          <SectionHeader title="Diagnosis History" count={diagnostics.length} />
-          {diagnostics.length === 0 ? (
+          <SectionHeader title="Diagnosis History" count={insights.length} />
+          {insights.length === 0 ? (
             <div className="px-4 py-8 text-center">
               <div className="w-10 h-10 rounded-2xl bg-sky-50 flex items-center justify-center mx-auto mb-3">
                 <Scan size={20} className="text-sky-300" strokeWidth={1.5} />
               </div>
               <p className="text-sm font-semibold text-slate-400">No diagnoses recorded yet.</p>
-              <p className="text-xs text-slate-300 mt-1">Use AI Diagnostics to log your first diagnosis.</p>
+              <p className="text-xs text-slate-300 mt-1">Use AI Insights to log your first diagnosis.</p>
             </div>
           ) : (
             <div className="divide-y divide-slate-50">
-              {diagnostics.map((d) => {
-                const dFollowUps = followUps.filter((f) => f.diagnosticId === d.id);
+              {insights.map((d) => {
+                const dFollowUps = followUps.filter((f) => f.insightId === d.id);
                 return (
                   <div key={d.id}>
                     <div className="px-4 py-3 flex gap-3">

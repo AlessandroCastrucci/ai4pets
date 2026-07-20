@@ -144,7 +144,7 @@ export default function MorePage() {
             <Row
               Icon={Bot}
               label="AI Follow-up Reminders"
-              sublabel="Follow-up on AI diagnostics"
+              sublabel="Follow-up on AI insights"
               iconBg="bg-emerald-50"
               iconColor="text-emerald-500"
               right={<Toggle checked={notifAiFollowUp} onChange={setNotifAiFollowUp} />}

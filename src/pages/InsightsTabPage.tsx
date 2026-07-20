@@ -4,7 +4,7 @@ import TopBar from '../components/TopBar';
 import { useApp } from '../context/AppContext';
 import type { Pet } from '../types';
 
-function DiagnosticsPetCard({ pet, onSelect }: { pet: Pet; onSelect: (petId: string) => void }) {
+function InsightsPetCard({ pet, onSelect }: { pet: Pet; onSelect: (petId: string) => void }) {
   const SpeciesIcon = pet.species === 'dog' ? Dog : Cat;
 
   return (
@@ -42,14 +42,14 @@ function DiagnosticsPetCard({ pet, onSelect }: { pet: Pet; onSelect: (petId: str
   );
 }
 
-export default function DiagnosticsTabPage() {
-  const { pets, startDiagnosticsForPet } = useApp();
+export default function InsightsTabPage() {
+  const { pets, startInsightsForPet } = useApp();
 
   useEffect(() => {
     if (pets.length === 1) {
-      startDiagnosticsForPet(pets[0].id);
+      startInsightsForPet(pets[0].id);
     }
-  }, [pets, startDiagnosticsForPet]);
+  }, [pets, startInsightsForPet]);
 
   if (pets.length === 1) {
     return null;
@@ -57,21 +57,21 @@ export default function DiagnosticsTabPage() {
 
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
-      <TopBar title="AI Diagnostics" />
+      <TopBar title="AI Insights" />
       <main className="flex-1 px-4 py-4 space-y-4 pb-24">
         <div className="text-center py-4">
           <div className="w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center mx-auto mb-3">
             <Scan size={28} className="text-sky-500" strokeWidth={1.5} />
           </div>
           <h2 className="text-lg font-bold text-slate-800">Which pet needs help?</h2>
-          <p className="text-sm text-slate-500 mt-1">Select a pet to start the AI diagnostic analysis</p>
+          <p className="text-sm text-slate-500 mt-1">Select a pet to generate AI insights</p>
         </div>
         <div className="space-y-3">
           {pets.map((pet) => (
-            <DiagnosticsPetCard
+            <InsightsPetCard
               key={pet.id}
               pet={pet}
-              onSelect={startDiagnosticsForPet}
+              onSelect={startInsightsForPet}
             />
           ))}
         </div>

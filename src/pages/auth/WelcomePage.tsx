@@ -23,7 +23,7 @@ export default function WelcomePage() {
 
         {/* Feature chips */}
         <div className="flex flex-wrap justify-center gap-2 mt-7">
-          {['AI Diagnostics', 'Vaccine Tracking', 'Reminders', 'Nutrition'].map((f) => (
+          {['AI Insights', 'Vaccine Tracking', 'Reminders', 'Nutrition'].map((f) => (
             <span
               key={f}
               className="bg-white/15 text-white/90 text-xs font-medium px-3 py-1.5 rounded-full border border-white/20 backdrop-blur-sm"

@@ -79,7 +79,7 @@ export default function PetDashboard() {
     navigateBack,
     getPetReminders,
     getPetVaccines,
-    getPetDiagnostics,
+    getPetInsights,
   } = useApp();
   const pet = getSelectedPet();
 
@@ -87,7 +87,7 @@ export default function PetDashboard() {
 
   const reminders = getPetReminders(pet.id).filter((r) => !r.done).slice(0, 2);
   const vaccines = getPetVaccines(pet.id);
-  const diagnostics = getPetDiagnostics(pet.id);
+  const insights = getPetInsights(pet.id);
   const SpeciesIcon = pet.species === 'dog' ? Dog : Cat;
 
   const vaccineStatuses = vaccines.map((v) => getVaccineStatus(v.nextDue));
@@ -248,16 +248,16 @@ export default function PetDashboard() {
           </div>
         </div>
 
-        {/* Featured AI Diagnostics card */}
+        {/* Featured AI Insights card */}
         <button
-          onClick={() => navigateToFeature('ai-diagnostics')}
+          onClick={() => navigateToFeature('ai-insights')}
           className="w-full bg-gradient-to-br from-sky-500 to-blue-600 rounded-2xl p-5 flex items-center gap-4 shadow-card hover:shadow-card-md active:scale-[0.99] transition-all text-left"
         >
           <div className="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
             <Scan size={28} className="text-white" strokeWidth={1.8} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-base font-bold text-white">AI Diagnostics</p>
+            <p className="text-base font-bold text-white">AI Insights</p>
             <p className="text-[13px] text-white/75 mt-0.5 leading-snug">
               Take a photo and get AI-powered health insights for {pet.name}.
             </p>
@@ -304,12 +304,12 @@ export default function PetDashboard() {
           </div>
         </section>
 
-        {/* Recent AI diagnostics */}
-        {diagnostics.length > 0 && (
+        {/* Recent AI insights */}
+        {insights.length > 0 && (
           <section>
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1 mb-3">Recent Diagnostics</p>
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-1 mb-3">Recent Insights</p>
             <div className="space-y-2">
-              {diagnostics.slice(0, 3).map((d) => (
+              {insights.slice(0, 3).map((d) => (
                 <div key={d.id} className="bg-white rounded-2xl shadow-card px-4 py-3 flex items-center gap-3">
                   <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
                     d.urgency === 'high' ? 'bg-red-400' : d.urgency === 'medium' ? 'bg-amber-400' : 'bg-emerald-400'

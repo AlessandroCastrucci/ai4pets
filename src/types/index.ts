@@ -85,7 +85,7 @@ export type BodyArea =
 
 export type UrgencyLevel = 'low' | 'medium' | 'high';
 
-export interface DiagnosticResult {
+export interface InsightResult {
   id: string;
   petId: string;
   date: string;
@@ -117,10 +117,10 @@ export interface MonthlyCheckup {
   photoSkin?: string;
 }
 
-export interface DiagnosticFollowUp {
+export interface InsightFollowUp {
   id: string;
   petId: string;
-  diagnosticId: string;
+  insightId: string;
   date: string;
   status: 'improved' | 'same' | 'worse';
   notes?: string;
@@ -136,14 +136,14 @@ export interface CalendarEvent {
   type: 'vaccine' | 'therapy' | 'checkup' | 'medication' | 'appointment' | 'parasite';
 }
 
-export type TabName = 'pets' | 'history' | 'diagnostics' | 'calendar' | 'more';
+export type TabName = 'pets' | 'history' | 'insights' | 'calendar' | 'more';
 export type ScreenName =
   | null
   | 'pet-dashboard'
   | 'add-pet'
   | 'edit-pet'
   | 'pet-health-history'
-  | 'ai-diagnostics'
+  | 'ai-insights'
   | 'ai-checkup'
   | 'nutrition'
   | 'vaccines'
@@ -151,7 +151,7 @@ export type ScreenName =
   | 'parasite-protection'
   | 'account'
   | 'edit-profile'
-  | 'diagnostic-detail';
+  | 'insight-detail';
 
 export type ParasiteTreatmentFrequency = 'Every month' | 'Every 3 months' | 'Every 6 months' | 'Custom';
 

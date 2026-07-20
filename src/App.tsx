@@ -11,13 +11,13 @@ const FORCE_SHOW_ONBOARDING = true;
 import MyPetsPage from './pages/MyPetsPage';
 import PetDashboard from './pages/PetDashboard';
 import HealthHistoryPage from './pages/HealthHistoryPage';
-import DiagnosticDetailPage from './pages/DiagnosticDetailPage';
-import DiagnosticsTabPage from './pages/DiagnosticsTabPage';
+import InsightDetailPage from './pages/InsightDetailPage';
+import InsightsTabPage from './pages/InsightsTabPage';
 import CalendarPage from './pages/CalendarPage';
 import MorePage from './pages/MorePage';
 import AddEditPetPage from './pages/AddEditPetPage';
 import PetHealthHistoryPage from './pages/features/PetHealthHistoryPage';
-import AIDiagnosticsPage from './pages/features/AIDiagnosticsPage';
+import AIInsightsPage from './pages/features/AIInsightsPage';
 import AICheckupPage from './pages/features/AICheckupPage';
 import NutritionPage from './pages/features/NutritionPage';
 import VaccinesPage from './pages/features/VaccinesPage';
@@ -35,8 +35,8 @@ function AppScreen() {
   if (currentScreen === 'add-pet') return <AddEditPetPage />;
   if (currentScreen === 'edit-pet') return <AddEditPetPage />;
   if (currentScreen === 'pet-health-history') return <PetHealthHistoryPage />;
-  if (currentScreen === 'diagnostic-detail') return <DiagnosticDetailPage />;
-  if (currentScreen === 'ai-diagnostics') return <AIDiagnosticsPage />;
+  if (currentScreen === 'insight-detail') return <InsightDetailPage />;
+  if (currentScreen === 'ai-insights') return <AIInsightsPage />;
   if (currentScreen === 'ai-checkup') return <AICheckupPage />;
   if (currentScreen === 'nutrition') return <NutritionPage />;
   if (currentScreen === 'vaccines') return <VaccinesPage />;
@@ -49,7 +49,7 @@ function AppScreen() {
   switch (activeTab) {
     case 'pets': return <MyPetsPage />;
     case 'history': return <HealthHistoryPage />;
-    case 'diagnostics': return <DiagnosticsTabPage />;
+    case 'insights': return <InsightsTabPage />;
     case 'calendar': return <CalendarPage />;
     case 'more': return <MorePage />;
   }

@@ -59,9 +59,9 @@ export default function BottomNav() {
           })}
         </div>
 
-        {/* Floating AI Diagnostics center button */}
+        {/* Floating AI Insights center button */}
         <button
-          onClick={() => setActiveTab('diagnostics')}
+          onClick={() => setActiveTab('insights')}
           className="absolute left-1/2 -translate-x-1/2 -top-7 flex flex-col items-center"
         >
           <div className="relative">

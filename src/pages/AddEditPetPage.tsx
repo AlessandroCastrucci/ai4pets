@@ -174,7 +174,7 @@ export default function AddEditPetPage() {
         <div className="bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl px-4 py-4">
           <p className="text-white font-bold text-base leading-tight">Create a health profile for this pet</p>
           <p className="text-white/75 text-xs mt-1 leading-relaxed">
-            Each pet gets its own dashboard, timeline, diagnostics, nutrition, therapies, vaccines and reminders.
+            Each pet gets its own dashboard, timeline, insights, nutrition, therapies, vaccines and reminders.
           </p>
         </div>
 

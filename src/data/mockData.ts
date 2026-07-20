@@ -5,8 +5,8 @@ import type {
   Vaccine,
   Therapy,
   NutritionPlan,
-  DiagnosticResult,
-  DiagnosticFollowUp,
+  InsightResult,
+  InsightFollowUp,
   MonthlyCheckup,
   CalendarEvent,
   ParasiteProtectionPlan,
@@ -111,7 +111,7 @@ export const REMINDERS: Reminder[] = [
     type: 'checkup',
     title: 'Follow-up: Mild contact dermatitis or environmental allergy',
     datetime: '2026-06-12T09:00:00',
-    notes: '2-day follow-up for AI Diagnostic (paws)',
+    notes: '2-day follow-up for AI Insight (paws)',
     done: true,
   },
   {
@@ -120,7 +120,7 @@ export const REMINDERS: Reminder[] = [
     type: 'checkup',
     title: 'Follow-up: Mild conjunctivitis or eye irritation',
     datetime: '2026-05-30T09:00:00',
-    notes: '2-day follow-up for AI Diagnostic (eyes)',
+    notes: '2-day follow-up for AI Insight (eyes)',
     done: true,
   },
 ];
@@ -263,7 +263,7 @@ export const NUTRITION_PLANS: NutritionPlan[] = [
   },
 ];
 
-export const DIAGNOSTIC_RESULTS: DiagnosticResult[] = [
+export const INSIGHT_RESULTS: InsightResult[] = [
   {
     id: 'd1',
     petId: 'luna',
@@ -356,11 +356,11 @@ export const DIAGNOSTIC_RESULTS: DiagnosticResult[] = [
   },
 ];
 
-export const DIAGNOSTIC_FOLLOW_UPS: DiagnosticFollowUp[] = [
+export const INSIGHT_FOLLOW_UPS: InsightFollowUp[] = [
   {
     id: 'fu1',
     petId: 'luna',
-    diagnosticId: 'd1',
+    insightId: 'd1',
     date: '2026-06-12',
     status: 'improved',
     notes: 'Paw licking has reduced significantly. No more redness visible between toes.',
@@ -368,7 +368,7 @@ export const DIAGNOSTIC_FOLLOW_UPS: DiagnosticFollowUp[] = [
   {
     id: 'fu2',
     petId: 'micio',
-    diagnosticId: 'd2',
+    insightId: 'd2',
     date: '2026-05-30',
     status: 'same',
     notes: 'Slight discharge still present in left eye. Monitoring continues.',

@@ -26,27 +26,27 @@ function fmtDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-export default function DiagnosticDetailPage() {
-  const { selectedDiagnosticId, diagnosticResults, diagnosticFollowUps, getPet } = useApp();
+export default function InsightDetailPage() {
+  const { selectedInsightId, insightResults, insightFollowUps, getPet } = useApp();
 
-  const result = diagnosticResults.find((d) => d.id === selectedDiagnosticId);
+  const result = insightResults.find((d) => d.id === selectedInsightId);
   if (!result) {
     return (
       <div className="flex flex-col min-h-full bg-slate-50">
-        <TopBar title="Diagnostic Detail" showBack />
+        <TopBar title="Insight Detail" showBack />
         <div className="flex-1 flex items-center justify-center text-slate-400 text-sm">
-          Diagnostic not found.
+          Insight not found.
         </div>
       </div>
     );
   }
 
   const pet = getPet(result.petId);
-  const followUps = diagnosticFollowUps.filter((f) => f.diagnosticId === result.id);
+  const followUps = insightFollowUps.filter((f) => f.insightId === result.id);
 
   return (
     <div className="flex flex-col min-h-full bg-slate-50">
-      <TopBar title="Diagnostic Detail" showBack />
+      <TopBar title="Insight Detail" showBack />
       <main className="flex-1 px-4 py-4 pb-10 space-y-4">
         {/* Header card */}
         <div className="bg-white rounded-2xl shadow-card p-5">
@@ -62,7 +62,7 @@ export default function DiagnosticDetailPage() {
 
           <div className="flex items-center gap-2 mb-2">
             <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
-              AI Diagnostic
+              AI Insight
             </span>
             <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
               {BODY_AREA_LABELS[result.bodyArea]}
