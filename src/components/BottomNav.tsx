@@ -73,7 +73,7 @@ export default function BottomNav() {
               <Scan size={26} className="text-white" strokeWidth={2.2} />
             </div>
           </div>
-          <span className="text-[10px] font-semibold text-sky-500 mt-1">AI Diagnostics</span>
+          <span className="text-[10px] font-semibold text-sky-500 mt-1">AI Insights</span>
         </button>
       </div>
     </nav>
